@@ -4,8 +4,9 @@
 #include <cmath>
 #include <vector>
 #include <bitset>
+#include "../types.hpp"
 
-#include "Graph.hpp"
+class Graph;
 
 class Table
 {
@@ -26,6 +27,10 @@ public:
 
 	TableRow MakeRow(const std::vector<int> activeVertexes);
 	TableRow MakeRow(const VertexActivityMask& vertexActivityMask);
+
+protected:
+
+	virtual std::unique_ptr<Graph> CreateGraph() = 0;
 
 private:
 

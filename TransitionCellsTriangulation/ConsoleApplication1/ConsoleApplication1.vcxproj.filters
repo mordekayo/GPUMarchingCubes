@@ -53,5 +53,8 @@
     <ClInclude Include="Vector3.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Table13.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

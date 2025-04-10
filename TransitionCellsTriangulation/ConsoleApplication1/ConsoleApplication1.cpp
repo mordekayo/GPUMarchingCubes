@@ -1,12 +1,12 @@
-#include "table.hpp"
 #include <iostream>
+#include "Tables/Table13.hpp"
+#include "types.hpp"
 
 int main()
 {
-    Table table;
-    table.CreateEmpty();
-    std::vector<int> mask({ 9,10,12 });
-    TableRow row = table.MakeRow(mask);
+    Table13 table13;
+    std::vector<int> mask({ 1,2,8,10,12 });
+    TableRow row = table13.MakeRow(mask);
     for (auto index : row)
     {
         std::cout << (int)index << " ";

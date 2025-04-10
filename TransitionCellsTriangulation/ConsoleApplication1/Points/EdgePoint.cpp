@@ -1,5 +1,5 @@
+#include "VertexPoint.hpp"
 #include "EdgePoint.hpp"
-#include "Vector3.hpp"
 
 EdgePoint::EdgePoint(const VertexPoint& firstParent, const VertexPoint& secondParent, std::int8_t _index)
     : index(_index), firstParentIndex(firstParent.GetIndex()), secondParentIndex(secondParent.GetIndex())

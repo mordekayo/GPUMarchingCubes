@@ -1,14 +1,13 @@
+#pragma once
 #include <memory>
-#include <array>
 #include <unordered_set>
-
-#include "types.hpp"
-#include "EdgePoint.hpp"
+#include "../Points/EdgePoint.hpp"
+#include "../types.hpp"
 
 class Graph
 {
 public:
-	Graph(const VertexActivityMask& vertexActivityMask);
+	Graph();
 	Graph(const Graph& other) = delete;
 	Graph& operator=(Graph& other) = delete;
 
@@ -16,13 +15,15 @@ public:
 
 	void AddNode(std::shared_ptr<VertexPoint> node);
 	
-	std::shared_ptr<std::array<std::shared_ptr<VertexPoint>, 20>> GetNodes();
+	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> GetNodes();
 	
 	std::shared_ptr<EdgePoint> GetEdgePoint(int firstVertex, int secondVertex);
 
 	bool static isOnSameFace(int firstEdgePoint, int secondEdgePoint);
 
-private:
+	virtual void Create(const VertexActivityMask& vertexActivityMask);
+
+protected:
 
 	struct pairHasher
 	{
@@ -31,7 +32,9 @@ private:
 			return std::hash<int>()(pair.first) ^ (std::hash<int>()(pair.second) << 1);
 		}
 	};
+
 	static std::unique_ptr<std::unordered_map<std::pair<int, int>, std::shared_ptr<EdgePoint>, pairHasher>> edgesTable;
 	static std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> edgeToFaceTable;
-	std::shared_ptr<std::array<std::shared_ptr<VertexPoint>, 20>> nodes;
+
+	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> nodes;
 };

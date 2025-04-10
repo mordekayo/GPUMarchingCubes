@@ -1,3 +1,4 @@
+#pragma once
 #include "VertexPoint.hpp"
 
 struct Vector3;

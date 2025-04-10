@@ -8,6 +8,9 @@
 #include <deque>
 #include <set>
 #include <stack>
+#include "../Math/Vector3.hpp"
+#include "../Points/EdgePoint.hpp"
+#include "../Graph/Graph.hpp"
 
 Table::Table()
 {
@@ -224,13 +227,16 @@ TableRow Table::MakeRow(const std::vector<int> activeVertexes)
     return MakeRow(vertexActivityMask);
 }
 
+
+
 TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
 {
     TableRow tableRow;
     tableRow.fill(-1);
     int index = 0;
 
-    std::unique_ptr<Graph> graph = std::make_unique<Graph>(vertexActivityMask);
+    std::unique_ptr<Graph> graph = CreateGraph();
+    graph->Create(vertexActivityMask);
 
     std::shared_ptr<VertexPoint> entry = graph->GetEntry();
 

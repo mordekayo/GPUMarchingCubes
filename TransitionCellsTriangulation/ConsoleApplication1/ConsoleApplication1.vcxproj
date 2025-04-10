@@ -130,19 +130,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
-    <ClCompile Include="EdgePoint.cpp" />
-    <ClCompile Include="EdgePoint.hpp" />
-    <ClCompile Include="Graph.cpp" />
-    <ClCompile Include="Table.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="VertexPoint.cpp" />
-    <ClCompile Include="VertexPoint.hpp" />
+    <ClCompile Include="Graph\Graph.cpp" />
+    <ClCompile Include="Graph\Graph13.cpp" />
+    <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Points\EdgePoint.cpp" />
+    <ClCompile Include="Points\VertexPoint.cpp" />
+    <ClCompile Include="Tables\Table.cpp" />
+    <ClCompile Include="Tables\Table13.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graph.hpp" />
-    <ClInclude Include="table.hpp" />
-    <ClInclude Include="types.hpp" />
-    <ClInclude Include="Vector3.hpp" />
+    <ClInclude Include="Graph\Graph.hpp" />
+    <ClInclude Include="Graph\Graph13.hpp" />
+    <ClInclude Include="Math\Vector3.hpp" />
+    <ClInclude Include="Points\EdgePoint.hpp" />
+    <ClInclude Include="Points\VertexPoint.hpp" />
+    <ClInclude Include="Tables\Table.hpp" />
+    <ClInclude Include="Tables\Table13.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

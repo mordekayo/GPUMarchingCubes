@@ -1,5 +1,5 @@
-#include "VertexPoint.hpp"
 #include <iostream>
+#include "VertexPoint.hpp"
 
 VertexPoint::VertexPoint(Vector3 _position, int _index, bool _active)
     : position(_position), index(_index), active(_active)
