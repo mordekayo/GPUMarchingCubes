@@ -1,5 +1,5 @@
 #include "Graph13.hpp"
-#include "../Points/VertexPoint.hpp"
+#include "../Points/VertexPoints/VertexPoint.hpp"
 #include "../Math/Vector3.hpp"
 
 Graph13::Graph13()

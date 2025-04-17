@@ -1,4 +1,4 @@
-#include "VertexPoint.hpp"
+#include "VertexPoints/VertexPoint.hpp"
 #include "EdgePoint.hpp"
 
 EdgePoint::EdgePoint(const VertexPoint& firstParent, const VertexPoint& secondParent, std::int8_t _index)

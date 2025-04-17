@@ -18,42 +18,60 @@
     <ClCompile Include="ConsoleApplication1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Table.cpp">
+    <ClCompile Include="Graph\Graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graph.cpp">
+    <ClCompile Include="Graph\Graph13.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VertexPoint.hpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexPoint.cpp">
+    <ClCompile Include="Math\Vector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
+    <ClCompile Include="Points\EdgePoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EdgePoint.hpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="Tables\Table.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EdgePoint.cpp">
+    <ClCompile Include="Tables\Table13.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph\Graph17.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tables\Table17.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Points\VertexPoints\VertexPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="table.hpp">
+    <ClInclude Include="Graph\Graph.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graph.hpp">
+    <ClInclude Include="Graph\Graph13.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="types.hpp">
+    <ClInclude Include="Math\Vector3.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.hpp">
+    <ClInclude Include="Points\EdgePoint.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Table13.hpp">
+    <ClInclude Include="Tables\Table.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables\Table13.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\Graph17.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables\Table17.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Points\VertexPoints\VertexPoint.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

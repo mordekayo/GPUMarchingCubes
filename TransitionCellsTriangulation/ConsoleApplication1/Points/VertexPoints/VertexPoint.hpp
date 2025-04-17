@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "../Math/Vector3.hpp"
+#include "../../Math/Vector3.hpp"
 
 class VertexPoint
 {

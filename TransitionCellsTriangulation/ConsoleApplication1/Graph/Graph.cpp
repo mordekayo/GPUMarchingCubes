@@ -4,7 +4,7 @@
 #include "../types.hpp"
 #include <unordered_map>
 #include "../Points/EdgePoint.hpp"
-#include "../Points/VertexPoint.hpp"
+#include "../Points/VertexPoints/VertexPoint.hpp"
 #include <format>
 
 std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> Graph::edgeToFaceTable = nullptr;

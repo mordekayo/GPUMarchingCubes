@@ -1,5 +1,5 @@
 #pragma once
-#include "VertexPoint.hpp"
+#include "VertexPoints/VertexPoint.hpp"
 
 struct Vector3;
 
