@@ -84,31 +84,6 @@ void Table::Fill()
     }
 }
 
-void RemoveExpandedAngles(std::deque<std::shared_ptr<EdgePoint>>& chain)
-{
-    std::stack<int> toRemove;
-
-    for (size_t index = 0; index < chain.size(); ++index)
-    {
-        size_t prevIndex = index == 0 ? chain.size() - 1 : index - 1;
-        size_t nextIndex = index == chain.size() - 1 ? 0 : index + 1;
-
-        Vector3 leftArm = chain[prevIndex]->GetPosition() - chain[index]->GetPosition();
-        Vector3 rightArm = chain[nextIndex]->GetPosition() - chain[index]->GetPosition();
-
-        if (Vector3::AngleBetween(leftArm, rightArm) == 180.0f)
-        {
-            toRemove.push(index);
-        }
-    }
-
-    while (!toRemove.empty())
-    {
-        chain.erase(chain.begin() + toRemove.top());
-        toRemove.pop();
-    }
-}
-
 std::vector<std::uint8_t> EarClipping(std::deque<std::shared_ptr<EdgePoint>>& chain)
 {
     std::vector<std::uint8_t> triangeList;
@@ -146,8 +121,6 @@ std::vector<std::uint8_t> EarClipping(std::deque<std::shared_ptr<EdgePoint>>& ch
 
     return triangeList;
 }
-
-
 
 void BFS(std::shared_ptr<VertexPoint> vertexPoint, std::unordered_set<std::shared_ptr<VertexPoint>>& alreadyVisitedPoints,
     std::unordered_set<std::shared_ptr<VertexPoint>>& familyPoints)
