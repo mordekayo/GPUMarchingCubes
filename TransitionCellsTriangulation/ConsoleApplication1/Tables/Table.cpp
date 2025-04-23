@@ -200,7 +200,29 @@ TableRow Table::MakeRow(const std::vector<int> activeVertexes)
     return MakeRow(vertexActivityMask);
 }
 
-
+void MergeIntersectingFamilies(std::vector<std::unordered_set<std::shared_ptr<VertexPoint>>>& families)
+{
+    bool mergeHappened = false;
+    do
+    {
+        mergeHappened = false;
+        for (int i = families.size() - 1; i > 0; --i)
+        {
+            for (int j = i - 1; j >= 0; --j)
+            {
+                for (auto node : families[i])
+                {
+                    if (families[j].contains(node))
+                    {
+                        families[j].insert(families[i].begin(), families[i].end());
+                        families.erase(families.end());
+                        mergeHappened = true;
+                    }
+                }
+            }
+        }
+    } while (mergeHappened);
+}
 
 TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
 {
@@ -214,7 +236,8 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> entry = graph->GetEntry();
 
     std::unordered_set<std::shared_ptr<VertexPoint>> alreadyVisitedNodes;
-
+    std::vector<std::unordered_set<std::shared_ptr<VertexPoint>>> families;
+    std::set<std::shared_ptr<EdgePoint>> edgePoints;
     for (std::shared_ptr<VertexPoint> node : *(graph->GetNodes()))
     {
         if (node == nullptr)
@@ -223,45 +246,60 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
         }
         if (node->IsActive() && !alreadyVisitedNodes.contains(node))
         {
-            std::set<std::shared_ptr<EdgePoint>> edgePoints;
-            std::unordered_set<std::shared_ptr<VertexPoint>> familyPoints;
-            BFS(node, alreadyVisitedNodes, familyPoints);
-            for (std::shared_ptr<VertexPoint> child : familyPoints)
+            std::unordered_set<std::shared_ptr<VertexPoint>> newFamily;
+            BFS(node, alreadyVisitedNodes, newFamily);
+            families.push_back(std::move(newFamily));
+        }
+    }
+    
+    MergeIntersectingFamilies(families);
+
+    for (std::unordered_set<std::shared_ptr<VertexPoint>> family : families)
+    {
+        std::set<std::shared_ptr<EdgePoint>> familyEdgePoints;
+        for (std::shared_ptr<VertexPoint> child : family)
+        {
+            int neighboursCount = child->GetNeighboursCount();
+            for (int neighbourIndex = 0; neighbourIndex < neighboursCount; ++neighbourIndex)
             {
-                int neighboursCount = child->GetNeighboursCount();
-                for (int neighbourIndex = 0; neighbourIndex < neighboursCount; ++neighbourIndex)
+                std::shared_ptr<VertexPoint> neighbour = child->GetNeighbour(neighbourIndex);
+                if (!neighbour->IsActive())
                 {
-                    std::shared_ptr<VertexPoint> neighbour = child->GetNeighbour(neighbourIndex);
-                    if (!neighbour->IsActive())
-                    {
-                        auto edgePoint = graph->GetEdgePoint(child->GetIndex(), neighbour->GetIndex());
-                        edgePoints.insert(edgePoint);
-                    }
+                    auto edgePoint = graph->GetEdgePoint(child->GetIndex(), neighbour->GetIndex());
+                    edgePoints.insert(edgePoint);
                 }
             }
-
-            std::deque<std::shared_ptr<EdgePoint>> chain = ConvertEdgePointsToTChain(edgePoints);
-
-            Vector3 chainPlaneNormal = Vector3::CrossProduct(chain[1]->GetPosition() - chain[0]->GetPosition(),
-                chain[2]->GetPosition() - chain[1]->GetPosition());
-
-            auto triangles = EarClipping(chain);
-
-
-
-            if (Vector3::DotProduct(chainPlaneNormal, chain[0]->GetPosition() - node->GetPosition()) < 0)
+            int doupletNeighboursCount = child->GetDoupletNeighboursCount();
+            for (int doupletNeighbourIndex = 0; doupletNeighbourIndex < doupletNeighboursCount; ++doupletNeighbourIndex)
             {
-                for (auto it = triangles.begin(); it != triangles.end(); ++it)
+                std::shared_ptr<DoupletVertexPoint> doupletNeighbour = child->GetDoupletNeighbour(doupletNeighbourIndex);
+                if (!doupletNeighbour->IsActive())
                 {
-                    tableRow[index++] = *it;
+                    auto edgePoint = graph->GetEdgePoint(child->GetIndex(), doupletNeighbour->GetIndex());
+                    edgePoints.insert(edgePoint);
                 }
             }
-            else
+        }
+
+        std::deque<std::shared_ptr<EdgePoint>> chain = ConvertEdgePointsToTChain(edgePoints);
+
+        Vector3 chainPlaneNormal = Vector3::CrossProduct(chain[1]->GetPosition() - chain[0]->GetPosition(),
+            chain[2]->GetPosition() - chain[1]->GetPosition());
+
+        auto triangles = EarClipping(chain);
+
+        if (Vector3::DotProduct(chainPlaneNormal, chain[0]->GetPosition() - (*family.begin())->GetPosition()) < 0)
+        {
+            for (auto it = triangles.begin(); it != triangles.end(); ++it)
             {
-                for (auto rIt = triangles.rbegin(); rIt != triangles.rend(); ++rIt)
-                {
-                    tableRow[index++] = *rIt;
-                }
+                tableRow[index++] = *it;
+            }
+        }
+        else
+        {
+            for (auto rIt = triangles.rbegin(); rIt != triangles.rend(); ++rIt)
+            {
+                tableRow[index++] = *rIt;
             }
         }
     }

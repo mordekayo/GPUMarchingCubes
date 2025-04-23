@@ -29,3 +29,13 @@ Vector3 EdgePoint::GetPosition() const
 {
     return position;
 }
+
+bool EdgePoint::IsHighPriority() const
+{
+    return highPriority;
+}
+
+void EdgePoint::SetHighPriority()
+{
+    highPriority = true;
+}

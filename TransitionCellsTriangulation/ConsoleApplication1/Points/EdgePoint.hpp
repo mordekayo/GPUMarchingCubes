@@ -11,9 +11,12 @@ public:
 	int GetSecondParentIndex() const;
 	std::int8_t GetIndex() const;
 	Vector3 GetPosition() const;
+	bool IsHighPriority() const;
+	void SetHighPriority();
 private:
 	Vector3 position;
 	std::int8_t index;
 	int firstParentIndex;
 	int secondParentIndex;
+	bool highPriority = false;
 };

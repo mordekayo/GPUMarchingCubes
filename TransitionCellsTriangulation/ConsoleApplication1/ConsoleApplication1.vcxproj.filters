@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Points">
+      <UniqueIdentifier>{c6e7315d-4cc6-4fde-b4a3-72d4b6c9d569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Points\VertexPoints">
+      <UniqueIdentifier>{8d5b151a-957d-491c-b721-a8a92a3948a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp">
@@ -42,8 +48,11 @@
     <ClCompile Include="Tables\Table17.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Points\VertexPoints\DoupletVertexPoint.cpp">
+      <Filter>Source Files\Points\VertexPoints</Filter>
+    </ClCompile>
     <ClCompile Include="Points\VertexPoints\VertexPoint.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Points\VertexPoints</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +80,11 @@
     <ClInclude Include="Tables\Table17.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Points\VertexPoints\DoupletVertexPoint.hpp">
+      <Filter>Source Files\Points\VertexPoints</Filter>
+    </ClInclude>
     <ClInclude Include="Points\VertexPoints\VertexPoint.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Points\VertexPoints</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

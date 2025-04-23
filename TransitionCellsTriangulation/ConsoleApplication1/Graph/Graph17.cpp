@@ -27,6 +27,11 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> node15 = std::make_shared<VertexPoint>(Vector3(0.5f, 1.0f, 1.0f), 15, vertexActivityMask.test(15));
     std::shared_ptr<VertexPoint> node16 = std::make_shared<VertexPoint>(Vector3(1.0f, 1.0f, 1.0f), 16, vertexActivityMask.test(16));
     
+    std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(17, node0, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode18 = std::make_shared<DoupletVertexPoint>(18, node12, node14);
+    std::shared_ptr<DoupletVertexPoint> doupletNode19 = std::make_shared<DoupletVertexPoint>(19, node2, node13);
+    std::shared_ptr<DoupletVertexPoint> doupletNode20 = std::make_shared<DoupletVertexPoint>(20, node13, node16);
+
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(17);
 
     node0->AddNeighbour(node1);
@@ -69,6 +74,8 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
     node6->AddNeighbour(node3);
     node6->AddNeighbour(node7);
     node6->AddNeighbour(node9);
+    node6->AddDoupletNeighbour(doupletNode17);
+    node6->AddDoupletNeighbour(doupletNode18);
 
     AddNode(node6);
     
@@ -82,6 +89,8 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
     node8->AddNeighbour(node5);
     node8->AddNeighbour(node7);
     node8->AddNeighbour(node11);
+    node8->AddDoupletNeighbour(doupletNode19);
+    node8->AddDoupletNeighbour(doupletNode20);
     
     AddNode(node8);
 
@@ -191,9 +200,12 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
 
         std::shared_ptr<EdgePoint> edge17 = std::make_shared<EdgePoint>(*node0, *node12, 17);
         edgesTable->insert(std::make_pair(std::make_pair(edge17->GetFirstParentIndex(), edge17->GetSecondParentIndex()), edge17));
+        edgesTable->insert(std::make_pair(std::make_pair(6, 17), edge17));
+
 
         std::shared_ptr<EdgePoint> edge18 = std::make_shared<EdgePoint>(*node2, *node13, 18);
         edgesTable->insert(std::make_pair(std::make_pair(edge18->GetFirstParentIndex(), edge18->GetSecondParentIndex()), edge18));
+        edgesTable->insert(std::make_pair(std::make_pair(8, 19), edge18));
 
         std::shared_ptr<EdgePoint> edge19 = std::make_shared<EdgePoint>(*node9, *node14, 19);
         edgesTable->insert(std::make_pair(std::make_pair(edge19->GetFirstParentIndex(), edge19->GetSecondParentIndex()), edge19));
@@ -209,6 +221,7 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
 
         std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node12, *node14, 23);
         edgesTable->insert(std::make_pair(std::make_pair(edge23->GetFirstParentIndex(), edge23->GetSecondParentIndex()), edge23));
+        edgesTable->insert(std::make_pair(std::make_pair(6, 18), edge23));
 
         std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node14, *node15, 24);
         edgesTable->insert(std::make_pair(std::make_pair(edge24->GetFirstParentIndex(), edge24->GetSecondParentIndex()), edge24));
@@ -218,7 +231,9 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
 
         std::shared_ptr<EdgePoint> edge26 = std::make_shared<EdgePoint>(*node13, *node16, 26);
         edgesTable->insert(std::make_pair(std::make_pair(edge26->GetFirstParentIndex(), edge26->GetSecondParentIndex()), edge26));
+        edgesTable->insert(std::make_pair(std::make_pair(8, 20), edge26));
     }
+
     if (edgeToFaceTable == nullptr)
     {
         edgeToFaceTable = std::make_unique<std::unordered_map<int, std::unordered_set<int>>>();

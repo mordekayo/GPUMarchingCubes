@@ -7,19 +7,14 @@ VertexPoint::VertexPoint(Vector3 _position, int _index, bool _active)
 
 }
 
-int VertexPoint::GetNeighboursCount()
+int VertexPoint::GetNeighboursCount() const
 {
     return neighbours.size();
 }
 
-std::shared_ptr<VertexPoint> VertexPoint::GetNeighbour(int index)
+std::shared_ptr<VertexPoint> VertexPoint::GetNeighbour(int index) const
 {
-    auto b = neighbours[index];
-    if (b == nullptr)
-    {
-        std::cout << "asd";
-    }
-    return b;
+    return neighbours[index];
 }
 
 void VertexPoint::AddNeighbour(std::shared_ptr<VertexPoint> newNode)
@@ -27,7 +22,22 @@ void VertexPoint::AddNeighbour(std::shared_ptr<VertexPoint> newNode)
     neighbours.push_back(newNode);
 }
 
-bool VertexPoint::IsActive()
+int VertexPoint::GetDoupletNeighboursCount() const
+{
+    return doupletNeighbours.size();
+}
+
+std::shared_ptr<DoupletVertexPoint> VertexPoint::GetDoupletNeighbour(int index) const
+{
+    return doupletNeighbours[index];
+}
+
+void VertexPoint::AddDoupletNeighbour(std::shared_ptr<DoupletVertexPoint> newNode)
+{
+    doupletNeighbours.push_back(newNode);
+}
+
+bool VertexPoint::IsActive() const
 {
     return active;
 }

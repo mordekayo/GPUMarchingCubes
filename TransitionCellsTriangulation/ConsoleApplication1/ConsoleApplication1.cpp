@@ -7,7 +7,7 @@
 int main()
 {
     Table17 table17;
-    std::vector<int> mask({8, 11, 16});
+    std::vector<int> mask({8, 16});
     TableRow row = table17.MakeRow(mask);
     for (auto index : row)
     {
