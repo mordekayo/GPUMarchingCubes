@@ -54,6 +54,12 @@
     <ClCompile Include="Points\VertexPoints\VertexPoint.cpp">
       <Filter>Source Files\Points\VertexPoints</Filter>
     </ClCompile>
+    <ClCompile Include="Graph\Graph20.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tables\Table20.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph\Graph.hpp">
@@ -85,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="Points\VertexPoints\VertexPoint.hpp">
       <Filter>Source Files\Points\VertexPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\Graph20.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables\Table20.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

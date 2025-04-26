@@ -133,6 +133,7 @@
     <ClCompile Include="Graph\Graph.cpp" />
     <ClCompile Include="Graph\Graph13.cpp" />
     <ClCompile Include="Graph\Graph17.cpp" />
+    <ClCompile Include="Graph\Graph20.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Points\EdgePoint.cpp" />
     <ClCompile Include="Points\VertexPoints\DoupletVertexPoint.cpp" />
@@ -140,11 +141,13 @@
     <ClCompile Include="Tables\Table.cpp" />
     <ClCompile Include="Tables\Table13.cpp" />
     <ClCompile Include="Tables\Table17.cpp" />
+    <ClCompile Include="Tables\Table20.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph\Graph.hpp" />
     <ClInclude Include="Graph\Graph13.hpp" />
     <ClInclude Include="Graph\Graph17.hpp" />
+    <ClInclude Include="Graph\Graph20.hpp" />
     <ClInclude Include="Math\Vector3.hpp" />
     <ClInclude Include="Points\EdgePoint.hpp" />
     <ClInclude Include="Points\VertexPoints\DoupletVertexPoint.hpp" />
@@ -152,6 +155,7 @@
     <ClInclude Include="Tables\Table.hpp" />
     <ClInclude Include="Tables\Table13.hpp" />
     <ClInclude Include="Tables\Table17.hpp" />
+    <ClInclude Include="Tables\Table20.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
