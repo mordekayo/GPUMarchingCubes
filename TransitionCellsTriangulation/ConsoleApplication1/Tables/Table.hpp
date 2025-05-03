@@ -18,15 +18,18 @@ public:
 
 	void CreateEmpty();
 	void Serialize(const std::string& fileName);
+	void SerializeAsText(const std::string& fileName);
 	void Deserialize(const std::string& fileName);
 
-	float GetFilledRatio();
-	void PrintFilledRatio();
+	float GetFailedRatio();
+	void PrintFailedRatio();
 
 	void Fill();
 
 	TableRow MakeRow(const std::vector<int> activeVertexes);
-	TableRow MakeRow(const VertexActivityMask& vertexActivityMask);
+	TableRow MakeRow(const VertexActivityMask& vertexActivityMask, bool& sucess);
+
+	int GetMaxEdgePointsCount();
 
 protected:
 
@@ -34,7 +37,9 @@ protected:
 
 private:
 
-	int filledCount = 0;
+	int failedCount = 0;
 
 	std::unique_ptr<TableArray> table = nullptr;
+
+	int maxEdgePointsCount = 0;
 };

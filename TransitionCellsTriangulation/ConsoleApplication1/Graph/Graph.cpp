@@ -60,3 +60,16 @@ void Graph::Create(const VertexActivityMask& vertexActivityMask)
 
 }
 
+bool Graph::IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const
+{
+    return prohibitedAreaBoundingBox.IsPointInside(
+        Vector3((point1.x + point2.x + point3.x) / 3,
+        (point1.y + point2.y + point3.y) / 3,
+        (point1.z + point2.z + point3.z) / 3));
+}
+
+bool Graph::IsProhibited(int edge1Index, int edge2Index) const
+{
+    return false;
+}
+

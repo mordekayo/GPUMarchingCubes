@@ -47,6 +47,37 @@ void Table::Serialize(const std::string& fileName)
     fileStream.close();
 }
 
+void Table::SerializeAsText(const std::string& fileName)
+{
+    if (table == nullptr)
+    {
+        MessageBox(NULL, L"Table is null!", L"ERROR!", MB_ICONERROR | MB_OK);
+        return;
+    }
+    std::string filename{ fileName };
+    std::fstream fileStream{ filename, fileStream.binary | fileStream.trunc | fileStream.out };
+
+    if (!fileStream.is_open())
+    {
+        std::cout << "Failed to open " << filename << '\n';
+        return;
+    }
+
+    for (int i = 0; i < table->size(); ++i)
+    {
+        TableRow& row = (*table)[i];
+        std::string str;
+        for (std::int8_t item : row)
+        {
+            str += std::to_string(item) + " ,";
+        }
+        str += "\n";
+        fileStream << str;
+    }
+
+    fileStream.close();
+}
+
 void Table::Deserialize(const std::string& fileName)
 {
     std::string filename{ fileName };
@@ -58,7 +89,7 @@ void Table::Deserialize(const std::string& fileName)
         return;
     }
 
-    filledCount = 0;
+    failedCount = 0;
     for (int i = 0; i < table->size(); ++i)
     {
         TableRow row;
@@ -66,25 +97,40 @@ void Table::Deserialize(const std::string& fileName)
     }
 }
 
-float Table::GetFilledRatio()
+float Table::GetFailedRatio()
 {
-    return static_cast<float>(filledCount / tableSize);
+    return static_cast<float>(failedCount / tableSize);
 }
 
-void Table::PrintFilledRatio()
+void Table::PrintFailedRatio()
 {
-    std::cout << filledCount << "/" << tableSize << " " << GetFilledRatio() << "%\n";
+    std::cout << failedCount << "/" << tableSize << " " << GetFailedRatio() << "%\n";
 }
 
 void Table::Fill()
 {
-    for (unsigned long i = 0; i < vertexActivityMaskLength; ++i)
+    for (unsigned long i = 0; i < tableSize; ++i)
     {
-        (*table)[i] = MakeRow(VertexActivityMask(i));
+        auto vertexActivityMaskCopy = VertexActivityMask(i);
+        if (vertexActivityMaskCopy.count() > vertexActivityMaskCopy.size() / 2)
+        {
+            vertexActivityMaskCopy.flip();
+        }
+        bool success = true;
+        (*table)[i] = MakeRow(vertexActivityMaskCopy, success);
+        if (success == false)
+        {
+            vertexActivityMaskCopy.flip();
+            (*table)[i] = MakeRow(vertexActivityMaskCopy, success);
+            if (success == false)
+            {
+                ++failedCount;
+            }
+        }
     }
 }
 
-std::vector<std::uint8_t> EarClipping(std::deque<std::shared_ptr<EdgePoint>>& chain)
+std::vector<std::uint8_t> EarClipping(const Graph& graph, std::deque<std::shared_ptr<EdgePoint>>& chain)
 {
     std::vector<std::uint8_t> triangeList;
     std::vector<std::shared_ptr<EdgePoint>> chainCopy;
@@ -106,9 +152,14 @@ std::vector<std::uint8_t> EarClipping(std::deque<std::shared_ptr<EdgePoint>>& ch
 
             if (Vector3::AngleBetween(leftArm, rightArm) < 180.0f)
             {
-                triangeList.push_back(chainCopy[prevIndex]->GetIndex());
-                triangeList.push_back(chainCopy[index]->GetIndex());
-                triangeList.push_back(chainCopy[nextIndex]->GetIndex());
+                if (!graph.IsTriangleInsideProhibitedArea(chainCopy[prevIndex]->GetPosition(),
+                    chainCopy[index]->GetPosition(),
+                    chainCopy[nextIndex]->GetPosition()))
+                {
+                    triangeList.push_back(chainCopy[prevIndex]->GetIndex());
+                    triangeList.push_back(chainCopy[index]->GetIndex());
+                    triangeList.push_back(chainCopy[nextIndex]->GetIndex());
+                }
                 chainCopy.erase(chainCopy.begin() + index);
                 if (prevIndex >= chainCopy.size())
                 {
@@ -123,14 +174,14 @@ std::vector<std::uint8_t> EarClipping(std::deque<std::shared_ptr<EdgePoint>>& ch
 }
 
 void BFS(std::shared_ptr<VertexPoint> vertexPoint, std::unordered_set<std::shared_ptr<VertexPoint>>& alreadyVisitedPoints,
-    std::unordered_set<std::shared_ptr<VertexPoint>>& familyPoints)
+    std::vector<std::shared_ptr<VertexPoint>>& familyPoints)
 {
     if (alreadyVisitedPoints.contains(vertexPoint) || !vertexPoint->IsActive())
     {
         return;
     }
     alreadyVisitedPoints.insert(vertexPoint);
-    familyPoints.insert(vertexPoint);
+    familyPoints.push_back(vertexPoint);
     int neighboursCount = vertexPoint->GetNeighboursCount();
     for (int neighbourIndex = 0; neighbourIndex < neighboursCount; ++neighbourIndex)
     {
@@ -138,7 +189,8 @@ void BFS(std::shared_ptr<VertexPoint> vertexPoint, std::unordered_set<std::share
     }
 }
 
-static std::deque<std::shared_ptr<EdgePoint>> ConvertEdgePointsToTChain(std::unordered_set<std::shared_ptr<EdgePoint>> edgePoints)
+static std::deque<std::shared_ptr<EdgePoint>> ConvertEdgePointsToTChain(const Graph& graph,
+    std::vector<std::shared_ptr<EdgePoint>> edgePoints, bool& sucess)
 {
     std::deque<std::shared_ptr<EdgePoint>> chain;
 
@@ -149,18 +201,22 @@ static std::deque<std::shared_ptr<EdgePoint>> ConvertEdgePointsToTChain(std::uno
 
         while (!edgePoints.empty())
         {
-            std::shared_ptr<EdgePoint> closestPoint = nullptr;
+            auto closestPoint = edgePoints.end();
             float distanceToClosestPoint = FLT_MAX;
             bool addToFront = true;
             for (auto it = edgePoints.begin(); it != edgePoints.end(); ++it)
             {
+                if (graph.IsProhibited(chain.front()->GetIndex(), (*it)->GetIndex()))
+                {
+                    continue;
+                }
                 if (Graph::isOnSameFace(chain.front()->GetIndex(), (*it)->GetIndex()))
                 {
                     float distance = Vector3::Distance(chain.front()->GetPosition(), (*it)->GetPosition());
                     if (distance < distanceToClosestPoint)
                     {
                         distanceToClosestPoint = distance;
-                        closestPoint = *it;
+                        closestPoint = it;
                         addToFront = true;
                     }
                 }
@@ -170,23 +226,32 @@ static std::deque<std::shared_ptr<EdgePoint>> ConvertEdgePointsToTChain(std::uno
                     if (distance < distanceToClosestPoint)
                     {
                         distanceToClosestPoint = distance;
-                        closestPoint = *it;
+                        closestPoint = it;
                         addToFront = false;
                     }
                 }
             }
-            if (addToFront)
+            if (closestPoint == edgePoints.end())
             {
-                chain.push_front(closestPoint);
+                sucess = false;
+                return chain;
             }
             else
             {
-                chain.push_back(closestPoint);
+                if (addToFront)
+                {
+                    chain.push_front(*closestPoint);
+                }
+                else
+                {
+                    chain.push_back(*closestPoint);
+                }
+                edgePoints.erase(closestPoint);
             }
-            edgePoints.erase(closestPoint);
         }
     }
 
+    sucess = true;
     return chain;
 }
 
@@ -197,7 +262,8 @@ TableRow Table::MakeRow(const std::vector<int> activeVertexes)
     {
         vertexActivityMask.set(vertexIndex, true);
     }
-    return MakeRow(vertexActivityMask);
+    bool success = true;
+    return MakeRow(vertexActivityMask, success);
 }
 
 void MergeIntersectingEdgePointsFamilies(
@@ -226,7 +292,20 @@ void MergeIntersectingEdgePointsFamilies(
     } while (mergeHappened);
 }
 
-TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
+bool Contains(auto begin, auto end, auto item)
+{
+    for (auto it = begin; it != end; ++it)
+    {
+        if (*it == item)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& sucess)
 {
     TableRow tableRow;
     tableRow.fill(-1);
@@ -238,7 +317,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> entry = graph->GetEntry();
 
     std::unordered_set<std::shared_ptr<VertexPoint>> alreadyVisitedNodes;
-    std::vector<std::unordered_set<std::shared_ptr<EdgePoint>>> edgePointsFamilies;
+    std::vector<std::vector<std::shared_ptr<EdgePoint>>> edgePointsFamilies;
     for (std::shared_ptr<VertexPoint> node : *(graph->GetNodes()))
     {
         if (node == nullptr)
@@ -247,9 +326,9 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
         }
         if (node->IsActive() && !alreadyVisitedNodes.contains(node))
         {
-            std::unordered_set<std::shared_ptr<VertexPoint>> vertexPointsFamily;
+            std::vector<std::shared_ptr<VertexPoint>> vertexPointsFamily;
             BFS(node, alreadyVisitedNodes, vertexPointsFamily);
-            std::unordered_set<std::shared_ptr<EdgePoint>> edgePointsFamily;
+            std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily;
             for (std::shared_ptr<VertexPoint> vertexPoint : vertexPointsFamily)
             {
                 int neighboursCount = vertexPoint->GetNeighboursCount();
@@ -260,7 +339,10 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
                     {
                         auto edgePoint = graph->GetEdgePoint(vertexPoint->GetIndex(), neighbour->GetIndex());
                         int edgePointIndex = edgePoint->GetIndex();
-                        edgePointsFamily.insert(edgePoint);
+                        if (!Contains(edgePointsFamily.begin(), edgePointsFamily.end(), edgePoint))
+                        {
+                            edgePointsFamily.push_back(edgePoint);
+                        }
                     }
                 }
                 //int doupletNeighboursCount = vertexPoint->GetDoupletNeighboursCount();
@@ -279,16 +361,22 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
         }
     }
     
-    MergeIntersectingEdgePointsFamilies(edgePointsFamilies);
+    //MergeIntersectingEdgePointsFamilies(edgePointsFamilies);
 
-    for (std::unordered_set<std::shared_ptr<EdgePoint>> edgePointsFamily : edgePointsFamilies)
+    for (std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily : edgePointsFamilies)
     {
-        std::deque<std::shared_ptr<EdgePoint>> chain = ConvertEdgePointsToTChain(edgePointsFamily);
+        sucess = true;
+        std::deque<std::shared_ptr<EdgePoint>> chain = ConvertEdgePointsToTChain(*graph, edgePointsFamily, sucess);
+
+        if (!sucess)
+        {
+            return tableRow;
+        }
 
         Vector3 chainPlaneNormal = Vector3::CrossProduct(chain[1]->GetPosition() - chain[0]->GetPosition(),
             chain[2]->GetPosition() - chain[1]->GetPosition());
 
-        auto triangles = EarClipping(chain);
+        auto triangles = EarClipping(*graph, chain);
 
         if (Vector3::DotProduct(chainPlaneNormal, chain[0]->GetPosition() - (*edgePointsFamily.begin())->GetPosition()) < 0)
         {
@@ -306,5 +394,15 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
         }
     }
 
+    if (index > maxEdgePointsCount)
+    {
+        maxEdgePointsCount = index;
+    }
+
     return tableRow;
+}
+
+int Table::GetMaxEdgePointsCount()
+{
+    return maxEdgePointsCount;
 }

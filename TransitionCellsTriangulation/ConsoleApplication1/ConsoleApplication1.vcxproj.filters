@@ -60,6 +60,9 @@
     <ClCompile Include="Tables\Table20.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Math\AxisAlighnedBoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph\Graph.hpp">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tables\Table20.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\AxisAlighnedBoundingBox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

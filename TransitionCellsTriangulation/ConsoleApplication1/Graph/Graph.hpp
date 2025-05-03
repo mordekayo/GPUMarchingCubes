@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include "../Points/EdgePoint.hpp"
 #include "../types.hpp"
+#include "../Math/AxisAlighnedBoundingBox.hpp"
 
 class Graph
 {
@@ -23,6 +24,10 @@ public:
 
 	virtual void Create(const VertexActivityMask& vertexActivityMask);
 
+	virtual bool IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const;
+
+	virtual bool IsProhibited(int edge1Index, int edge2Index) const;
+
 protected:
 
 	struct pairHasher
@@ -37,4 +42,6 @@ protected:
 	static std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> edgeToFaceTable;
 
 	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> nodes;
+
+	AABB prohibitedAreaBoundingBox;
 };

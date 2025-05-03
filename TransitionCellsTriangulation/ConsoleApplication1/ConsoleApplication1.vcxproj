@@ -134,6 +134,7 @@
     <ClCompile Include="Graph\Graph13.cpp" />
     <ClCompile Include="Graph\Graph17.cpp" />
     <ClCompile Include="Graph\Graph20.cpp" />
+    <ClCompile Include="Math\AxisAlighnedBoundingBox.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Points\EdgePoint.cpp" />
     <ClCompile Include="Points\VertexPoints\DoupletVertexPoint.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Graph\Graph13.hpp" />
     <ClInclude Include="Graph\Graph17.hpp" />
     <ClInclude Include="Graph\Graph20.hpp" />
+    <ClInclude Include="Math\AxisAlighnedBoundingBox.hpp" />
     <ClInclude Include="Math\Vector3.hpp" />
     <ClInclude Include="Points\EdgePoint.hpp" />
     <ClInclude Include="Points\VertexPoints\DoupletVertexPoint.hpp" />

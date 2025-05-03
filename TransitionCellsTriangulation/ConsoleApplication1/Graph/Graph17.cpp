@@ -266,4 +266,6 @@ void Graph17::Create(const VertexActivityMask& vertexActivityMask)
         edgeToFaceTable->insert(std::make_pair(25, std::unordered_set<int>{3, 8}));
         edgeToFaceTable->insert(std::make_pair(26, std::unordered_set<int>{7, 8}));
     }
+
+    prohibitedAreaBoundingBox = AABB(Vector3(0.0f,0.0f,0.5), Vector3(1.0f, 0.5f, 1.0f));
 }

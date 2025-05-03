@@ -195,3 +195,31 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{3, 4}));
     }
 }
+
+bool Graph13::IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const
+{
+    return false;
+}
+
+bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
+{
+    if (edge1Index > edge2Index)
+    {
+        std::swap(edge1Index, edge2Index);
+    }
+    if (edge1Index == 5 && edge2Index == 6)
+    {
+        if (nodes->at(1)->IsActive() && nodes->at(7)->IsActive())
+        {
+            return true;
+        }
+    }
+    if (edge1Index == 3 && edge2Index == 8)
+    {
+        if (nodes->at(3)->IsActive() && nodes->at(5)->IsActive())
+        {
+            return true;
+        }
+    }
+    return false;
+}
