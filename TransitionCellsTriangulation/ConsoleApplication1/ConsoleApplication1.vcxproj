@@ -152,6 +152,7 @@
     <ClInclude Include="Math\AxisAlighnedBoundingBox.hpp" />
     <ClInclude Include="Math\Vector3.hpp" />
     <ClInclude Include="Points\EdgePoint.hpp" />
+    <ClInclude Include="Points\EdgePointsGraph.hpp" />
     <ClInclude Include="Points\VertexPoints\DoupletVertexPoint.hpp" />
     <ClInclude Include="Points\VertexPoints\VertexPoint.hpp" />
     <ClInclude Include="Tables\Table.hpp" />

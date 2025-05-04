@@ -104,5 +104,8 @@
     <ClInclude Include="Math\AxisAlighnedBoundingBox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Points\EdgePointsGraph.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

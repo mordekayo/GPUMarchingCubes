@@ -587,6 +587,10 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
                 removeCombinedCircuits(closedCircuits);
                 std::reverse(closedCircuits.begin(), closedCircuits.end());
                 removeCombinedCircuits(closedCircuits);
+                std::reverse(closedCircuits.begin(), closedCircuits.end());
+                removeCombinedCircuits(closedCircuits);
+                std::reverse(closedCircuits.begin(), closedCircuits.end());
+                removeCombinedCircuits(closedCircuits);
                 std::cout << "Circuits found : " << closedCircuits.size() << std::endl;
                 for (int i = 0; i < closedCircuits.size(); ++i)
                 {
