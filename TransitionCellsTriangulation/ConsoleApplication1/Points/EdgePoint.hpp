@@ -6,7 +6,7 @@ struct Vector3;
 class EdgePoint
 {
 public:
-	EdgePoint(const VertexPoint& firstParent, const VertexPoint& secondParent, std::int8_t _index);
+	EdgePoint(const IGraphNode& firstParent, const IGraphNode& secondParent, std::int8_t _index);
 	int GetFirstParentIndex() const;
 	int GetSecondParentIndex() const;
 	std::int8_t GetIndex() const;

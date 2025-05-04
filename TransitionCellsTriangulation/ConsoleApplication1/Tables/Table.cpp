@@ -11,6 +11,7 @@
 #include "../Math/Vector3.hpp"
 #include "../Points/EdgePoint.hpp"
 #include "../Graph/Graph.hpp"
+#include "../Points/VertexPoints/EdgePointsGraph.hpp"
 
 Table::Table()
 {
@@ -116,17 +117,7 @@ void Table::Fill()
         {
             vertexActivityMaskCopy.flip();
         }
-        bool success = true;
-        (*table)[i] = MakeRow(vertexActivityMaskCopy, success);
-        if (success == false)
-        {
-            vertexActivityMaskCopy.flip();
-            (*table)[i] = MakeRow(vertexActivityMaskCopy, success);
-            if (success == false)
-            {
-                ++failedCount;
-            }
-        }
+        (*table)[i] = MakeRow(vertexActivityMaskCopy);
     }
 }
 
@@ -262,50 +253,117 @@ TableRow Table::MakeRow(const std::vector<int> activeVertexes)
     {
         vertexActivityMask.set(vertexIndex, true);
     }
-    bool success = true;
-    return MakeRow(vertexActivityMask, success);
+    return MakeRow(vertexActivityMask);
 }
 
-void MergeIntersectingEdgePointsFamilies(
-    std::vector<std::unordered_set<std::shared_ptr<EdgePoint>>>& families)
-{
-    bool mergeHappened = false;
-    do
-    {
-        mergeHappened = false;
-        for (int i = families.size() - 1; i > 0; --i)
-        {
-            for (int j = i - 1; j >= 0; --j)
-            {
-                for (auto node : families[i])
-                {
-                    if (families[j].contains(node))
-                    {
-                        families[j].insert(families[i].begin(), families[i].end());
-                        families.erase(families.end() - 1);
-                        mergeHappened = true;
-                        break;
-                    }
-                }
-            }
-        }
-    } while (mergeHappened);
-}
+//void MergeIntersectingEdgePointsFamilies(
+//    std::vector<std::unordered_set<std::shared_ptr<EdgePoint>>>& families)
+//{
+//    bool mergeHappened = false;
+//    do
+//    {
+//        mergeHappened = false;
+//        for (int i = families.size() - 1; i > 0; --i)
+//        {
+//            for (int j = i - 1; j >= 0; --j)
+//            {
+//                for (auto node : families[i])
+//                {
+//                    if (families[j].contains(node))
+//                    {
+//                        families[j].insert(families[i].begin(), families[i].end());
+//                        families.erase(families.end() - 1);
+//                        mergeHappened = true;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//    } while (mergeHappened);
+//}
 
-bool Contains(auto begin, auto end, auto item)
+bool Contains(const std::vector<std::shared_ptr<EdgePoint>>& family, std::shared_ptr<EdgePoint> item)
 {
-    for (auto it = begin; it != end; ++it)
+    for (auto it : family)
     {
-        if (*it == item)
+        if (it == item)
         {
             return true;
         }
     }
-
     return false;
 }
 
-TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& sucess)
+EdgePointsGraph* CreateEdgePointsGraph(const std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily, const Graph& graph)
+{
+    EdgePointsGraph* edgePointsGraph = new EdgePointsGraph();
+    if (edgePointsFamily.size() > 0)
+    {
+        edgePointsGraph->root = new EdgePointsGraphNode(edgePointsFamily.front()->GetIndex());
+        edgePointsGraph->nodes.push_back(edgePointsGraph->root);
+    }
+    for (int i = 1; i < edgePointsFamily.size(); ++i)
+    {
+        EdgePointsGraphNode* newNode = new EdgePointsGraphNode(edgePointsFamily[i]->GetIndex());
+        edgePointsGraph->nodes.push_back(newNode);
+    }
+    for (auto nodei : edgePointsGraph->nodes)
+    {
+        for (auto nodej : edgePointsGraph->nodes)
+        {
+            if (nodei == nodej)
+            {
+                continue;
+            }
+            if (!graph.IsProhibited(nodei->edgePointIndex, nodej->edgePointIndex))
+            {
+                nodei->neighbours.insert(nodej);
+                nodej->neighbours.insert(nodei);
+            }
+        }
+    }
+
+    return edgePointsGraph;
+}
+
+EdgePointsGraph* CombineGraphs(EdgePointsGraph* combinedGraph, EdgePointsGraph* graphToAdd)
+{
+    if (combinedGraph->nodes.size() == 0)
+    {
+        delete combinedGraph;
+        combinedGraph = nullptr;
+        return graphToAdd;
+    }
+
+    std::vector<int> addedNodesIndexes;
+    int initialCombinedGraphSize = combinedGraph->nodes.size();
+    for (int i = 0; i < graphToAdd->nodes.size(); ++i)
+    {
+        EdgePointsGraphNode* taNode = graphToAdd->nodes[i];
+        combinedGraph->nodes.push_back(taNode);
+        addedNodesIndexes.push_back(i);
+        for (int j = 0; j < initialCombinedGraphSize; ++j)
+        {
+            EdgePointsGraphNode* cgNode = combinedGraph->nodes[j];
+            if (Graph::isOnSameFace(cgNode->edgePointIndex, taNode->edgePointIndex))
+            {
+                cgNode->neighbours.insert(taNode);
+                taNode->neighbours.insert(cgNode);
+            }
+        }
+    }
+    if (addedNodesIndexes.size() != graphToAdd->nodes.size())
+    {
+        std::cout << "PIZDEC!!!" << std::endl;
+    }
+
+    delete graphToAdd;
+    graphToAdd = nullptr;
+
+    return combinedGraph;
+}
+
+TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
 {
     TableRow tableRow;
     tableRow.fill(-1);
@@ -317,7 +375,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& suce
     std::shared_ptr<VertexPoint> entry = graph->GetEntry();
 
     std::unordered_set<std::shared_ptr<VertexPoint>> alreadyVisitedNodes;
-    std::vector<std::vector<std::shared_ptr<EdgePoint>>> edgePointsFamilies;
+    std::vector<EdgePointsGraph*> edgePointsGraphs;
     for (std::shared_ptr<VertexPoint> node : *(graph->GetNodes()))
     {
         if (node == nullptr)
@@ -328,9 +386,9 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& suce
         {
             std::vector<std::shared_ptr<VertexPoint>> vertexPointsFamily;
             BFS(node, alreadyVisitedNodes, vertexPointsFamily);
-            std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily;
             for (std::shared_ptr<VertexPoint> vertexPoint : vertexPointsFamily)
             {
+                std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily;
                 int neighboursCount = vertexPoint->GetNeighboursCount();
                 for (int neighbourIndex = 0; neighbourIndex < neighboursCount; ++neighbourIndex)
                 {
@@ -339,33 +397,51 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& suce
                     {
                         auto edgePoint = graph->GetEdgePoint(vertexPoint->GetIndex(), neighbour->GetIndex());
                         int edgePointIndex = edgePoint->GetIndex();
-                        if (!Contains(edgePointsFamily.begin(), edgePointsFamily.end(), edgePoint))
+                        if (!Contains(edgePointsFamily, edgePoint))
                         {
                             edgePointsFamily.push_back(edgePoint);
                         }
                     }
                 }
-                //int doupletNeighboursCount = vertexPoint->GetDoupletNeighboursCount();
-                //for (int doupletNeighbourIndex = 0; doupletNeighbourIndex < doupletNeighboursCount; ++doupletNeighbourIndex)
-                //{
-                //    std::shared_ptr<DoupletVertexPoint> doupletNeighbour = vertexPoint->GetDoupletNeighbour(doupletNeighbourIndex);
-                //    if (!doupletNeighbour->IsActive())
-                //    {
-                //        auto edgePoint = graph->GetEdgePoint(vertexPoint->GetIndex(), doupletNeighbour->GetIndex());
-                //        int edgePointIndex = edgePoint->GetIndex();
-                //        edgePointsFamily.insert(edgePoint);
-                //    }
-                //}
+
+                int doupletNeighboursCount = vertexPoint->GetDoupletNeighboursCount();
+                for (int doupletNeighbourIndex = 0; doupletNeighbourIndex < doupletNeighboursCount; ++doupletNeighbourIndex)
+                {
+                    std::shared_ptr<DoupletVertexPoint> doupletNeighbour = vertexPoint->GetDoupletNeighbour(doupletNeighbourIndex);
+                    if (!doupletNeighbour->IsActive())
+                    {
+                        auto edgePoint = graph->GetEdgePoint(vertexPoint->GetIndex(), doupletNeighbour->GetIndex());
+                        int edgePointIndex = edgePoint->GetIndex();
+                        if (!Contains(edgePointsFamily, edgePoint))
+                        {
+                            edgePointsFamily.push_back(edgePoint);
+                        }
+                    }
+                }
+
+                if (edgePointsFamily.size() > 0)
+                {
+                    edgePointsGraphs.push_back(CreateEdgePointsGraph(edgePointsFamily, *graph));
+                }
             }
-            edgePointsFamilies.push_back(std::move(edgePointsFamily));
+            
+            if (edgePointsGraphs.size() > 0)
+            {
+                EdgePointsGraph* combinedGraph = new EdgePointsGraph();
+                for (auto graph : edgePointsGraphs)
+                {
+                    combinedGraph = CombineGraphs(combinedGraph, graph);
+                }
+                std::cout << "end";
+            }
         }
     }
     
     //MergeIntersectingEdgePointsFamilies(edgePointsFamilies);
+    
 
-    for (std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily : edgePointsFamilies)
+    /*for (std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily : edgePointsFamilies)
     {
-        sucess = true;
         std::deque<std::shared_ptr<EdgePoint>> chain = ConvertEdgePointsToTChain(*graph, edgePointsFamily, sucess);
 
         if (!sucess)
@@ -397,7 +473,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool& suce
     if (index > maxEdgePointsCount)
     {
         maxEdgePointsCount = index;
-    }
+    }*/
 
     return tableRow;
 }

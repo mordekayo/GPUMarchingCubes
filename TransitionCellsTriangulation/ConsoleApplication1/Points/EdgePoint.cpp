@@ -1,7 +1,7 @@
 #include "VertexPoints/VertexPoint.hpp"
 #include "EdgePoint.hpp"
 
-EdgePoint::EdgePoint(const VertexPoint& firstParent, const VertexPoint& secondParent, std::int8_t _index)
+EdgePoint::EdgePoint(const IGraphNode& firstParent, const IGraphNode& secondParent, std::int8_t _index)
     : index(_index), firstParentIndex(firstParent.GetIndex()), secondParentIndex(secondParent.GetIndex())
 {
     float x = (firstParent.GetPosition().x + secondParent.GetPosition().x) / 2;

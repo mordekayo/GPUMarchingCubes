@@ -18,11 +18,10 @@ public:
 	int GetDoupletNeighboursCount() const;
 	std::shared_ptr<DoupletVertexPoint> GetDoupletNeighbour(int index) const;
 	void AddDoupletNeighbour(std::shared_ptr<DoupletVertexPoint> newNode);
-
-	Vector3 GetPosition() const;
 	
 	virtual bool IsActive() const override;
 	virtual int GetIndex() const override;
+	virtual Vector3 GetPosition() const override;
 
 private:
 	Vector3 position;

@@ -27,7 +27,7 @@ public:
 	void Fill();
 
 	TableRow MakeRow(const std::vector<int> activeVertexes);
-	TableRow MakeRow(const VertexActivityMask& vertexActivityMask, bool& sucess);
+	TableRow MakeRow(const VertexActivityMask& vertexActivityMask);
 
 	int GetMaxEdgePointsCount();
 

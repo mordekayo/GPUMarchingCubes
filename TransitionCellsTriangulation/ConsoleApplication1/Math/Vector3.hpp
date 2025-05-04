@@ -12,6 +12,8 @@ struct Vector3
 	float z;
 
 	Vector3 operator+(const Vector3& other) const;
+	Vector3 operator*(int other) const;
+	Vector3 operator/(int other) const;
 
 	Vector3 operator-() const;
 	Vector3 operator-(const Vector3& other) const;

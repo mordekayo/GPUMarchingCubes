@@ -23,6 +23,12 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> node11 = std::make_shared<VertexPoint>(Vector3(0.0f, 1.0f, 1.0f), 11, vertexActivityMask.test(11));
     std::shared_ptr<VertexPoint> node12 = std::make_shared<VertexPoint>(Vector3(1.0f, 1.0f, 1.0f), 12, vertexActivityMask.test(12));
     
+    std::shared_ptr<DoupletVertexPoint> doupletNode13 = std::make_shared<DoupletVertexPoint>(13, node9, node10);
+    std::shared_ptr<DoupletVertexPoint> doupletNode14 = std::make_shared<DoupletVertexPoint>(14, node10, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode15 = std::make_shared<DoupletVertexPoint>(15, node9, node11);
+    std::shared_ptr<DoupletVertexPoint> doupletNode16 = std::make_shared<DoupletVertexPoint>(16, node11, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(16, node9, node11, node10, node12);
+
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(13);
 
     node0->AddNeighbour(node1);
@@ -34,6 +40,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node1->AddNeighbour(node0);
     node1->AddNeighbour(node2);
     node1->AddNeighbour(node4);
+
+    node1->AddDoupletNeighbour(doupletNode13);
 
     AddNode(node1);
 
@@ -47,6 +55,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node3->AddNeighbour(node4);
     node3->AddNeighbour(node6);
 
+    node3->AddDoupletNeighbour(doupletNode15);
+
     AddNode(node3);
 
     node4->AddNeighbour(node1);
@@ -54,11 +64,15 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node4->AddNeighbour(node7);
     node4->AddNeighbour(node5);
 
+    node4->AddDoupletNeighbour(doupletNode17);
+
     AddNode(node4);
 
     node5->AddNeighbour(node2);
     node5->AddNeighbour(node4);
     node5->AddNeighbour(node8);
+
+    node5->AddDoupletNeighbour(doupletNode14);
 
     AddNode(node5);
 
@@ -71,6 +85,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node7->AddNeighbour(node4);
     node7->AddNeighbour(node6);
     node7->AddNeighbour(node8);
+
+    node7->AddDoupletNeighbour(doupletNode16);
 
     AddNode(node7);
 
@@ -168,31 +184,51 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
 
         std::shared_ptr<EdgePoint> edge19 = std::make_shared<EdgePoint>(*node10, *node12, 19);
         edgesTable->insert(std::make_pair(std::make_pair(edge19->GetFirstParentIndex(), edge19->GetSecondParentIndex()), edge19));
+
+        std::shared_ptr<EdgePoint> edge20 = std::make_shared<EdgePoint>(*node1, *doupletNode13, 20);
+        edgesTable->insert(std::make_pair(std::make_pair(edge20->GetFirstParentIndex(), edge20->GetSecondParentIndex()), edge20));
+
+        std::shared_ptr<EdgePoint> edge21 = std::make_shared<EdgePoint>(*node5, *doupletNode14, 21);
+        edgesTable->insert(std::make_pair(std::make_pair(edge21->GetFirstParentIndex(), edge21->GetSecondParentIndex()), edge21));
+
+        std::shared_ptr<EdgePoint> edge22 = std::make_shared<EdgePoint>(*node3, *doupletNode15, 22);
+        edgesTable->insert(std::make_pair(std::make_pair(edge22->GetFirstParentIndex(), edge22->GetSecondParentIndex()), edge22));
+
+        std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node7, *doupletNode16, 23);
+        edgesTable->insert(std::make_pair(std::make_pair(edge23->GetFirstParentIndex(), edge23->GetSecondParentIndex()), edge23));
+
+        std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node4, *doupletNode17, 24);
+        edgesTable->insert(std::make_pair(std::make_pair(edge24->GetFirstParentIndex(), edge24->GetSecondParentIndex()), edge24));
     }
     if (edgeToFaceTable == nullptr)
     {
         edgeToFaceTable = std::make_unique<std::unordered_map<int, std::unordered_set<int>>>();
 
-        edgeToFaceTable->insert(std::make_pair(0, std::unordered_set<int>{0, 2}));
-        edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{0, 2}));
-        edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 1}));
-        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{0}));
-        edgeToFaceTable->insert(std::make_pair(4, std::unordered_set<int>{0, 4}));
-        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0}));
-        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{0}));
-        edgeToFaceTable->insert(std::make_pair(7, std::unordered_set<int>{0, 1}));
-        edgeToFaceTable->insert(std::make_pair(8, std::unordered_set<int>{0}));
-        edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{0, 4}));
-        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{0, 5}));
-        edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{0, 5}));
-        edgeToFaceTable->insert(std::make_pair(12, std::unordered_set<int>{0, 1}));
-        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{0, 4}));
-        edgeToFaceTable->insert(std::make_pair(14, std::unordered_set<int>{1, 5}));
-        edgeToFaceTable->insert(std::make_pair(15, std::unordered_set<int>{4, 5}));
-        edgeToFaceTable->insert(std::make_pair(16, std::unordered_set<int>{2, 3}));
-        edgeToFaceTable->insert(std::make_pair(17, std::unordered_set<int>{1, 3}));      
-        edgeToFaceTable->insert(std::make_pair(18, std::unordered_set<int>{3, 5}));
-        edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{3, 4}));
+        edgeToFaceTable->insert(std::make_pair(0, std::unordered_set<int>{0, 11}));
+        edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{1, 10}));
+        edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 4}));
+        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{0, 1}));
+        edgeToFaceTable->insert(std::make_pair(4, std::unordered_set<int>{1, 6}));
+        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 2}));
+        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{1, 3}));
+        edgeToFaceTable->insert(std::make_pair(7, std::unordered_set<int>{2, 5}));
+        edgeToFaceTable->insert(std::make_pair(8, std::unordered_set<int>{2, 3}));
+        edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{3, 7}));
+        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{2, 8}));
+        edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{3, 9}));
+        edgeToFaceTable->insert(std::make_pair(12, std::unordered_set<int>{4, 11}));
+        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{6, 10}));
+        edgeToFaceTable->insert(std::make_pair(14, std::unordered_set<int>{5, 8}));
+        edgeToFaceTable->insert(std::make_pair(15, std::unordered_set<int>{7, 9}));
+        edgeToFaceTable->insert(std::make_pair(16, std::unordered_set<int>{10, 11, 12}));
+        edgeToFaceTable->insert(std::make_pair(17, std::unordered_set<int>{4, 5, 12}));      
+        edgeToFaceTable->insert(std::make_pair(18, std::unordered_set<int>{8, 9, 12}));
+        edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{6, 7, 12}));
+        edgeToFaceTable->insert(std::make_pair(20, std::unordered_set<int>{10, 11, 13}));
+        edgeToFaceTable->insert(std::make_pair(21, std::unordered_set<int>{6, 7, 15}));
+        edgeToFaceTable->insert(std::make_pair(22, std::unordered_set<int>{4, 5, 14}));
+        edgeToFaceTable->insert(std::make_pair(23, std::unordered_set<int>{8, 9, 16}));
+        edgeToFaceTable->insert(std::make_pair(24, std::unordered_set<int>{13, 14, 15, 16}));
     }
 }
 
@@ -209,17 +245,31 @@ bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
     }
     if (edge1Index == 5 && edge2Index == 6)
     {
-        if (nodes->at(1)->IsActive() && nodes->at(7)->IsActive())
-        {
-            return true;
-        }
+        return true;
     }
     if (edge1Index == 3 && edge2Index == 8)
     {
-        if (nodes->at(3)->IsActive() && nodes->at(5)->IsActive())
-        {
-            return true;
-        }
+        return true;
+    }
+    if (edge1Index == 5 && edge2Index == 6)
+    {
+        return true;
+    }
+    if (edge1Index == 2 && edge2Index == 7)
+    {
+        return true;
+    }
+    if (edge1Index == 0 && edge2Index == 1)
+    {
+        return true;
+    }
+    if (edge1Index == 4 && edge2Index == 9)
+    {
+        return true;
+    }
+    if (edge1Index == 10 && edge2Index == 11)
+    {
+        return true;
     }
     return false;
 }
