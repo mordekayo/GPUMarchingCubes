@@ -436,9 +436,6 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
             }
         }
     }
-    
-    //MergeIntersectingEdgePointsFamilies(edgePointsFamilies);
-    
 
     /*for (std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily : edgePointsFamilies)
     {

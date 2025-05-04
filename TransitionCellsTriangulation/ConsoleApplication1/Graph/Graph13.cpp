@@ -207,12 +207,12 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         edgeToFaceTable->insert(std::make_pair(0, std::unordered_set<int>{0, 11}));
         edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{1, 10}));
         edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 4}));
-        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{0, 1}));
+        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{0, 1, 20, 22}));
         edgeToFaceTable->insert(std::make_pair(4, std::unordered_set<int>{1, 6}));
-        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 2}));
-        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{1, 3}));
+        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 2, 18}));
+        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{1, 3, 19}));
         edgeToFaceTable->insert(std::make_pair(7, std::unordered_set<int>{2, 5}));
-        edgeToFaceTable->insert(std::make_pair(8, std::unordered_set<int>{2, 3}));
+        edgeToFaceTable->insert(std::make_pair(8, std::unordered_set<int>{2, 3, 17, 21}));
         edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{3, 7}));
         edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{2, 8}));
         edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{3, 9}));
@@ -224,11 +224,11 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         edgeToFaceTable->insert(std::make_pair(17, std::unordered_set<int>{4, 5, 12}));      
         edgeToFaceTable->insert(std::make_pair(18, std::unordered_set<int>{8, 9, 12}));
         edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{6, 7, 12}));
-        edgeToFaceTable->insert(std::make_pair(20, std::unordered_set<int>{10, 11, 13}));
+        edgeToFaceTable->insert(std::make_pair(20, std::unordered_set<int>{10, 11, 13, 22}));
         edgeToFaceTable->insert(std::make_pair(21, std::unordered_set<int>{6, 7, 15}));
         edgeToFaceTable->insert(std::make_pair(22, std::unordered_set<int>{4, 5, 14}));
-        edgeToFaceTable->insert(std::make_pair(23, std::unordered_set<int>{8, 9, 16}));
-        edgeToFaceTable->insert(std::make_pair(24, std::unordered_set<int>{13, 14, 15, 16}));
+        edgeToFaceTable->insert(std::make_pair(23, std::unordered_set<int>{8, 9, 16, 21}));
+        edgeToFaceTable->insert(std::make_pair(24, std::unordered_set<int>{13, 14, 15, 16, 17, 18, 19, 20}));
     }
 }
 

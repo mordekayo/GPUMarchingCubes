@@ -276,7 +276,7 @@ int main()
     //table13.PrintFailedRatio();
 
     Table13 table13;
-    std::vector<int> mask({0,1,2,4,7});
+    std::vector<int> mask({0,2,3,4,5,9,10});
     auto row = table13.MakeRow(mask);
     for (auto index : row)
     {
