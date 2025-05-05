@@ -10,18 +10,18 @@ Graph13::Graph13()
 void Graph13::Create(const VertexActivityMask& vertexActivityMask)
 {
     std::shared_ptr<VertexPoint> node0 = std::make_shared<VertexPoint>(Vector3(0.0f, 0.0f, 0.0f), 0, vertexActivityMask.test(0));
-    std::shared_ptr<VertexPoint> node1 = std::make_shared<VertexPoint>(Vector3(0.5f, 0.0f, 0.0f), 1, vertexActivityMask.test(1));
-    std::shared_ptr<VertexPoint> node2 = std::make_shared<VertexPoint>(Vector3(1.0f, 0.0f, 0.0f), 2, vertexActivityMask.test(2));
-    std::shared_ptr<VertexPoint> node3 = std::make_shared<VertexPoint>(Vector3(0.0f, 0.0f, 0.5f), 3, vertexActivityMask.test(3));
-    std::shared_ptr<VertexPoint> node4 = std::make_shared<VertexPoint>(Vector3(0.5f, 0.0f, 0.5f), 4, vertexActivityMask.test(4));
-    std::shared_ptr<VertexPoint> node5 = std::make_shared<VertexPoint>(Vector3(1.0f, 0.0f, 0.5f), 5, vertexActivityMask.test(5));
-    std::shared_ptr<VertexPoint> node6 = std::make_shared<VertexPoint>(Vector3(0.0f, 0.0f, 1.0f), 6, vertexActivityMask.test(6));
-    std::shared_ptr<VertexPoint> node7 = std::make_shared<VertexPoint>(Vector3(0.5f, 0.0f, 1.0f), 7, vertexActivityMask.test(7));
-    std::shared_ptr<VertexPoint> node8 = std::make_shared<VertexPoint>(Vector3(1.0f, 0.0f, 1.0f), 8, vertexActivityMask.test(8));
-    std::shared_ptr<VertexPoint> node9 = std::make_shared<VertexPoint>(Vector3(0.0f, 1.0f, 0.0f), 9, vertexActivityMask.test(9));
-    std::shared_ptr<VertexPoint> node10 = std::make_shared<VertexPoint>(Vector3(1.0f, 1.0f, 0.0f), 10, vertexActivityMask.test(10));
-    std::shared_ptr<VertexPoint> node11 = std::make_shared<VertexPoint>(Vector3(0.0f, 1.0f, 1.0f), 11, vertexActivityMask.test(11));
-    std::shared_ptr<VertexPoint> node12 = std::make_shared<VertexPoint>(Vector3(1.0f, 1.0f, 1.0f), 12, vertexActivityMask.test(12));
+    std::shared_ptr<VertexPoint> node1 = std::make_shared<VertexPoint>(Vector3(2.0f, 0.0f, 0.0f), 1, vertexActivityMask.test(1));
+    std::shared_ptr<VertexPoint> node2 = std::make_shared<VertexPoint>(Vector3(2.0f, 0.0f, 1.0f), 2, vertexActivityMask.test(2));
+    std::shared_ptr<VertexPoint> node3 = std::make_shared<VertexPoint>(Vector3(1.0f, 0.0f, 1.0f), 3, vertexActivityMask.test(3));
+    std::shared_ptr<VertexPoint> node4 = std::make_shared<VertexPoint>(Vector3(0.f, 0.0f, 1.0f), 4, vertexActivityMask.test(4));
+    std::shared_ptr<VertexPoint> node5 = std::make_shared<VertexPoint>(Vector3(2.0f, 1.0f, 1.0f), 5, vertexActivityMask.test(5));
+    std::shared_ptr<VertexPoint> node6 = std::make_shared<VertexPoint>(Vector3(1.0f, 1.0f, 1.0f), 6, vertexActivityMask.test(6));
+    std::shared_ptr<VertexPoint> node7 = std::make_shared<VertexPoint>(Vector3(0.0f, 1.0f, 1.0f), 7, vertexActivityMask.test(7));
+    std::shared_ptr<VertexPoint> node8 = std::make_shared<VertexPoint>(Vector3(2.0f, 2.0f, 0.0f), 8, vertexActivityMask.test(8));
+    std::shared_ptr<VertexPoint> node9 = std::make_shared<VertexPoint>(Vector3(2.0f, 2.0f, 1.0f), 9, vertexActivityMask.test(9));
+    std::shared_ptr<VertexPoint> node10 = std::make_shared<VertexPoint>(Vector3(1.0f, 2.0f, 1.0f), 10, vertexActivityMask.test(10));
+    std::shared_ptr<VertexPoint> node11 = std::make_shared<VertexPoint>(Vector3(0.0f, 2.0f, 1.0f), 11, vertexActivityMask.test(11));
+    std::shared_ptr<VertexPoint> node12 = std::make_shared<VertexPoint>(Vector3(0.0f, 2.0f, 0.0f), 12, vertexActivityMask.test(12));
     
     std::shared_ptr<DoupletVertexPoint> doupletNode13 = std::make_shared<DoupletVertexPoint>(13, node9, node10);
     std::shared_ptr<DoupletVertexPoint> doupletNode14 = std::make_shared<DoupletVertexPoint>(14, node10, node12);
@@ -32,91 +32,82 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(13);
 
     node0->AddNeighbour(node1);
-    node0->AddNeighbour(node3);
-    node0->AddNeighbour(node9);
+    node0->AddNeighbour(node4);
+    node0->AddNeighbour(node12);
     
     AddNode(node0);
 
     node1->AddNeighbour(node0);
     node1->AddNeighbour(node2);
-    node1->AddNeighbour(node4);
+    node1->AddNeighbour(node8);
 
     node1->AddDoupletNeighbour(doupletNode13);
 
     AddNode(node1);
 
     node2->AddNeighbour(node1);
+    node2->AddNeighbour(node3);
     node2->AddNeighbour(node5);
-    node2->AddNeighbour(node10);
 
     AddNode(node2);
 
-    node3->AddNeighbour(node0);
+    node3->AddNeighbour(node2);
     node3->AddNeighbour(node4);
     node3->AddNeighbour(node6);
 
-    node3->AddDoupletNeighbour(doupletNode15);
-
     AddNode(node3);
 
-    node4->AddNeighbour(node1);
     node4->AddNeighbour(node3);
+    node4->AddNeighbour(node0);
     node4->AddNeighbour(node7);
-    node4->AddNeighbour(node5);
-
-    node4->AddDoupletNeighbour(doupletNode17);
 
     AddNode(node4);
 
     node5->AddNeighbour(node2);
-    node5->AddNeighbour(node4);
-    node5->AddNeighbour(node8);
-
-    node5->AddDoupletNeighbour(doupletNode14);
+    node5->AddNeighbour(node6);
+    node5->AddNeighbour(node9);
 
     AddNode(node5);
 
     node6->AddNeighbour(node3);
+    node6->AddNeighbour(node5);
     node6->AddNeighbour(node7);
-    node6->AddNeighbour(node11);
+    node6->AddNeighbour(node10);
 
     AddNode(node6);
     
     node7->AddNeighbour(node4);
     node7->AddNeighbour(node6);
-    node7->AddNeighbour(node8);
-
-    node7->AddDoupletNeighbour(doupletNode16);
+    node7->AddNeighbour(node11);
 
     AddNode(node7);
 
-    node8->AddNeighbour(node5);
-    node8->AddNeighbour(node7);
+    node8->AddNeighbour(node1);
+    node8->AddNeighbour(node9);
     node8->AddNeighbour(node12);
     
     AddNode(node8);
 
-    node9->AddNeighbour(node0);
+    node9->AddNeighbour(node5);
+    node9->AddNeighbour(node8);
     node9->AddNeighbour(node10);
-    node9->AddNeighbour(node11);
 
     AddNode(node9);
 
-    node10->AddNeighbour(node2);
+    node10->AddNeighbour(node6);
     node10->AddNeighbour(node9);
-    node10->AddNeighbour(node12);
+    node10->AddNeighbour(node11);
 
     AddNode(node10);
 
-    node11->AddNeighbour(node6);
-    node11->AddNeighbour(node9);
-    node11->AddNeighbour(node12);
+    node11->AddNeighbour(node7);
+    node11->AddNeighbour(node10);
     node11->AddNeighbour(node12);
 
     AddNode(node11);
 
+    node12->AddNeighbour(node0);
     node12->AddNeighbour(node8);
-    node12->AddNeighbour(node10);
     node12->AddNeighbour(node11);
 
     AddNode(node12);
