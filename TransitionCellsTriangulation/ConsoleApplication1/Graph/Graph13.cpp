@@ -274,7 +274,87 @@ bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
     return false;
 }
 
+std::vector<std::vector<std::shared_ptr<EdgePoint>>>::iterator FindLinkInEdgePointsGraph(
+                    EdgePointsGraph* graph, std::vector<int> link)
+{
+    for (auto it = graph->links.begin(); it != graph->links.end(); ++it)
+    {
+        if (it->at(0)->GetIndex() == link[0] && it->at(1)->GetIndex() == link[1])
+        {
+            return it;
+        }
+    }
+
+    return graph->links.end();
+}
+
 void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
 {
-    //edgePointsGraph->links
+    std::vector<int> link0 = {17, 22};
+    if(FindLinkInEdgePointsGraph(edgePointsGraph, link0) != edgePointsGraph->links.end())
+    {
+        std::vector<int> link1 = { 7, 17 };
+        std::vector<int> link2 = { 2, 7 };
+        auto link1it = FindLinkInEdgePointsGraph(edgePointsGraph, link1);
+        if(link1it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link1it);
+        }
+        auto link2it = FindLinkInEdgePointsGraph(edgePointsGraph, link2);
+        if (link2it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link2it);
+        }
+    }
+
+    std::vector<int> link3 = { 18, 23 };
+    if (FindLinkInEdgePointsGraph(edgePointsGraph, link3) != edgePointsGraph->links.end())
+    {
+        std::vector<int> link4 = { 10, 18 };
+        std::vector<int> link5 = { 10, 11 };
+        auto link4it = FindLinkInEdgePointsGraph(edgePointsGraph, link4);
+        if (link4it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link4it);
+        }
+        auto link5it = FindLinkInEdgePointsGraph(edgePointsGraph, link5);
+        if (link5it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link5it);
+        }
+    }
+
+    std::vector<int> link6 = { 19, 21 };
+    if (FindLinkInEdgePointsGraph(edgePointsGraph, link6) != edgePointsGraph->links.end())
+    {
+        std::vector<int> link7 = { 9, 19 };
+        std::vector<int> link8 = { 4, 19 };
+        auto link7it = FindLinkInEdgePointsGraph(edgePointsGraph, link7);
+        if (link7it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link7it);
+        }
+        auto link8it = FindLinkInEdgePointsGraph(edgePointsGraph, link8);
+        if (link8it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link8it);
+        }
+    }
+
+    std::vector<int> link9 = { 16, 20 };
+    if (FindLinkInEdgePointsGraph(edgePointsGraph, link9) != edgePointsGraph->links.end())
+    {
+        std::vector<int> link10 = { 0, 16 };
+        std::vector<int> link11 = { 1, 16 };
+        auto link10it = FindLinkInEdgePointsGraph(edgePointsGraph, link10);
+        if (link10it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link10it);
+        }
+        auto link11it = FindLinkInEdgePointsGraph(edgePointsGraph, link11);
+        if (link11it != edgePointsGraph->links.end())
+        {
+            edgePointsGraph->links.erase(link11it);
+        }
+    }
 }

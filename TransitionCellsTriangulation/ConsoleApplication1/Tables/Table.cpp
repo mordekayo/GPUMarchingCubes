@@ -310,8 +310,15 @@ EdgePointsGraph* CreateEdgePointsGraph(const std::vector<std::shared_ptr<EdgePoi
                 continue;
             }
             if (!graph.IsProhibited(edgePointsGraph->nodes[i]->GetIndex(), edgePointsGraph->nodes[j]->GetIndex()))
-            {
-                edgePointsGraph->links.push_back({ edgePointsGraph->nodes[i] , edgePointsGraph->nodes[j] });
+            {   
+                if (edgePointsGraph->nodes[i]->GetIndex() < edgePointsGraph->nodes[j]->GetIndex())
+                {
+                    edgePointsGraph->links.push_back({ edgePointsGraph->nodes[i], edgePointsGraph->nodes[j] });
+                }
+                else
+                {
+                    edgePointsGraph->links.push_back({ edgePointsGraph->nodes[j], edgePointsGraph->nodes[i] });
+                }
             }
         }
     }
@@ -567,13 +574,16 @@ EdgePointsGraph* CombineGraphs(EdgePointsGraph* combinedGraph, EdgePointsGraph* 
             std::shared_ptr<EdgePoint> cgNode = combinedGraph->nodes[j];
             if (Graph::isOnSameFace(cgNode->GetIndex(), taNode->GetIndex()))
             {
-                combinedGraph->links.push_back({ cgNode , taNode });
+                if (cgNode->GetIndex() < taNode->GetIndex())
+                {
+                    combinedGraph->links.push_back({ cgNode, taNode });
+                }
+                else
+                {
+                    combinedGraph->links.push_back({ taNode, cgNode });
+                }
             }
         }
-    }
-    if (addedNodesIndexes.size() != graphToAdd->nodes.size())
-    {
-        std::cout << "PIZDEC!!!" << std::endl;
     }
 
     delete graphToAdd;
@@ -652,6 +662,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
                 {
                     combinedGraph = CombineGraphs(combinedGraph, graph);
                 }
+                graph->RemoveRedundantLinks(combinedGraph);
                 auto closedCircuits = findCycles(combinedGraph->links);
                 removeFaceAlignedCircuits(closedCircuits);
                 removeCombinedCircuits(closedCircuits);
