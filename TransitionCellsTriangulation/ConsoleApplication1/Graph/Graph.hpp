@@ -4,6 +4,7 @@
 #include "../Points/EdgePoint.hpp"
 #include "../types.hpp"
 #include "../Math/AxisAlighnedBoundingBox.hpp"
+#include "../Points/EdgePointsGraph.hpp"
 
 class Graph
 {
@@ -27,6 +28,8 @@ public:
 	virtual bool IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const;
 
 	virtual bool IsProhibited(int edge1Index, int edge2Index) const;
+
+	virtual void RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph);
 
 protected:
 

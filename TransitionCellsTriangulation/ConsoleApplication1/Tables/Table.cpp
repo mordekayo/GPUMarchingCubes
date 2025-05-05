@@ -420,56 +420,125 @@ std::vector<std::vector<std::shared_ptr<EdgePoint>>> findCycles(std::vector<std:
     return cycles;
 }
 
+void sortCircuitsBySize(std::vector<std::vector<std::shared_ptr<EdgePoint>>>& circuits)
+{
+    struct
+    {
+        bool operator()(const std::vector<std::shared_ptr<EdgePoint>>& a,
+            const std::vector<std::shared_ptr<EdgePoint>>& b) const
+        {
+            return a.size() < b.size(); 
+        }
+    }
+    customLess;
+    std::sort(circuits.begin(), circuits.end(), customLess);
+}
+
+bool FloatEqual(float a, float b)
+{
+    return std::fabs(a - b) < std::numeric_limits<float>::epsilon();
+}
+
+void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint>>>& circuits)
+{
+    for (int i = circuits.size() - 1; i >= 1; --i)
+    {
+        std::vector<float> xs;
+        std::vector<float> ys;
+        std::vector<float> zs;
+        
+        for (int j = 0; j < circuits[i].size(); ++j)
+        {
+            Vector3 pos = circuits[i][j]->GetPosition();
+            xs.push_back(pos.x);
+            ys.push_back(pos.y);
+            zs.push_back(pos.z);
+        }
+
+        bool allXisZero = true;
+        bool allXisOne = true;
+        for (auto x : xs)
+        {
+            if (!FloatEqual(x, 0))
+            {
+                allXisZero = false;
+            }
+            if (!FloatEqual(x, 1))
+            {
+                allXisOne = false;
+            }
+        }
+
+        bool allYisZero = true;
+        bool allYisOne = true;
+        for (auto y : ys)
+        {
+            if (!FloatEqual(y, 0))
+            {
+                allYisZero = false;
+            }
+            if (!FloatEqual(y, 1))
+            {
+                allYisOne = false;
+            }
+        }
+
+        bool allZisZero = true;
+        bool allZisOne = true;
+        for (auto z : zs)
+        {
+            if (!FloatEqual(z, 0))
+            {
+                allZisZero = false;
+            }
+            if (!FloatEqual(z, 1))
+            {
+                allZisOne = false;
+            }
+        }
+
+        if (allXisZero || allXisOne || allYisZero || allYisOne || allZisZero || allZisOne)
+        {
+            circuits.erase(circuits.begin() + i);
+        }
+    }
+}
+
 void removeCombinedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint>>>& circuits)
 {
-    bool wasRemoved = false;
-    for (int i = circuits.size() - 1; i >= 2; --i)
+    sortCircuitsBySize(circuits);
+
+    for (int i = circuits.size() - 1; i >= 1; --i)
     {
-        bool shouldBeRemoved = false;
+        bool shouldBeRemoved = true;
         std::unordered_set<std::shared_ptr<EdgePoint>> iset;
         for (auto point : circuits[i])
         {
             iset.insert(point);
         }
-
-        for (int j = i - 1; j >= 1; --j)
+    
+        std::unordered_set<std::shared_ptr<EdgePoint>> othersSet;
+        for (int j = 0; j < i; ++j)
         {
-            std::unordered_set<std::shared_ptr<EdgePoint>> jset;
             for (auto point : circuits[j])
             {
-                jset.insert(point);
+                othersSet.insert(point);
             }
+        }
 
-            for (int k = j - 1; k >= 0; --k)
+        for (auto point : iset)
+        {
+            if (!othersSet.contains(point))
             {
-                std::unordered_set<std::shared_ptr<EdgePoint>> kset;
-                for (auto point : circuits[k])
-                {
-                    kset.insert(point);
-                }
-
-                kset.insert(jset.begin(), jset.end());
-
-                if (kset == iset)
-                {
-                    shouldBeRemoved = true;
-                    break;
-                }
-            }
-
-            if (shouldBeRemoved == true)
-            {
+                shouldBeRemoved = false;
                 break;
             }
         }
+
         if (shouldBeRemoved)
         {
             circuits.erase(circuits.begin() + i);
         }
-    }
-    if (wasRemoved == true)
-    {
-        removeCombinedCircuits(circuits);
     }
 }
 
@@ -584,25 +653,13 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
                     combinedGraph = CombineGraphs(combinedGraph, graph);
                 }
                 auto closedCircuits = findCycles(combinedGraph->links);
+                removeFaceAlignedCircuits(closedCircuits);
                 removeCombinedCircuits(closedCircuits);
-                std::reverse(closedCircuits.begin(), closedCircuits.end());
-                removeCombinedCircuits(closedCircuits);
-                std::cout << "Circuits found : " << closedCircuits.size() << std::endl;
-                for (int i = 0; i < closedCircuits.size(); ++i)
-                {
-                    std::cout << i << ".Circuit: ";
-                    for (int j = 0; i < closedCircuits[i].size(); ++j)
-                    {
-                        std::cout << closedCircuits[i][j] << " ";
-                    }
-                    std::cout << std::endl;
-                }
-
                 for (auto circuit : closedCircuits)
                 {
                     std::vector<std::uint8_t> triangles = EarClipping(*graph, circuit);
 
-                    for (int i = 0; i < triangles.size(); i += 3)
+                    for (int i = 0; i < triangles.size(); ++i)
                     {
                         tableRow[index++] = triangles[i];
                     }

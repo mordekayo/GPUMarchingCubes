@@ -273,3 +273,8 @@ bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
     }
     return false;
 }
+
+void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
+{
+    //edgePointsGraph->links
+}

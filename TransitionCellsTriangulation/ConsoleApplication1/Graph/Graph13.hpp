@@ -11,4 +11,6 @@ public:
 	bool IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const override;
 
 	virtual bool IsProhibited(int edge1Index, int edge2Index) const override;
+
+	virtual void RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph) override;
 };

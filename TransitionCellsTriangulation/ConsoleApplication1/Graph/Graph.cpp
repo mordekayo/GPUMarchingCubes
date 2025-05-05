@@ -73,3 +73,8 @@ bool Graph::IsProhibited(int edge1Index, int edge2Index) const
     return false;
 }
 
+void Graph::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
+{
+
+}
+
