@@ -270,18 +270,20 @@ int main()
     //{
     //    std::cout << row2[index] << " ";
     //}
-    //Table13 table13;
-    //table13.CreateEmpty();
-    //table13.Fill();
-    //table13.PrintFailedRatio();
-
     Table13 table13;
-    std::vector<int> mask({0,2,3,4,5,9, 10});
-    auto row = table13.MakeRow(mask);
-    for (auto index : row)
-    {
-        std::cout << (int)index << " ";
-    }
+    table13.CreateEmpty();
+    table13.Fill();
+    //table13.GetMaxEdgePointsCount();
+    table13.Serialize("Table13.bin");
+    table13.SerializeAsText("Table13.txt");
+
+    //Table13 table13;
+    //std::vector<int> mask({0,2,3,4,5,9, 10});
+    //auto row = table13.MakeRow(mask);
+    //for (auto index : row)
+    //{
+    //    std::cout << (int)index << " ";
+    //}
     //table13.CreateEmpty();
     //table13.Fill(); 
     //table13.SerializeAsText("Table13.txt");

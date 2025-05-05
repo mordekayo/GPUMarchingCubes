@@ -42,7 +42,7 @@ void Table::Serialize(const std::string& fileName)
     for (int i = 0; i < table->size(); ++i)
     {
         TableRow& row = (*table)[i];
-        fileStream.write(reinterpret_cast<char*>(row.data()), sizeof(row.data()));
+        fileStream.write(reinterpret_cast<char*>(row.data()), sizeof(char) * row.size());
     }
 
     fileStream.close();
@@ -604,7 +604,6 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> entry = graph->GetEntry();
 
     std::unordered_set<std::shared_ptr<VertexPoint>> alreadyVisitedNodes;
-    std::vector<EdgePointsGraph*> edgePointsGraphs;
     std::vector<std::vector<std::shared_ptr<EdgePoint>>> closedCircuits;
     for (std::shared_ptr<VertexPoint> node : *(graph->GetNodes()))
     {
@@ -614,6 +613,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
         }
         if (node->IsActive() && !alreadyVisitedNodes.contains(node))
         {
+            std::vector<EdgePointsGraph*> edgePointsGraphs;
             std::vector<std::shared_ptr<VertexPoint>> vertexPointsFamily;
             BFS(node, alreadyVisitedNodes, vertexPointsFamily);
             for (std::shared_ptr<VertexPoint> vertexPoint : vertexPointsFamily)
