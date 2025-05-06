@@ -18,6 +18,7 @@ public:
 	void AddNode(std::shared_ptr<VertexPoint> node);
 	
 	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> GetNodes();
+	std::shared_ptr<std::vector<std::shared_ptr<DoupletVertexPoint>>> GetDoupletNodes();
 	
 	std::shared_ptr<EdgePoint> GetEdgePoint(int firstVertex, int secondVertex);
 
@@ -45,6 +46,7 @@ protected:
 	static std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> edgeToFaceTable;
 
 	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> nodes;
+	std::shared_ptr<std::vector<std::shared_ptr<DoupletVertexPoint>>> doupletNodes;
 
 	AABB prohibitedAreaBoundingBox;
 };

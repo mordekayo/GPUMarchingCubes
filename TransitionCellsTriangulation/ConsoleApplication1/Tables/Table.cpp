@@ -302,6 +302,18 @@ bool Contains(const std::vector<std::shared_ptr<EdgePoint>>& family, std::shared
     return false;
 }
 
+bool Contains(const std::vector<std::shared_ptr<VertexPoint>>& family, std::shared_ptr<VertexPoint> item)
+{
+    for (auto it : family)
+    {
+        if (it == item)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 EdgePointsGraph* CreateEdgePointsGraph(const std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily, const Graph& graph)
 {
     EdgePointsGraph* edgePointsGraph = new EdgePointsGraph();
@@ -662,6 +674,23 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                     edgePointsGraphs.push_back(CreateEdgePointsGraph(edgePointsFamily, *graph));
                 }
             }
+
+            /*for (auto doupletNode : *graph->GetDoupletNodes())
+            {
+                auto parents = doupletNode->GetParents();
+                bool doupletInFamily = true;
+                for(auto vertex : parents)
+                {
+                    if (!Contains(vertexPointsFamily, vertex))
+                    {
+                        doupletInFamily = false;
+                    }
+                }
+                if (doupletNode->IsActive() && doupletInFamily)
+                {
+                    
+                }
+            }*/
             
             if (edgePointsGraphs.size() > 0)
             {

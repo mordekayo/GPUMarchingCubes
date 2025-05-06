@@ -30,6 +30,13 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(17, node8, node12);
 
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(13);
+    doupletNodes = std::make_shared<std::vector<std::shared_ptr<DoupletVertexPoint>>>(5);
+
+    doupletNodes->push_back(doupletNode13);
+    doupletNodes->push_back(doupletNode14);
+    doupletNodes->push_back(doupletNode15);
+    doupletNodes->push_back(doupletNode16);
+    doupletNodes->push_back(doupletNode17);
 
     node0->AddNeighbour(node1);
     node0->AddNeighbour(node4);
@@ -187,17 +194,27 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         std::shared_ptr<EdgePoint> edge20 = std::make_shared<EdgePoint>(*node3, *doupletNode13, 1);
         edgesTable->insert(std::make_pair(std::make_pair(edge20->GetFirstParentIndex(), edge20->GetSecondParentIndex()), edge20));
 
+        doupletNode13->SetLinkedEdgePoint(edge20);
+
         std::shared_ptr<EdgePoint> edge21 = std::make_shared<EdgePoint>(*node7, *doupletNode14, 11);
         edgesTable->insert(std::make_pair(std::make_pair(edge21->GetFirstParentIndex(), edge21->GetSecondParentIndex()), edge21));
+
+        doupletNode14->SetLinkedEdgePoint(edge21);
 
         std::shared_ptr<EdgePoint> edge22 = std::make_shared<EdgePoint>(*node6, *doupletNode15, 9);
         edgesTable->insert(std::make_pair(std::make_pair(edge22->GetFirstParentIndex(), edge22->GetSecondParentIndex()), edge22));
 
+        doupletNode15->SetLinkedEdgePoint(edge22);
+
         std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node5, *doupletNode16, 18);
         edgesTable->insert(std::make_pair(std::make_pair(edge23->GetFirstParentIndex(), edge23->GetSecondParentIndex()), edge23));
 
+        doupletNode16->SetLinkedEdgePoint(edge23);
+
         std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node10, *doupletNode17, 37);
         edgesTable->insert(std::make_pair(std::make_pair(edge24->GetFirstParentIndex(), edge24->GetSecondParentIndex()), edge24));
+
+        doupletNode17->SetLinkedEdgePoint(edge24);
     }
     if (edgeToFaceTable == nullptr)
     {

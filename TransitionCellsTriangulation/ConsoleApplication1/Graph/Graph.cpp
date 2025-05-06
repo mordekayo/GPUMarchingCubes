@@ -30,6 +30,11 @@ std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> Graph::GetNodes()
     return nodes;
 }
 
+std::shared_ptr<std::vector<std::shared_ptr<DoupletVertexPoint>>> Graph::GetDoupletNodes()
+{
+    return doupletNodes;
+}
+
 std::shared_ptr<EdgePoint> Graph::GetEdgePoint(int firstVertexIndex, int secondVertexIndex)
 {
     int first = std::min(firstVertexIndex, secondVertexIndex);

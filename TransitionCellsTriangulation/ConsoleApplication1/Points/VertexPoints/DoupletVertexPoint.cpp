@@ -1,5 +1,6 @@
 #include "DoupletVertexPoint.hpp"
 #include "VertexPoint.hpp"
+#include "../EdgePoint.hpp"
 
 DoupletVertexPoint::DoupletVertexPoint(int _index, std::shared_ptr<VertexPoint> _first,
 	std::shared_ptr<VertexPoint> _second) : index(_index), node1(_first), node2(_second)
@@ -23,8 +24,7 @@ bool DoupletVertexPoint::IsActive() const
 	}
 	else
 	{
-		return node1->IsActive() && node2->IsActive() || node3->IsActive() && node4->IsActive() || 
-			node1->IsActive() && node4->IsActive() || node2->IsActive() && node3->IsActive();
+		return node1->IsActive() && node2->IsActive() && node3->IsActive() && node4->IsActive();
 	}
 }
 
@@ -45,4 +45,26 @@ Vector3 DoupletVertexPoint::GetPosition() const
 		Vector3 v = node3->GetPosition() - node1->GetPosition();
 		return node1->GetPosition() + v / 2;
 	}
+}
+
+//std::vector<std::shared_ptr<IGraphNode>> DoupletVertexPoint::GetParents()
+//{
+//	if (node3 == nullptr)
+//	{
+//		return { node1, node2 };
+//	}
+//	else
+//	{
+//		return { node1, node2, node3, node4 };
+//	}
+//}
+
+void DoupletVertexPoint::SetLinkedEdgePoint(std::shared_ptr<EdgePoint> _edgePoint)
+{
+	edgePoint = _edgePoint;
+}
+
+std::shared_ptr<EdgePoint> DoupletVertexPoint::GetLinkedEdgePoint()
+{
+	return edgePoint;
 }

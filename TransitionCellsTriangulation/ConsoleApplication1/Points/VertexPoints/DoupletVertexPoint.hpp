@@ -5,6 +5,7 @@
 
 class VertexPoint;
 class Vector3;
+class EdgePoint;
 
 class DoupletVertexPoint : public IGraphNode
 {
@@ -17,6 +18,11 @@ public:
 	virtual int GetIndex() const override;
 	virtual Vector3 GetPosition() const override;
 
+	//std::vector<std::shared_ptr<IGraphNode>> GetParents();
+
+	void SetLinkedEdgePoint(std::shared_ptr<EdgePoint> edgePoint);
+	std::shared_ptr<EdgePoint> GetLinkedEdgePoint();
+
 private:
 
 	int index;
@@ -24,4 +30,6 @@ private:
 	std::shared_ptr<VertexPoint> node2 = nullptr;
 	std::shared_ptr<VertexPoint> node3 = nullptr;
 	std::shared_ptr<VertexPoint> node4 = nullptr;
+
+	std::shared_ptr<EdgePoint> edgePoint = nullptr;
 };
