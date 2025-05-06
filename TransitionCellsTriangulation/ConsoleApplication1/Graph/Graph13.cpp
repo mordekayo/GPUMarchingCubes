@@ -30,7 +30,7 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(17, node8, node12);
 
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(13);
-    doupletNodes = std::make_shared<std::vector<std::shared_ptr<DoupletVertexPoint>>>(5);
+    doupletNodes = std::make_shared<std::vector<std::shared_ptr<DoupletVertexPoint>>>();
 
     doupletNodes->push_back(doupletNode13);
     doupletNodes->push_back(doupletNode14);
@@ -143,7 +143,7 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         std::shared_ptr<EdgePoint> edge3 = std::make_shared<EdgePoint>(*node3, *node4, 2);
         edgesTable->insert(std::make_pair(std::make_pair(edge3->GetFirstParentIndex(), edge3->GetSecondParentIndex()), edge3));
 
-        std::shared_ptr<EdgePoint> edge4 = std::make_shared<EdgePoint>(*node4, *node0, 3);
+        std::shared_ptr<EdgePoint> edge4 = std::make_shared<EdgePoint>(*node0, *node4, 3);
         edgesTable->insert(std::make_pair(std::make_pair(edge4->GetFirstParentIndex(), edge4->GetSecondParentIndex()), edge4));
 
         std::shared_ptr<EdgePoint> edge5 = std::make_shared<EdgePoint>(*node2, *node5, 16);
@@ -255,38 +255,30 @@ bool Graph13::IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vec
 
 bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
 {
-    //if (edge1Index > edge2Index)
-    //{
-    //    std::swap(edge1Index, edge2Index);
-    //}
-    //if (edge1Index == 5 && edge2Index == 6)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 3 && edge2Index == 8)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 5 && edge2Index == 6)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 2 && edge2Index == 7)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 0 && edge2Index == 1)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 4 && edge2Index == 9)
-    //{
-    //    return true;
-    //}
-    //if (edge1Index == 10 && edge2Index == 11)
-    //{
-    //    return true;
-    //}
+    if (edge1Index > edge2Index)
+    {
+        std::swap(edge1Index, edge2Index);
+    }
+    if (edge1Index == 2 && edge2Index == 14)
+    {
+        return true;
+    }
+    if (edge1Index == 10 && edge2Index == 19)
+    {
+        return true;
+    }
+    if (edge1Index == 38 && edge2Index == 44)
+    {
+        return true;
+    }
+    if (edge1Index == 6 && edge2Index == 35)
+    {
+        return true;
+    }
+    if (edge1Index == 16 && edge2Index == 41)
+    {
+        return true;
+    }
     return false;
 }
 

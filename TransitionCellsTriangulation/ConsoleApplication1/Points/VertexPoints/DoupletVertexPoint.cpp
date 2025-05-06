@@ -47,18 +47,6 @@ Vector3 DoupletVertexPoint::GetPosition() const
 	}
 }
 
-//std::vector<std::shared_ptr<IGraphNode>> DoupletVertexPoint::GetParents()
-//{
-//	if (node3 == nullptr)
-//	{
-//		return { node1, node2 };
-//	}
-//	else
-//	{
-//		return { node1, node2, node3, node4 };
-//	}
-//}
-
 void DoupletVertexPoint::SetLinkedEdgePoint(std::shared_ptr<EdgePoint> _edgePoint)
 {
 	edgePoint = _edgePoint;
@@ -68,3 +56,16 @@ std::shared_ptr<EdgePoint> DoupletVertexPoint::GetLinkedEdgePoint()
 {
 	return edgePoint;
 }
+
+std::vector<std::shared_ptr<VertexPoint>> DoupletVertexPoint::GetParents()
+{
+	if (node3 == nullptr)
+	{
+		return { node1, node2 };
+	}
+	else
+	{
+		return { node1, node2, node3, node4 };
+	}
+}
+

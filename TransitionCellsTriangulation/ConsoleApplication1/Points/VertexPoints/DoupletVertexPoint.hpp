@@ -2,6 +2,7 @@
 
 #include "GraphNode.hpp"
 #include <memory>
+#include <vector>
 
 class VertexPoint;
 class Vector3;
@@ -18,10 +19,10 @@ public:
 	virtual int GetIndex() const override;
 	virtual Vector3 GetPosition() const override;
 
-	//std::vector<std::shared_ptr<IGraphNode>> GetParents();
-
 	void SetLinkedEdgePoint(std::shared_ptr<EdgePoint> edgePoint);
 	std::shared_ptr<EdgePoint> GetLinkedEdgePoint();
+		
+	std::vector<std::shared_ptr<VertexPoint>> GetParents();
 
 private:
 

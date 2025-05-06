@@ -314,7 +314,7 @@ bool Contains(const std::vector<std::shared_ptr<VertexPoint>>& family, std::shar
     return false;
 }
 
-EdgePointsGraph* CreateEdgePointsGraph(const std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily, const Graph& graph)
+EdgePointsGraph* CreateEdgePointsGraph(const std::vector<std::shared_ptr<EdgePoint>>& edgePointsFamily, const Graph& graph)
 {
     EdgePointsGraph* edgePointsGraph = new EdgePointsGraph();
     for (std::shared_ptr<EdgePoint> edgePoint : edgePointsFamily)
@@ -675,7 +675,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                 }
             }
 
-            /*for (auto doupletNode : *graph->GetDoupletNodes())
+            for (auto doupletNode : *graph->GetDoupletNodes())
             {
                 auto parents = doupletNode->GetParents();
                 bool doupletInFamily = true;
@@ -688,9 +688,10 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                 }
                 if (doupletNode->IsActive() && doupletInFamily)
                 {
-                    
+                    std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily { doupletNode->GetLinkedEdgePoint ()};
+                    edgePointsGraphs.push_back(CreateEdgePointsGraph(edgePointsFamily, *graph));
                 }
-            }*/
+            }
             
             if (edgePointsGraphs.size() > 0)
             {
@@ -707,7 +708,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                 {
                     std::vector<std::shared_ptr<EdgePoint>> triangles = EarClipping(*graph, circuit);
 
-                    for (int i = 0; i < triangles.size(); ++i)
+                    for (int i = 0; i < triangles.size(); i += 3)
                     {
                         auto p0 = triangles[i];
                         auto p1 = triangles[i + 1];
@@ -716,7 +717,25 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                         Vector3 triangleNormal = Vector3::CrossProduct(p1->GetPosition() - p0->GetPosition(),
                                                                        p2->GetPosition() - p1->GetPosition());
                         
-                        if (Vector3::DotProduct(triangleNormal, p0->GetPosition() - vertexPointsFamily[0]->GetPosition()))
+                        Vector3 triangleCenter = Vector3((p0->GetPosition().x + p1->GetPosition().x + p2->GetPosition().x) / 3,
+                                                         (p0->GetPosition().y + p1->GetPosition().y + p2->GetPosition().y) / 3,
+                                                         (p0->GetPosition().z + p1->GetPosition().z + p2->GetPosition().z) / 3);
+
+                        float closestDistance = (triangleCenter - vertexPointsFamily[0]->GetPosition()).GetMagnitude();
+                        Vector3 closestVertexPosition = vertexPointsFamily[0]->GetPosition();
+                        for (int i = 1; i < vertexPointsFamily.size(); ++i)
+                        {
+                            float distance = (triangleCenter - vertexPointsFamily[i]->GetPosition()).GetMagnitude();
+                            if (distance < closestDistance)
+                            {
+                                closestDistance = distance;
+                                closestVertexPosition = vertexPointsFamily[i]->GetPosition();
+                            }
+                        }
+
+                        Vector3 fromClosestVertexToTriangleCenter = triangleCenter - closestVertexPosition;
+
+                        if (Vector3::DotProduct(triangleNormal, fromClosestVertexToTriangleCenter) > 0)
                         {
                             tableRow[index++] = p0->GetIndex();
                             tableRow[index++] = p1->GetIndex();

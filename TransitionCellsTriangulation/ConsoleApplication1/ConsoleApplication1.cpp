@@ -271,19 +271,24 @@ int main()
     //    std::cout << row2[index] << " ";
     //}
     Table13 table13;
-    table13.CreateEmpty();
-    table13.Fill();
+    //table13.CreateEmpty();
+    //table13.Fill();
+    std::vector<int> mask({0,2,4,5,6,7});
+    auto row = table13.MakeRow(mask);
+    int i = 0;
+    for (; row[i] != -1; ++i)
+    {
+        std::cout << (int)row[i] << ", ";
+    }
+    std::cout << std::endl;
+    std::cout << i;
     //table13.GetMaxEdgePointsCount();
-    table13.Serialize("Table13.bin");
-    table13.SerializeAsText("Table13.txt");
+    //table13.Serialize("Table13.bin");
+    //table13.SerializeAsText("Table13.txt");
 
     //Table13 table13;
-    //std::vector<int> mask({0,2,3,4,5,9, 10});
-    //auto row = table13.MakeRow(mask);
-    //for (auto index : row)
-    //{
-    //    std::cout << (int)index << " ";
-    //}
+
+
     //table13.CreateEmpty();
     //table13.Fill(); 
     //table13.SerializeAsText("Table13.txt");
