@@ -113,20 +113,22 @@ void Table::Fill()
     for (unsigned long i = 0; i < tableSize; ++i)
     {
         auto vertexActivityMaskCopy = VertexActivityMask(i);
+        bool flipped = false;
         if (vertexActivityMaskCopy.count() > vertexActivityMaskCopy.size() / 2)
         {
             vertexActivityMaskCopy.flip();
+            flipped = true;
         }
-        (*table)[i] = MakeRow(vertexActivityMaskCopy);
+        (*table)[i] = MakeRow(vertexActivityMaskCopy, flipped);
     }
 }
 
-std::vector<std::uint8_t> EarClipping(const Graph& graph, std::vector<std::shared_ptr<EdgePoint>>& chain)
+std::vector<std::shared_ptr<EdgePoint>> EarClipping(const Graph& graph, std::vector<std::shared_ptr<EdgePoint>>& circuit)
 {
-    std::vector<std::uint8_t> triangeList;
+    std::vector<std::shared_ptr<EdgePoint>> triangeList;
     std::vector<std::shared_ptr<EdgePoint>> chainCopy;
 
-    for (auto edgePoint : chain)
+    for (auto edgePoint : circuit)
     {
         chainCopy.push_back(edgePoint);
     }
@@ -147,9 +149,9 @@ std::vector<std::uint8_t> EarClipping(const Graph& graph, std::vector<std::share
                     chainCopy[index]->GetPosition(),
                     chainCopy[nextIndex]->GetPosition()))
                 {
-                    triangeList.push_back(chainCopy[prevIndex]->GetIndex());
-                    triangeList.push_back(chainCopy[index]->GetIndex());
-                    triangeList.push_back(chainCopy[nextIndex]->GetIndex());
+                    triangeList.push_back(chainCopy[prevIndex]);
+                    triangeList.push_back(chainCopy[index]);
+                    triangeList.push_back(chainCopy[nextIndex]);
                 }
                 chainCopy.erase(chainCopy.begin() + index);
                 if (prevIndex >= chainCopy.size())
@@ -253,7 +255,13 @@ TableRow Table::MakeRow(const std::vector<int> activeVertexes)
     {
         vertexActivityMask.set(vertexIndex, true);
     }
-    return MakeRow(vertexActivityMask);
+    bool flipped = false;
+    if (vertexActivityMask.count() > vertexActivityMask.size() / 2)
+    {
+        vertexActivityMask.flip();
+        flipped = true;
+    }
+    return MakeRow(vertexActivityMask, flipped);
 }
 
 //void MergeIntersectingEdgePointsFamilies(
@@ -592,7 +600,7 @@ EdgePointsGraph* CombineGraphs(EdgePointsGraph* combinedGraph, EdgePointsGraph* 
     return combinedGraph;
 }
 
-TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
+TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipped = false)
 {
     TableRow tableRow;
     tableRow.fill(-1);
@@ -668,29 +676,30 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask)
                 removeCombinedCircuits(closedCircuits);
                 for (auto circuit : closedCircuits)
                 {
-                    std::vector<std::uint8_t> triangles = EarClipping(*graph, circuit);
+                    std::vector<std::shared_ptr<EdgePoint>> triangles = EarClipping(*graph, circuit);
 
                     for (int i = 0; i < triangles.size(); ++i)
                     {
-                        tableRow[index++] = triangles[i];
+                        auto p0 = triangles[i];
+                        auto p1 = triangles[i + 1];
+                        auto p2 = triangles[i + 2];
+
+                        Vector3 triangleNormal = Vector3::CrossProduct(p1->GetPosition() - p0->GetPosition(),
+                                                                       p2->GetPosition() - p1->GetPosition());
+                        
+                        if (Vector3::DotProduct(triangleNormal, p0->GetPosition() - vertexPointsFamily[0]->GetPosition()))
+                        {
+                            tableRow[index++] = p0->GetIndex();
+                            tableRow[index++] = p1->GetIndex();
+                            tableRow[index++] = p2->GetIndex();
+                        }
+                        else
+                        {
+                            tableRow[index++] = p2->GetIndex();
+                            tableRow[index++] = p1->GetIndex();
+                            tableRow[index++] = p0->GetIndex();
+                        }
                     }
-
-                    //TODO reverse triangles by position of vertexes that created circuit
-
-                    //if (Vector3::DotProduct(circuitPlaneNormal, chain[0]->GetPosition() - (*edgePointsFamily.begin())->GetPosition()) < 0)
-                    //{
-                    //    for (auto it = triangles.begin(); it != triangles.end(); ++it)
-                    //    {
-                    //        tableRow[index++] = *it;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    for (auto rIt = triangles.rbegin(); rIt != triangles.rend(); ++rIt)
-                    //    {
-                    //        tableRow[index++] = *rIt;
-                    //    }
-                    //}
                 }
             }
         }
