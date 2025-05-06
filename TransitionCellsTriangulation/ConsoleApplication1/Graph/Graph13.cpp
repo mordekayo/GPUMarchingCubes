@@ -23,11 +23,11 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     std::shared_ptr<VertexPoint> node11 = std::make_shared<VertexPoint>(Vector3(0.0f, 2.0f, 1.0f), 11, vertexActivityMask.test(11));
     std::shared_ptr<VertexPoint> node12 = std::make_shared<VertexPoint>(Vector3(0.0f, 2.0f, 0.0f), 12, vertexActivityMask.test(12));
     
-    std::shared_ptr<DoupletVertexPoint> doupletNode13 = std::make_shared<DoupletVertexPoint>(13, node9, node10);
-    std::shared_ptr<DoupletVertexPoint> doupletNode14 = std::make_shared<DoupletVertexPoint>(14, node10, node12);
-    std::shared_ptr<DoupletVertexPoint> doupletNode15 = std::make_shared<DoupletVertexPoint>(15, node9, node11);
-    std::shared_ptr<DoupletVertexPoint> doupletNode16 = std::make_shared<DoupletVertexPoint>(16, node11, node12);
-    std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(16, node9, node11, node10, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode13 = std::make_shared<DoupletVertexPoint>(13, node0, node1);
+    std::shared_ptr<DoupletVertexPoint> doupletNode14 = std::make_shared<DoupletVertexPoint>(14, node0, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode15 = std::make_shared<DoupletVertexPoint>(15, node0, node1, node8, node12);
+    std::shared_ptr<DoupletVertexPoint> doupletNode16 = std::make_shared<DoupletVertexPoint>(16, node1, node8);
+    std::shared_ptr<DoupletVertexPoint> doupletNode17 = std::make_shared<DoupletVertexPoint>(17, node8, node12);
 
     nodes = std::make_shared<std::vector<std::shared_ptr<VertexPoint>>>(13);
 
@@ -41,8 +41,6 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node1->AddNeighbour(node2);
     node1->AddNeighbour(node8);
 
-    node1->AddDoupletNeighbour(doupletNode13);
-
     AddNode(node1);
 
     node2->AddNeighbour(node1);
@@ -54,6 +52,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node3->AddNeighbour(node2);
     node3->AddNeighbour(node4);
     node3->AddNeighbour(node6);
+
+    node3->AddDoupletNeighbour(doupletNode13);
 
     AddNode(node3);
 
@@ -67,6 +67,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node5->AddNeighbour(node6);
     node5->AddNeighbour(node9);
 
+    node5->AddDoupletNeighbour(doupletNode16);
+
     AddNode(node5);
 
     node6->AddNeighbour(node3);
@@ -74,11 +76,15 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node6->AddNeighbour(node7);
     node6->AddNeighbour(node10);
 
+    node6->AddDoupletNeighbour(doupletNode15);
+
     AddNode(node6);
     
     node7->AddNeighbour(node4);
     node7->AddNeighbour(node6);
     node7->AddNeighbour(node11);
+
+    node7->AddDoupletNeighbour(doupletNode14);
 
     AddNode(node7);
 
@@ -98,6 +104,8 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     node10->AddNeighbour(node9);
     node10->AddNeighbour(node11);
 
+    node10->AddDoupletNeighbour(doupletNode17);
+
     AddNode(node10);
 
     node11->AddNeighbour(node7);
@@ -116,110 +124,110 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
     {
         edgesTable = std::make_unique<std::unordered_map<std::pair<int, int>, std::shared_ptr<EdgePoint>, Graph::pairHasher>>();
 
-        std::shared_ptr<EdgePoint> edge0 = std::make_shared<EdgePoint>(*node0, *node1, 0);
+        std::shared_ptr<EdgePoint> edge0 = std::make_shared<EdgePoint>(*node0, *node1, 53);
         edgesTable->insert(std::make_pair(std::make_pair(edge0->GetFirstParentIndex(), edge0->GetSecondParentIndex()), edge0));
 
-        std::shared_ptr<EdgePoint> edge1 = std::make_shared<EdgePoint>(*node1, *node2, 1);
+        std::shared_ptr<EdgePoint> edge1 = std::make_shared<EdgePoint>(*node1, *node2, 13);
         edgesTable->insert(std::make_pair(std::make_pair(edge1->GetFirstParentIndex(), edge1->GetSecondParentIndex()), edge1));
 
-        std::shared_ptr<EdgePoint> edge2 = std::make_shared<EdgePoint>(*node0, *node3, 2);
+        std::shared_ptr<EdgePoint> edge2 = std::make_shared<EdgePoint>(*node2, *node3, 14);
         edgesTable->insert(std::make_pair(std::make_pair(edge2->GetFirstParentIndex(), edge2->GetSecondParentIndex()), edge2));
 
-        std::shared_ptr<EdgePoint> edge3 = std::make_shared<EdgePoint>(*node1, *node4, 3);
+        std::shared_ptr<EdgePoint> edge3 = std::make_shared<EdgePoint>(*node3, *node4, 2);
         edgesTable->insert(std::make_pair(std::make_pair(edge3->GetFirstParentIndex(), edge3->GetSecondParentIndex()), edge3));
 
-        std::shared_ptr<EdgePoint> edge4 = std::make_shared<EdgePoint>(*node2, *node5, 4);
+        std::shared_ptr<EdgePoint> edge4 = std::make_shared<EdgePoint>(*node4, *node0, 3);
         edgesTable->insert(std::make_pair(std::make_pair(edge4->GetFirstParentIndex(), edge4->GetSecondParentIndex()), edge4));
 
-        std::shared_ptr<EdgePoint> edge5 = std::make_shared<EdgePoint>(*node3, *node4, 5);
+        std::shared_ptr<EdgePoint> edge5 = std::make_shared<EdgePoint>(*node2, *node5, 16);
         edgesTable->insert(std::make_pair(std::make_pair(edge5->GetFirstParentIndex(), edge5->GetSecondParentIndex()), edge5));
 
-        std::shared_ptr<EdgePoint> edge6 = std::make_shared<EdgePoint>(*node4, *node5, 6);
+        std::shared_ptr<EdgePoint> edge6 = std::make_shared<EdgePoint>(*node3, *node6, 5);
         edgesTable->insert(std::make_pair(std::make_pair(edge6->GetFirstParentIndex(), edge6->GetSecondParentIndex()), edge6));
 
-        std::shared_ptr<EdgePoint> edge7 = std::make_shared<EdgePoint>(*node3, *node6, 7);
+        std::shared_ptr<EdgePoint> edge7 = std::make_shared<EdgePoint>(*node4, *node7, 6);
         edgesTable->insert(std::make_pair(std::make_pair(edge7->GetFirstParentIndex(), edge7->GetSecondParentIndex()), edge7));
 
-        std::shared_ptr<EdgePoint> edge8 = std::make_shared<EdgePoint>(*node4, *node7, 8);
+        std::shared_ptr<EdgePoint> edge8 = std::make_shared<EdgePoint>(*node0, *node12, 56);
         edgesTable->insert(std::make_pair(std::make_pair(edge8->GetFirstParentIndex(), edge8->GetSecondParentIndex()), edge8));
 
-        std::shared_ptr<EdgePoint> edge9 = std::make_shared<EdgePoint>(*node5, *node8, 9);
+        std::shared_ptr<EdgePoint> edge9 = std::make_shared<EdgePoint>(*node1, *node8, 54);
         edgesTable->insert(std::make_pair(std::make_pair(edge9->GetFirstParentIndex(), edge9->GetSecondParentIndex()), edge9));
 
-        std::shared_ptr<EdgePoint> edge10 = std::make_shared<EdgePoint>(*node6, *node7, 10);
+        std::shared_ptr<EdgePoint> edge10 = std::make_shared<EdgePoint>(*node5, *node6, 19);
         edgesTable->insert(std::make_pair(std::make_pair(edge10->GetFirstParentIndex(), edge10->GetSecondParentIndex()), edge10));
 
-        std::shared_ptr<EdgePoint> edge11 = std::make_shared<EdgePoint>(*node7, *node8, 11);
+        std::shared_ptr<EdgePoint> edge11 = std::make_shared<EdgePoint>(*node6, *node7, 10);
         edgesTable->insert(std::make_pair(std::make_pair(edge11->GetFirstParentIndex(), edge11->GetSecondParentIndex()), edge11));
 
-        std::shared_ptr<EdgePoint> edge12 = std::make_shared<EdgePoint>(*node0, *node9, 12);
+        std::shared_ptr<EdgePoint> edge12 = std::make_shared<EdgePoint>(*node5, *node9, 41);
         edgesTable->insert(std::make_pair(std::make_pair(edge12->GetFirstParentIndex(), edge12->GetSecondParentIndex()), edge12));
 
-        std::shared_ptr<EdgePoint> edge13 = std::make_shared<EdgePoint>(*node2, *node10, 13);
+        std::shared_ptr<EdgePoint> edge13 = std::make_shared<EdgePoint>(*node6, *node10, 34);
         edgesTable->insert(std::make_pair(std::make_pair(edge13->GetFirstParentIndex(), edge13->GetSecondParentIndex()), edge13));
 
-        std::shared_ptr<EdgePoint> edge14 = std::make_shared<EdgePoint>(*node6, *node11, 14);
+        std::shared_ptr<EdgePoint> edge14 = std::make_shared<EdgePoint>(*node7, *node11, 35);
         edgesTable->insert(std::make_pair(std::make_pair(edge14->GetFirstParentIndex(), edge14->GetSecondParentIndex()), edge14));
 
-        std::shared_ptr<EdgePoint> edge15 = std::make_shared<EdgePoint>(*node8, *node12, 15);
+        std::shared_ptr<EdgePoint> edge15 = std::make_shared<EdgePoint>(*node8, *node12, 55);
         edgesTable->insert(std::make_pair(std::make_pair(edge15->GetFirstParentIndex(), edge15->GetSecondParentIndex()), edge15));
 
-        std::shared_ptr<EdgePoint> edge16 = std::make_shared<EdgePoint>(*node9, *node10, 16);
+        std::shared_ptr<EdgePoint> edge16 = std::make_shared<EdgePoint>(*node8, *node9, 43);
         edgesTable->insert(std::make_pair(std::make_pair(edge16->GetFirstParentIndex(), edge16->GetSecondParentIndex()), edge16));
 
-        std::shared_ptr<EdgePoint> edge17 = std::make_shared<EdgePoint>(*node9, *node11, 17);
+        std::shared_ptr<EdgePoint> edge17 = std::make_shared<EdgePoint>(*node9, *node10, 44);
         edgesTable->insert(std::make_pair(std::make_pair(edge17->GetFirstParentIndex(), edge17->GetSecondParentIndex()), edge17));
 
-        std::shared_ptr<EdgePoint> edge18 = std::make_shared<EdgePoint>(*node11, *node12, 18);
+        std::shared_ptr<EdgePoint> edge18 = std::make_shared<EdgePoint>(*node10, *node11, 38);
         edgesTable->insert(std::make_pair(std::make_pair(edge18->GetFirstParentIndex(), edge18->GetSecondParentIndex()), edge18));
 
-        std::shared_ptr<EdgePoint> edge19 = std::make_shared<EdgePoint>(*node10, *node12, 19);
+        std::shared_ptr<EdgePoint> edge19 = std::make_shared<EdgePoint>(*node11, *node12, 39);
         edgesTable->insert(std::make_pair(std::make_pair(edge19->GetFirstParentIndex(), edge19->GetSecondParentIndex()), edge19));
 
-        std::shared_ptr<EdgePoint> edge20 = std::make_shared<EdgePoint>(*node1, *doupletNode13, 20);
+        std::shared_ptr<EdgePoint> edge20 = std::make_shared<EdgePoint>(*node3, *doupletNode13, 1);
         edgesTable->insert(std::make_pair(std::make_pair(edge20->GetFirstParentIndex(), edge20->GetSecondParentIndex()), edge20));
 
-        std::shared_ptr<EdgePoint> edge21 = std::make_shared<EdgePoint>(*node5, *doupletNode14, 21);
+        std::shared_ptr<EdgePoint> edge21 = std::make_shared<EdgePoint>(*node7, *doupletNode14, 11);
         edgesTable->insert(std::make_pair(std::make_pair(edge21->GetFirstParentIndex(), edge21->GetSecondParentIndex()), edge21));
 
-        std::shared_ptr<EdgePoint> edge22 = std::make_shared<EdgePoint>(*node3, *doupletNode15, 22);
+        std::shared_ptr<EdgePoint> edge22 = std::make_shared<EdgePoint>(*node6, *doupletNode15, 9);
         edgesTable->insert(std::make_pair(std::make_pair(edge22->GetFirstParentIndex(), edge22->GetSecondParentIndex()), edge22));
 
-        std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node7, *doupletNode16, 23);
+        std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node5, *doupletNode16, 18);
         edgesTable->insert(std::make_pair(std::make_pair(edge23->GetFirstParentIndex(), edge23->GetSecondParentIndex()), edge23));
 
-        std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node4, *doupletNode17, 24);
+        std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node10, *doupletNode17, 37);
         edgesTable->insert(std::make_pair(std::make_pair(edge24->GetFirstParentIndex(), edge24->GetSecondParentIndex()), edge24));
     }
     if (edgeToFaceTable == nullptr)
     {
         edgeToFaceTable = std::make_unique<std::unordered_map<int, std::unordered_set<int>>>();
 
-        edgeToFaceTable->insert(std::make_pair(0, std::unordered_set<int>{0, 11}));
-        edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{1, 10}));
-        edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 4}));
-        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{0, 1, 20, 22}));
-        edgeToFaceTable->insert(std::make_pair(4, std::unordered_set<int>{1, 6}));
-        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 2, 18}));
-        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{1, 3, 19}));
-        edgeToFaceTable->insert(std::make_pair(7, std::unordered_set<int>{2, 5}));
-        edgeToFaceTable->insert(std::make_pair(8, std::unordered_set<int>{2, 3, 17, 21}));
-        edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{3, 7}));
-        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{2, 8}));
-        edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{3, 9}));
-        edgeToFaceTable->insert(std::make_pair(12, std::unordered_set<int>{4, 11}));
-        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{6, 10}));
-        edgeToFaceTable->insert(std::make_pair(14, std::unordered_set<int>{5, 8}));
-        edgeToFaceTable->insert(std::make_pair(15, std::unordered_set<int>{7, 9}));
-        edgeToFaceTable->insert(std::make_pair(16, std::unordered_set<int>{10, 11, 12}));
-        edgeToFaceTable->insert(std::make_pair(17, std::unordered_set<int>{4, 5, 12}));      
-        edgeToFaceTable->insert(std::make_pair(18, std::unordered_set<int>{8, 9, 12}));
-        edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{6, 7, 12}));
-        edgeToFaceTable->insert(std::make_pair(20, std::unordered_set<int>{10, 11, 13, 22}));
-        edgeToFaceTable->insert(std::make_pair(21, std::unordered_set<int>{6, 7, 15}));
-        edgeToFaceTable->insert(std::make_pair(22, std::unordered_set<int>{4, 5, 14}));
-        edgeToFaceTable->insert(std::make_pair(23, std::unordered_set<int>{8, 9, 16, 21}));
-        edgeToFaceTable->insert(std::make_pair(24, std::unordered_set<int>{13, 14, 15, 16, 17, 18, 19, 20}));
+        edgeToFaceTable->insert(std::make_pair(53, std::unordered_set<int>{10, 11, 12}));
+        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{6, 11}));
+        edgeToFaceTable->insert(std::make_pair(14, std::unordered_set<int>{1, 11}));
+        edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 10}));
+        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{4, 10}));
+        edgeToFaceTable->insert(std::make_pair(16, std::unordered_set<int>{1, 6}));
+        edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 1, 14, 15}));
+        edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{0, 4}));
+        edgeToFaceTable->insert(std::make_pair(56, std::unordered_set<int>{4, 5, 12}));
+        edgeToFaceTable->insert(std::make_pair(54, std::unordered_set<int>{6, 7, 12}));
+        edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{1, 3, 16}));
+        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{17, 2}));
+        edgeToFaceTable->insert(std::make_pair(41, std::unordered_set<int>{3, 7}));
+        edgeToFaceTable->insert(std::make_pair(34, std::unordered_set<int>{2, 3, 18, 22}));
+        edgeToFaceTable->insert(std::make_pair(35, std::unordered_set<int>{2, 5}));
+        edgeToFaceTable->insert(std::make_pair(55, std::unordered_set<int>{8, 9, 12}));
+        edgeToFaceTable->insert(std::make_pair(43, std::unordered_set<int>{7, 9}));
+        edgeToFaceTable->insert(std::make_pair(44, std::unordered_set<int>{3, 9}));
+        edgeToFaceTable->insert(std::make_pair(38, std::unordered_set<int>{2, 8}));
+        edgeToFaceTable->insert(std::make_pair(39, std::unordered_set<int>{5, 8}));
+        edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{10, 11, 13, 14}));
+        edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{4, 5, 20}));
+        edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{13, 14, 15, 16, 17, 18, 19, 20, 21}));
+        edgeToFaceTable->insert(std::make_pair(18, std::unordered_set<int>{6, 7, 19}));
+        edgeToFaceTable->insert(std::make_pair(37, std::unordered_set<int>{8, 9, 21, 22}));
     }
 }
 
@@ -230,38 +238,38 @@ bool Graph13::IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vec
 
 bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
 {
-    if (edge1Index > edge2Index)
-    {
-        std::swap(edge1Index, edge2Index);
-    }
-    if (edge1Index == 5 && edge2Index == 6)
-    {
-        return true;
-    }
-    if (edge1Index == 3 && edge2Index == 8)
-    {
-        return true;
-    }
-    if (edge1Index == 5 && edge2Index == 6)
-    {
-        return true;
-    }
-    if (edge1Index == 2 && edge2Index == 7)
-    {
-        return true;
-    }
-    if (edge1Index == 0 && edge2Index == 1)
-    {
-        return true;
-    }
-    if (edge1Index == 4 && edge2Index == 9)
-    {
-        return true;
-    }
-    if (edge1Index == 10 && edge2Index == 11)
-    {
-        return true;
-    }
+    //if (edge1Index > edge2Index)
+    //{
+    //    std::swap(edge1Index, edge2Index);
+    //}
+    //if (edge1Index == 5 && edge2Index == 6)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 3 && edge2Index == 8)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 5 && edge2Index == 6)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 2 && edge2Index == 7)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 0 && edge2Index == 1)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 4 && edge2Index == 9)
+    //{
+    //    return true;
+    //}
+    //if (edge1Index == 10 && edge2Index == 11)
+    //{
+    //    return true;
+    //}
     return false;
 }
 
@@ -281,11 +289,11 @@ std::vector<std::vector<std::shared_ptr<EdgePoint>>>::iterator FindLinkInEdgePoi
 
 void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
 {
-    std::vector<int> link0 = {17, 22};
+    std::vector<int> link0 = {1, 53};
     if(FindLinkInEdgePointsGraph(edgePointsGraph, link0) != edgePointsGraph->links.end())
     {
-        std::vector<int> link1 = { 7, 17 };
-        std::vector<int> link2 = { 2, 7 };
+        std::vector<int> link1 = { 2, 53 };
+        std::vector<int> link2 = { 14, 53 };
         auto link1it = FindLinkInEdgePointsGraph(edgePointsGraph, link1);
         if(link1it != edgePointsGraph->links.end())
         {
@@ -298,11 +306,11 @@ void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
         }
     }
 
-    std::vector<int> link3 = { 18, 23 };
+    std::vector<int> link3 = { 11, 56 };
     if (FindLinkInEdgePointsGraph(edgePointsGraph, link3) != edgePointsGraph->links.end())
     {
-        std::vector<int> link4 = { 10, 18 };
-        std::vector<int> link5 = { 10, 11 };
+        std::vector<int> link4 = { 35, 56 };
+        std::vector<int> link5 = { 6, 56 };
         auto link4it = FindLinkInEdgePointsGraph(edgePointsGraph, link4);
         if (link4it != edgePointsGraph->links.end())
         {
@@ -315,11 +323,11 @@ void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
         }
     }
 
-    std::vector<int> link6 = { 19, 21 };
+    std::vector<int> link6 = { 18, 54 };
     if (FindLinkInEdgePointsGraph(edgePointsGraph, link6) != edgePointsGraph->links.end())
     {
-        std::vector<int> link7 = { 9, 19 };
-        std::vector<int> link8 = { 4, 19 };
+        std::vector<int> link7 = { 41, 54 };
+        std::vector<int> link8 = { 16, 54 };
         auto link7it = FindLinkInEdgePointsGraph(edgePointsGraph, link7);
         if (link7it != edgePointsGraph->links.end())
         {
@@ -332,11 +340,11 @@ void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
         }
     }
 
-    std::vector<int> link9 = { 16, 20 };
+    std::vector<int> link9 = { 37, 55 };
     if (FindLinkInEdgePointsGraph(edgePointsGraph, link9) != edgePointsGraph->links.end())
     {
-        std::vector<int> link10 = { 0, 16 };
-        std::vector<int> link11 = { 1, 16 };
+        std::vector<int> link10 = { 44, 55 };
+        std::vector<int> link11 = { 38, 55 };
         auto link10it = FindLinkInEdgePointsGraph(edgePointsGraph, link10);
         if (link10it != edgePointsGraph->links.end())
         {

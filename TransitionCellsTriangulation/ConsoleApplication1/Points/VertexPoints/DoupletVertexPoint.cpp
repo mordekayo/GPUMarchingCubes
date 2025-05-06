@@ -23,7 +23,8 @@ bool DoupletVertexPoint::IsActive() const
 	}
 	else
 	{
-		return node1->IsActive() && node2->IsActive() || node3->IsActive() && node4->IsActive();;
+		return node1->IsActive() && node2->IsActive() || node3->IsActive() && node4->IsActive() || 
+			node1->IsActive() && node4->IsActive() || node2->IsActive() && node3->IsActive();
 	}
 }
 
