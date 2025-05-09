@@ -119,6 +119,9 @@ void Table::Fill()
             vertexActivityMaskCopy.flip();
             flipped = true;
         }
+        //vertexActivityMaskCopy = 17;
+        //std::vector<int> mask({ 0,1,2,3,4 });
+        //(*table)[i] = MakeRow(mask);
         (*table)[i] = MakeRow(vertexActivityMaskCopy, flipped);
     }
 }
@@ -483,16 +486,16 @@ void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint
         }
 
         bool allXisZero = true;
-        bool allXisOne = true;
+        bool allXisTwo = true;
         for (auto x : xs)
         {
             if (!FloatEqual(x, 0))
             {
                 allXisZero = false;
             }
-            if (!FloatEqual(x, 1))
+            if (!FloatEqual(x, 2))
             {
-                allXisOne = false;
+                allXisTwo = false;
             }
         }
 
@@ -524,7 +527,7 @@ void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint
             }
         }
 
-        if (allXisZero || allXisOne || allYisZero || allYisOne || allZisZero || allZisOne)
+        if (allXisZero || allXisTwo || allYisZero || allYisOne || allZisZero || allZisOne)
         {
             circuits.erase(circuits.begin() + i);
         }
@@ -565,6 +568,74 @@ void removeCombinedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint>>>
         if (shouldBeRemoved)
         {
             circuits.erase(circuits.begin() + i);
+        }
+    }
+}
+
+
+void removeFaceAlignedTriangles(std::vector<std::shared_ptr<EdgePoint>>& triangles)
+{
+    for (int i = triangles.size() - 1; i >=0 ; i -= 3)
+    {
+        std::vector<float> xs;
+        std::vector<float> ys;
+        std::vector<float> zs;
+
+        for (int j = i; j > i - 3; --j)
+        {
+            Vector3 pos = triangles[j]->GetPosition();
+            xs.push_back(pos.x);
+            ys.push_back(pos.y);
+            zs.push_back(pos.z);
+        }
+
+        bool allXisZero = true;
+        bool allXisTwo = true;
+        for (auto x : xs)
+        {
+            if (!FloatEqual(x, 0))
+            {
+                allXisZero = false;
+            }
+            if (!FloatEqual(x, 2))
+            {
+                allXisTwo = false;
+            }
+        }
+
+        bool allYisZero = true;
+        bool allYisTwo = true;
+        for (auto y : ys)
+        {
+            if (!FloatEqual(y, 0))
+            {
+                allYisZero = false;
+            }
+            if (!FloatEqual(y, 2))
+            {
+                allYisTwo = false;
+            }
+        }
+
+        bool allZisZero = true;
+        bool allZisOne = true;
+        for (auto z : zs)
+        {
+            if (!FloatEqual(z, 0))
+            {
+                allZisZero = false;
+            }
+            if (!FloatEqual(z, 1))
+            {
+                allZisOne = false;
+            }
+        }
+
+         if (allXisZero || allXisTwo || allYisZero || allYisTwo || allZisZero || allZisOne)
+        {
+            triangles.erase(triangles.begin() + i);
+            triangles.erase(triangles.begin() + (i-1));
+            triangles.erase(triangles.begin() + (i-2));
         }
     }
 }
@@ -707,7 +778,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                 for (auto circuit : closedCircuits)
                 {
                     std::vector<std::shared_ptr<EdgePoint>> triangles = EarClipping(*graph, circuit);
-
+                    removeFaceAlignedTriangles(triangles);
                     for (int i = 0; i < triangles.size(); i += 3)
                     {
                         auto p0 = triangles[i];

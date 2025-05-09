@@ -2,6 +2,8 @@
 #include "../Points/VertexPoints/VertexPoint.hpp"
 #include "../Math/Vector3.hpp"
 
+#include <algorithm>
+
 Graph13::Graph13()
 {
 
@@ -194,52 +196,49 @@ void Graph13::Create(const VertexActivityMask& vertexActivityMask)
         std::shared_ptr<EdgePoint> edge20 = std::make_shared<EdgePoint>(*node3, *doupletNode13, 1);
         edgesTable->insert(std::make_pair(std::make_pair(edge20->GetFirstParentIndex(), edge20->GetSecondParentIndex()), edge20));
 
-        doupletNode13->SetLinkedEdgePoint(edge20);
-
         std::shared_ptr<EdgePoint> edge21 = std::make_shared<EdgePoint>(*node7, *doupletNode14, 11);
         edgesTable->insert(std::make_pair(std::make_pair(edge21->GetFirstParentIndex(), edge21->GetSecondParentIndex()), edge21));
-
-        doupletNode14->SetLinkedEdgePoint(edge21);
 
         std::shared_ptr<EdgePoint> edge22 = std::make_shared<EdgePoint>(*node6, *doupletNode15, 9);
         edgesTable->insert(std::make_pair(std::make_pair(edge22->GetFirstParentIndex(), edge22->GetSecondParentIndex()), edge22));
 
-        doupletNode15->SetLinkedEdgePoint(edge22);
-
         std::shared_ptr<EdgePoint> edge23 = std::make_shared<EdgePoint>(*node5, *doupletNode16, 18);
         edgesTable->insert(std::make_pair(std::make_pair(edge23->GetFirstParentIndex(), edge23->GetSecondParentIndex()), edge23));
 
-        doupletNode16->SetLinkedEdgePoint(edge23);
-
         std::shared_ptr<EdgePoint> edge24 = std::make_shared<EdgePoint>(*node10, *doupletNode17, 37);
         edgesTable->insert(std::make_pair(std::make_pair(edge24->GetFirstParentIndex(), edge24->GetSecondParentIndex()), edge24));
-
-        doupletNode17->SetLinkedEdgePoint(edge24);
     }
+
+    doupletNode13->SetLinkedEdgePoint(edgesTable->at(std::make_pair(3, 13)));
+    doupletNode14->SetLinkedEdgePoint(edgesTable->at(std::make_pair(7, 14)));
+    doupletNode15->SetLinkedEdgePoint(edgesTable->at(std::make_pair(6, 15)));
+    doupletNode16->SetLinkedEdgePoint(edgesTable->at(std::make_pair(5, 16)));
+    doupletNode17->SetLinkedEdgePoint(edgesTable->at(std::make_pair(10, 17)));
+
     if (edgeToFaceTable == nullptr)
     {
         edgeToFaceTable = std::make_unique<std::unordered_map<int, std::unordered_set<int>>>();
 
         edgeToFaceTable->insert(std::make_pair(53, std::unordered_set<int>{10, 11, 12}));
-        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{6, 11}));
+        edgeToFaceTable->insert(std::make_pair(13, std::unordered_set<int>{6, 11, 23, 24}));
         edgeToFaceTable->insert(std::make_pair(14, std::unordered_set<int>{1, 11}));
         edgeToFaceTable->insert(std::make_pair(2, std::unordered_set<int>{0, 10}));
-        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{4, 10}));
+        edgeToFaceTable->insert(std::make_pair(3, std::unordered_set<int>{4, 10, 23, 26}));
         edgeToFaceTable->insert(std::make_pair(16, std::unordered_set<int>{1, 6}));
         edgeToFaceTable->insert(std::make_pair(5, std::unordered_set<int>{0, 1, 14, 15}));
         edgeToFaceTable->insert(std::make_pair(6, std::unordered_set<int>{0, 4}));
         edgeToFaceTable->insert(std::make_pair(56, std::unordered_set<int>{4, 5, 12}));
         edgeToFaceTable->insert(std::make_pair(54, std::unordered_set<int>{6, 7, 12}));
         edgeToFaceTable->insert(std::make_pair(19, std::unordered_set<int>{1, 3, 16}));
-        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{17, 2}));
+        edgeToFaceTable->insert(std::make_pair(10, std::unordered_set<int>{0, 17, 2}));
         edgeToFaceTable->insert(std::make_pair(41, std::unordered_set<int>{3, 7}));
         edgeToFaceTable->insert(std::make_pair(34, std::unordered_set<int>{2, 3, 18, 22}));
         edgeToFaceTable->insert(std::make_pair(35, std::unordered_set<int>{2, 5}));
         edgeToFaceTable->insert(std::make_pair(55, std::unordered_set<int>{8, 9, 12}));
-        edgeToFaceTable->insert(std::make_pair(43, std::unordered_set<int>{7, 9}));
+        edgeToFaceTable->insert(std::make_pair(43, std::unordered_set<int>{7, 9, 24, 25}));
         edgeToFaceTable->insert(std::make_pair(44, std::unordered_set<int>{3, 9}));
         edgeToFaceTable->insert(std::make_pair(38, std::unordered_set<int>{2, 8}));
-        edgeToFaceTable->insert(std::make_pair(39, std::unordered_set<int>{5, 8}));
+        edgeToFaceTable->insert(std::make_pair(39, std::unordered_set<int>{5, 8, 25, 26}));
         edgeToFaceTable->insert(std::make_pair(1, std::unordered_set<int>{10, 11, 13, 14}));
         edgeToFaceTable->insert(std::make_pair(11, std::unordered_set<int>{4, 5, 20}));
         edgeToFaceTable->insert(std::make_pair(9, std::unordered_set<int>{13, 14, 15, 16, 17, 18, 19, 20, 21}));
@@ -298,71 +297,118 @@ std::vector<std::vector<std::shared_ptr<EdgePoint>>>::iterator FindLinkInEdgePoi
 
 void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
 {
-    std::vector<int> link0 = {1, 53};
-    if(FindLinkInEdgePointsGraph(edgePointsGraph, link0) != edgePointsGraph->links.end())
+    std::vector<int> link0 = { 2, 53 };
+    std::vector<int> link1 = { 14, 53 };
+
+    int edgeIndex = 53;
+    bool found = false;
+    for (auto it : edgePointsGraph->nodes)
     {
-        std::vector<int> link1 = { 2, 53 };
-        std::vector<int> link2 = { 14, 53 };
-        auto link1it = FindLinkInEdgePointsGraph(edgePointsGraph, link1);
-        if(link1it != edgePointsGraph->links.end())
+        if (it->GetIndex() == edgeIndex)
         {
-            edgePointsGraph->links.erase(link1it);
+            found = true;
+            break;
         }
-        auto link2it = FindLinkInEdgePointsGraph(edgePointsGraph, link2);
-        if (link2it != edgePointsGraph->links.end())
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
         {
-            edgePointsGraph->links.erase(link2it);
+            if (edgePointsGraph->nodes[i]->GetIndex() == 1)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 1 || edgePointsGraph->links[i][1]->GetIndex() == 1)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
         }
     }
 
-    std::vector<int> link3 = { 11, 56 };
-    if (FindLinkInEdgePointsGraph(edgePointsGraph, link3) != edgePointsGraph->links.end())
+    edgeIndex = 54;
+    found = false;
+    for (auto it : edgePointsGraph->nodes)
     {
-        std::vector<int> link4 = { 35, 56 };
-        std::vector<int> link5 = { 6, 56 };
-        auto link4it = FindLinkInEdgePointsGraph(edgePointsGraph, link4);
-        if (link4it != edgePointsGraph->links.end())
+        if (it->GetIndex() == edgeIndex)
         {
-            edgePointsGraph->links.erase(link4it);
+            found = true;
+            break;
         }
-        auto link5it = FindLinkInEdgePointsGraph(edgePointsGraph, link5);
-        if (link5it != edgePointsGraph->links.end())
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
         {
-            edgePointsGraph->links.erase(link5it);
+            if (edgePointsGraph->nodes[i]->GetIndex() == 18)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 18 || edgePointsGraph->links[i][1]->GetIndex() == 18)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
         }
     }
 
-    std::vector<int> link6 = { 18, 54 };
-    if (FindLinkInEdgePointsGraph(edgePointsGraph, link6) != edgePointsGraph->links.end())
+    edgeIndex = 55;
+    found = false;
+    for (auto it : edgePointsGraph->nodes)
     {
-        std::vector<int> link7 = { 41, 54 };
-        std::vector<int> link8 = { 16, 54 };
-        auto link7it = FindLinkInEdgePointsGraph(edgePointsGraph, link7);
-        if (link7it != edgePointsGraph->links.end())
+        if (it->GetIndex() == edgeIndex)
         {
-            edgePointsGraph->links.erase(link7it);
+            found = true;
+            break;
         }
-        auto link8it = FindLinkInEdgePointsGraph(edgePointsGraph, link8);
-        if (link8it != edgePointsGraph->links.end())
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
         {
-            edgePointsGraph->links.erase(link8it);
+            if (edgePointsGraph->nodes[i]->GetIndex() == 37)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 37 || edgePointsGraph->links[i][1]->GetIndex() == 37)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
         }
     }
 
-    std::vector<int> link9 = { 37, 55 };
-    if (FindLinkInEdgePointsGraph(edgePointsGraph, link9) != edgePointsGraph->links.end())
+    edgeIndex = 56;
+    found = false;
+    for (auto it : edgePointsGraph->nodes)
     {
-        std::vector<int> link10 = { 44, 55 };
-        std::vector<int> link11 = { 38, 55 };
-        auto link10it = FindLinkInEdgePointsGraph(edgePointsGraph, link10);
-        if (link10it != edgePointsGraph->links.end())
+        if (it->GetIndex() == edgeIndex)
         {
-            edgePointsGraph->links.erase(link10it);
+            found = true;
+            break;
         }
-        auto link11it = FindLinkInEdgePointsGraph(edgePointsGraph, link11);
-        if (link11it != edgePointsGraph->links.end())
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
         {
-            edgePointsGraph->links.erase(link11it);
+            if (edgePointsGraph->nodes[i]->GetIndex() == 11)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 11 || edgePointsGraph->links[i][1]->GetIndex() == 11)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
         }
     }
 }
