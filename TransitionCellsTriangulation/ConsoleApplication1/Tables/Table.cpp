@@ -119,11 +119,13 @@ void Table::Fill()
             vertexActivityMaskCopy.flip();
             flipped = true;
         }
-        //vertexActivityMaskCopy = 17;
-        //std::vector<int> mask({ 0,1,2,3,4 });
-        //(*table)[i] = MakeRow(mask);
         (*table)[i] = MakeRow(vertexActivityMaskCopy, flipped);
     }
+}
+
+bool FloatEqual(float a, float b)
+{
+    return std::fabs(a - b) < std::numeric_limits<float>::epsilon();
 }
 
 std::vector<std::shared_ptr<EdgePoint>> EarClipping(const Graph& graph, std::vector<std::shared_ptr<EdgePoint>>& circuit)
@@ -146,6 +148,15 @@ std::vector<std::shared_ptr<EdgePoint>> EarClipping(const Graph& graph, std::vec
             Vector3 leftArm = chainCopy[prevIndex]->GetPosition() - chainCopy[index]->GetPosition();
             Vector3 rightArm = chainCopy[nextIndex]->GetPosition() - chainCopy[index]->GetPosition();
 
+            if (FloatEqual(Vector3::AngleBetween(leftArm, rightArm), 180.0f))
+            {
+                chainCopy.erase(chainCopy.begin() + index);
+                if (prevIndex >= chainCopy.size())
+                {
+                    prevIndex = chainCopy.size() - 2;
+                }
+                index = prevIndex;
+            }
             if (Vector3::AngleBetween(leftArm, rightArm) < 180.0f)
             {
                 if (!graph.IsTriangleInsideProhibitedArea(chainCopy[prevIndex]->GetPosition(),
@@ -464,11 +475,6 @@ void sortCircuitsBySize(std::vector<std::vector<std::shared_ptr<EdgePoint>>>& ci
     std::sort(circuits.begin(), circuits.end(), customLess);
 }
 
-bool FloatEqual(float a, float b)
-{
-    return std::fabs(a - b) < std::numeric_limits<float>::epsilon();
-}
-
 void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint>>>& circuits)
 {
     for (int i = circuits.size() - 1; i >= 1; --i)
@@ -757,7 +763,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                         doupletInFamily = false;
                     }
                 }
-                if (doupletNode->IsActive() && doupletInFamily)
+                if (doupletNode->IsActive() && !doupletNode->GetLinkedVertexPoint()->IsActive() && doupletInFamily)
                 {
                     std::vector<std::shared_ptr<EdgePoint>> edgePointsFamily { doupletNode->GetLinkedEdgePoint ()};
                     edgePointsGraphs.push_back(CreateEdgePointsGraph(edgePointsFamily, *graph));
@@ -778,7 +784,7 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                 for (auto circuit : closedCircuits)
                 {
                     std::vector<std::shared_ptr<EdgePoint>> triangles = EarClipping(*graph, circuit);
-                    removeFaceAlignedTriangles(triangles);
+                    //removeFaceAlignedTriangles(triangles);
                     for (int i = 0; i < triangles.size(); i += 3)
                     {
                         auto p0 = triangles[i];

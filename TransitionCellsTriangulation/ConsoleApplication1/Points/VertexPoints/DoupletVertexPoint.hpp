@@ -21,6 +21,8 @@ public:
 
 	void SetLinkedEdgePoint(std::shared_ptr<EdgePoint> edgePoint);
 	std::shared_ptr<EdgePoint> GetLinkedEdgePoint();
+	void SetLinkedVertexPoint(std::shared_ptr<VertexPoint> vertexPoint);
+	std::shared_ptr<VertexPoint> GetLinkedVertexPoint();
 		
 	std::vector<std::shared_ptr<VertexPoint>> GetParents();
 
@@ -33,4 +35,5 @@ private:
 	std::shared_ptr<VertexPoint> node4 = nullptr;
 
 	std::shared_ptr<EdgePoint> edgePoint = nullptr;
+	std::shared_ptr<VertexPoint> vertexPoint = nullptr;
 };

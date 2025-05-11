@@ -1,6 +1,7 @@
 #include "DoupletVertexPoint.hpp"
 #include "VertexPoint.hpp"
 #include "../EdgePoint.hpp"
+#include <iostream>
 
 DoupletVertexPoint::DoupletVertexPoint(int _index, std::shared_ptr<VertexPoint> _first,
 	std::shared_ptr<VertexPoint> _second) : index(_index), node1(_first), node2(_second)
@@ -54,7 +55,21 @@ void DoupletVertexPoint::SetLinkedEdgePoint(std::shared_ptr<EdgePoint> _edgePoin
 
 std::shared_ptr<EdgePoint> DoupletVertexPoint::GetLinkedEdgePoint()
 {
+	if (edgePoint->GetIndex() == 38)
+	{
+		std::cout << "";
+	}
 	return edgePoint;
+}
+
+void DoupletVertexPoint::SetLinkedVertexPoint(std::shared_ptr<VertexPoint> _vertexPoint)
+{
+	vertexPoint = _vertexPoint;
+}
+
+std::shared_ptr<VertexPoint> DoupletVertexPoint::GetLinkedVertexPoint()
+{
+	return vertexPoint;
 }
 
 std::vector<std::shared_ptr<VertexPoint>> DoupletVertexPoint::GetParents()
