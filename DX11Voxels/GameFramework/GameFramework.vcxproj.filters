@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{a5c45454-cef8-47a4-aa2c-66ba5c14782b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>
+      </Extensions>
+    </Filter>
+    <Filter Include="Code Files\Input">
+      <UniqueIdentifier>{1ce24379-77a1-4a1a-b484-c0075f508e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code Files\Components">
+      <UniqueIdentifier>{2821accb-fe04-47ae-9d82-0afa8afeea26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code Files\VertexStructures">
+      <UniqueIdentifier>{1b2d689f-37c0-448b-9eaa-9e671c66c6f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGUI">
+      <UniqueIdentifier>{48751230-5ca4-41d4-8d01-8d42928a35e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGUINodeEditor">
+      <UniqueIdentifier>{57af9a28-17f1-45bd-9529-127568cb4d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lua">
+      <UniqueIdentifier>{bac43b2a-4645-42c5-aed6-f77453622354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code Files\Camera">
+      <UniqueIdentifier>{15d8be52-2188-4ef0-853d-894c8e4c2e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sol2">
+      <UniqueIdentifier>{6456119e-56ed-4480-8c5e-8cfd21349715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Loaders">
+      <UniqueIdentifier>{890de4d7-8318-4506-87b6-6ac7a3e8a8b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Subsystems">
+      <UniqueIdentifier>{69193fd8-111b-42b7-bf6b-4bcc44c4f4cd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Code Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Code Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Code Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exports.h">
+      <Filter>Code Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDevice.h">
+      <Filter>Code Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Keys.h">
+      <Filter>Code Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneComponent.h">
+      <Filter>Code Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleComponent.h">
+      <Filter>Code Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositionColor.h">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponent.h">
+      <Filter>Code Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositionNormalBinormalTangentColorTex.h">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositionNormalTex.h">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositionTex.h">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexPositon2DTex2DColor.h">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyObjLoader.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="ImGUI\imconfig.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui_internal.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_rectpack.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_textedit.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imstb_truetype.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderer2D.h" />
+    <ClInclude Include="ImGUINodeEditor\crude_json.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUINodeEditor\imgui_bezier_math.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUINodeEditor\imgui_canvas.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUINodeEditor\imgui_extra_math.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUINodeEditor\imgui_node_editor.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUINodeEditor\imgui_node_editor_internal.h">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\include\lualib.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\include\luaconf.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\include\lua.hpp">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\include\lua.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\include\lauxlib.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Code Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraController.h">
+      <Filter>Code Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="sol_ImGui.h" />
+    <ClInclude Include="ImGUI\imgui_impl_dx11.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUI\imgui_impl_win32.h">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ILayer.h" />
+    <ClInclude Include="Delegates.h" />
+    <ClInclude Include="magic_enum.hpp" />
+    <ClInclude Include="LightComponent.h" />
+    <ClInclude Include="TinyModelComponent.h" />
+    <ClInclude Include="FbxLoaderExt.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoader.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer2DImpl.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptingSystem.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderIncludeHandler.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="UIRendererClass.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayWin32.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderSystem.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderSysImpl.h">
+      <Filter>Subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="ZActor.h" />
+    <ClInclude Include="SkyBoxComp.h" />
+    <ClInclude Include="CubeMapHelper.h" />
+    <ClInclude Include="entt.hpp" />
+    <ClInclude Include="StringHashCompileTime.h" />
+    <ClInclude Include="CycleProfiler.h" />
+    <ClInclude Include="TextEditor.h" />
+    <ClInclude Include="ImPlot\implot.h" />
+    <ClInclude Include="ImPlot\implot_internal.h" />
+    <ClInclude Include="sol\config.hpp" />
+    <ClInclude Include="sol\forward.hpp" />
+    <ClInclude Include="sol\sol.hpp" />
+    <ClInclude Include="CSharpScriptingSystem.h" />
+    <ClInclude Include="PhysicsSystemJolt.h" />
+    <ClInclude Include="ChunkyTriMesh.h" />
+    <ClInclude Include="CrowdTool.h" />
+    <ClInclude Include="NavigationSystem.h" />
+    <ClInclude Include="PhysicsSystemPhysX.h" />
+    <ClInclude Include="ImGUISharpGlue.h" />
+    <ClInclude Include="VertexSkin.h" />
+    <ClInclude Include="SoundSystemFMod.h" />
+    <ClInclude Include="QueryGpuProfiler.h" />
+    <ClInclude Include="RingBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PlaneComponent.cpp">
+      <Filter>Code Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleComponent.cpp">
+      <Filter>Code Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositionColor.cpp">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="InputDevice.cpp">
+      <Filter>Code Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositionNormalBinormalTangentColorTex.cpp">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Code Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Code Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Code Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositionNormalTex.cpp">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositionTex.cpp">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositon2DTex2DColor.cpp">
+      <Filter>Code Files\VertexStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="ImGUI\imgui.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_draw.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_demo.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_widgets.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUINodeEditor\crude_json.cpp">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUINodeEditor\imgui_canvas.cpp">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUINodeEditor\imgui_node_editor.cpp">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUINodeEditor\imgui_node_editor_api.cpp">
+      <Filter>ImGUINodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Code Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Code Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_dx11.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_win32.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Delegates.cpp" />
+    <ClCompile Include="LightComponent.cpp" />
+    <ClCompile Include="TinyModelComponent.cpp" />
+    <ClCompile Include="ObjLoader.cpp">
+      <Filter>Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer2DImpl.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="ScipringSystem.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderIncludeHandler.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="UIRendererClass.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayWin32.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderSystem.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderSysImpl.cpp">
+      <Filter>Subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="ZActor.cpp" />
+    <ClCompile Include="FbxLoaderExt.cpp" />
+    <ClCompile Include="SkyBoxComp.cpp" />
+    <ClCompile Include="CubeMapHelper.cpp" />
+    <ClCompile Include="CycleProfiler.cpp" />
+    <ClCompile Include="TextEditor.cpp" />
+    <ClCompile Include="ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="ImPlot\implot.cpp" />
+    <ClCompile Include="ImPlot\implot_demo.cpp" />
+    <ClCompile Include="ImPlot\implot_items.cpp" />
+    <ClCompile Include="CSharpScriptingSystem.cpp" />
+    <ClCompile Include="ChunkyTriMesh.cpp" />
+    <ClCompile Include="CrowdTool.cpp" />
+    <ClCompile Include="PhysicsSystemPhysX.cpp" />
+    <ClCompile Include="PhysicsSystemJolt.cpp" />
+    <ClCompile Include="NavigationSystem.cpp" />
+    <ClCompile Include="VertexSkin.cpp" />
+    <ClCompile Include="SoundSystemFMod.cpp" />
+    <ClCompile Include="QueryGpuProfiler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\UIShader.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Simple.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\TexturedShader.hlsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ImGUINodeEditor\imgui_bezier_math.inl">
+      <Filter>ImGUINodeEditor</Filter>
+    </None>
+    <None Include="ImGUINodeEditor\imgui_extra_math.inl">
+      <Filter>ImGUINodeEditor</Filter>
+    </None>
+    <None Include="ImGUINodeEditor\imgui_node_editor_internal.inl">
+      <Filter>ImGUINodeEditor</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Delegates.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\DefaultDiffuseMap.jpg" />
+    <Image Include="Content\DefaultNormalMap.jpg" />
+    <Image Include="Content\DefaultSpecularMap.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\ConvolutionCalc.hlsl" />
+    <Text Include="Shaders\Skybox.hlsl" />
+    <Text Include="Shaders\SphereToCube.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\CubeToPlanar.hlsl" />
+  </ItemGroup>
+</Project>

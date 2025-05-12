@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MonoDebug|Win32">
+      <Configuration>MonoDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MonoDebug|x64">
+      <Configuration>MonoDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{5243651A-A856-4BBF-8E9E-A655AE2FE960}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GameFramework</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;SHARP_EVENT_NO_BOOST;MONO_DLL_EXPORT;JPH_PROFILE_ENABLED;JPH_DEBUG_RENDERER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)lua/include;$(SolutionDir)Misc/assimp/include;$(SolutionDir)Misc/mono/include;$(SolutionDir)Misc/PhysX/include;$(SolutionDir)Misc/PhysX/pxshared/include;$(SolutionDir)Misc/RecastNavigation/Include;$(SolutionDir)Misc/JoltPhysics/include;$(SolutionDir)Misc/FMod/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)Misc/assimp/lib/Debug;$(SolutionDir)Misc/mono/lib/;%(AdditionalLibraryDirectories);$(SolutionDir)Misc/FMod/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;mono-2.0-sgen.lib;$(SolutionDir)Misc\DirectXTex\DirectXTexD.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXExtensions_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysX_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXPvdSDK_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXVehicle_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCooking_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCommon_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXFoundation_64.lib;$(SolutionDir)Misc/RecastNavigation/lib/Recast-d.lib;$(SolutionDir)Misc/RecastNavigation/lib/Detour-d.lib;$(SolutionDir)Misc/RecastNavigation/lib/DetourCrowd-d.lib;$(SolutionDir)Misc/JoltPhysics/lib/debug/Jolt.lib;%(AdditionalDependencies);fmod_vc.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /E /I /d "$(ProjectDir)Shaders"  "$(OutDir)Shaders"
+xcopy /y /E /I /d /s "$(ProjectDir)Content"  "$(OutDir)Content"
+xcopy /y /d "$(SolutionDir)Misc/assimp/lib/Debug/assimp-vc142-mtd.dll"  "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;_DEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;SHARP_EVENT_NO_BOOST;MONO_DLL_EXPORT;JPH_DEBUG_RENDERER;JPH_PROFILE_ENABLED;MONO_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)lua/include;$(SolutionDir)Misc/assimp/include;$(SolutionDir)Misc/mono/include;$(SolutionDir)Misc/PhysX/include;$(SolutionDir)Misc/PhysX/pxshared/include;$(SolutionDir)Misc/RecastNavigation/Include;$(SolutionDir)Misc/JoltPhysics/include;$(SolutionDir)Misc/FMod/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)Misc/assimp/lib/Debug;$(SolutionDir)Misc/mono/lib/;$(SolutionDir)Misc/FMod/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;mono-2.0-sgen.lib;$(SolutionDir)Misc\DirectXTex\DirectXTexD.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXExtensions_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysX_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXPvdSDK_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXVehicle_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCooking_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXCommon_64.lib;$(SolutionDir)Misc/PhysX/lib/debug/PhysXFoundation_64.lib;$(SolutionDir)Misc/RecastNavigation/lib/Recast-d.lib;$(SolutionDir)Misc/RecastNavigation/lib/Detour-d.lib;$(SolutionDir)Misc/RecastNavigation/lib/DetourCrowd-d.lib;$(SolutionDir)Misc/JoltPhysics/lib/debug/Jolt.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /E /I /d "$(ProjectDir)Shaders"  "$(OutDir)Shaders"
+xcopy /y /E /I /d /s "$(ProjectDir)Content"  "$(OutDir)Content"
+xcopy /y /d "$(SolutionDir)Misc/assimp/lib/Debug/assimp-vc142-mtd.dll"  "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MonoDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NOMINMAX;SHARP_EVENT_NO_BOOST;NDEBUG;GAMEFRAMEWORK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)lua/include;$(SolutionDir)Misc/assimp/include;$(SolutionDir)Misc/mono/include;$(SolutionDir)Misc/PhysX/include;$(SolutionDir)Misc/PhysX/pxshared/include;$(SolutionDir)Misc/RecastNavigation/Include;$(SolutionDir)Misc/JoltPhysics/include;$(SolutionDir)Misc/FMod/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalLibraryDirectories>$(SolutionDir)Misc/assimp/lib/Release;%(AdditionalLibraryDirectories);$(SolutionDir)Misc/FMod/lib;$(SolutionDir)Misc/mono/lib/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;mono-2.0-sgen.lib;$(SolutionDir)Misc\DirectXTex\DirectXTex.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXExtensions_static_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysX_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXPvdSDK_static_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXVehicle_static_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXCharacterKinematic_static_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXCooking_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXCommon_64.lib;$(SolutionDir)Misc/PhysX/lib/checked/PhysXFoundation_64.lib;$(SolutionDir)Misc/RecastNavigation/lib/Recast.lib;$(SolutionDir)Misc/RecastNavigation/lib/Detour.lib;$(SolutionDir)Misc/RecastNavigation/lib/DetourCrowd.lib;$(SolutionDir)Misc/JoltPhysics/lib/dist/Jolt.lib;%(AdditionalDependencies);fmod_vc.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /E /I /d "$(ProjectDir)Shaders"  "$(OutDir)Shaders"
+xcopy /y /E /I /d /s "$(ProjectDir)Content"  "$(OutDir)Content"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="ChunkyTriMesh.h" />
+    <ClInclude Include="CrowdTool.h" />
+    <ClInclude Include="CSharpScriptingSystem.h" />
+    <ClInclude Include="CycleProfiler.h" />
+    <ClInclude Include="DebugRenderSysImpl.h" />
+    <ClInclude Include="DebugRenderSystem.h" />
+    <ClInclude Include="Delegates.h" />
+    <ClInclude Include="DisplayWin32.h" />
+    <ClInclude Include="entt.hpp" />
+    <ClInclude Include="Exports.h" />
+    <ClInclude Include="FbxLoaderExt.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameComponent.h" />
+    <ClInclude Include="ILayer.h" />
+    <ClInclude Include="ImGUINodeEditor\crude_json.h" />
+    <ClInclude Include="ImGUINodeEditor\imgui_bezier_math.h" />
+    <ClInclude Include="ImGUINodeEditor\imgui_canvas.h" />
+    <ClInclude Include="ImGUINodeEditor\imgui_extra_math.h" />
+    <ClInclude Include="ImGUINodeEditor\imgui_node_editor.h" />
+    <ClInclude Include="ImGUINodeEditor\imgui_node_editor_internal.h" />
+    <ClInclude Include="ImGUISharpGlue.h" />
+    <ClInclude Include="ImGUI\imconfig.h" />
+    <ClInclude Include="ImGUI\imgui.h" />
+    <ClInclude Include="ImGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="ImGUI\imgui_internal.h" />
+    <ClInclude Include="ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="ImGUI\imstb_textedit.h" />
+    <ClInclude Include="ImGUI\imstb_truetype.h" />
+    <ClInclude Include="ImPlot\implot.h" />
+    <ClInclude Include="ImPlot\implot_internal.h" />
+    <ClInclude Include="InputDevice.h" />
+    <ClInclude Include="IRenderer2D.h" />
+    <ClInclude Include="LightComponent.h" />
+    <ClInclude Include="magic_enum.hpp" />
+    <ClInclude Include="NavigationSystem.h" />
+    <ClInclude Include="PhysicsSystemPhysX.h" />
+    <ClInclude Include="PhysicsSystemJolt.h" />
+    <ClInclude Include="QueryGpuProfiler.h" />
+    <ClInclude Include="RingBuffer.h" />
+    <ClInclude Include="ScriptingSystem.h" />
+    <ClInclude Include="Keys.h" />
+    <ClInclude Include="lua\include\lauxlib.h" />
+    <ClInclude Include="lua\include\lua.h" />
+    <ClInclude Include="lua\include\lua.hpp" />
+    <ClInclude Include="lua\include\luaconf.h" />
+    <ClInclude Include="lua\include\lualib.h" />
+    <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="PlaneComponent.h" />
+    <ClInclude Include="Renderer2DImpl.h" />
+    <ClInclude Include="ShaderIncludeHandler.h" />
+    <ClInclude Include="SkyBoxComp.h" />
+    <ClInclude Include="sol\config.hpp" />
+    <ClInclude Include="sol\forward.hpp" />
+    <ClInclude Include="sol\sol.hpp" />
+    <ClInclude Include="sol_ImGui.h" />
+    <ClInclude Include="CubeMapHelper.h" />
+    <ClInclude Include="SoundSystemFMod.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="StringHashCompileTime.h" />
+    <ClInclude Include="TextEditor.h" />
+    <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="TinyModelComponent.h" />
+    <ClInclude Include="tinyObjLoader.h" />
+    <ClInclude Include="TriangleComponent.h" />
+    <ClInclude Include="UIRendererClass.h" />
+    <ClInclude Include="VertexPositionColor.h" />
+    <ClInclude Include="VertexPositionNormalBinormalTangentColorTex.h" />
+    <ClInclude Include="VertexPositionNormalTex.h" />
+    <ClInclude Include="VertexPositionTex.h" />
+    <ClInclude Include="VertexPositon2DTex2DColor.h" />
+    <ClInclude Include="VertexSkin.h" />
+    <ClInclude Include="ZActor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="ChunkyTriMesh.cpp" />
+    <ClCompile Include="CrowdTool.cpp" />
+    <ClCompile Include="CSharpScriptingSystem.cpp" />
+    <ClCompile Include="CycleProfiler.cpp" />
+    <ClCompile Include="DebugRenderSysImpl.cpp" />
+    <ClCompile Include="DebugRenderSystem.cpp" />
+    <ClCompile Include="Delegates.cpp" />
+    <ClCompile Include="DisplayWin32.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="FbxLoaderExt.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ImGUINodeEditor\crude_json.cpp" />
+    <ClCompile Include="ImGUINodeEditor\imgui_canvas.cpp" />
+    <ClCompile Include="ImGUINodeEditor\imgui_node_editor.cpp" />
+    <ClCompile Include="ImGUINodeEditor\imgui_node_editor_api.cpp" />
+    <ClCompile Include="ImGUI\imgui.cpp" />
+    <ClCompile Include="ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="ImGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="ImGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="ImPlot\implot.cpp" />
+    <ClCompile Include="ImPlot\implot_demo.cpp" />
+    <ClCompile Include="ImPlot\implot_items.cpp" />
+    <ClCompile Include="InputDevice.cpp" />
+    <ClCompile Include="LightComponent.cpp" />
+    <ClCompile Include="NavigationSystem.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='MonoDebug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystemPhysX.cpp" />
+    <ClCompile Include="PhysicsSystemJolt.cpp" />
+    <ClCompile Include="PlaneComponent.cpp" />
+    <ClCompile Include="QueryGpuProfiler.cpp" />
+    <ClCompile Include="Renderer2DImpl.cpp" />
+    <ClCompile Include="ScipringSystem.cpp" />
+    <ClCompile Include="ShaderIncludeHandler.cpp" />
+    <ClCompile Include="SkyBoxComp.cpp" />
+    <ClCompile Include="CubeMapHelper.cpp" />
+    <ClCompile Include="SoundSystemFMod.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="TextEditor.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="TinyModelComponent.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
+    <ClCompile Include="UIRendererClass.cpp" />
+    <ClCompile Include="VertexPositionColor.cpp" />
+    <ClCompile Include="VertexPositionNormalBinormalTangentColorTex.cpp" />
+    <ClCompile Include="VertexPositionNormalTex.cpp" />
+    <ClCompile Include="VertexPositionTex.cpp" />
+    <ClCompile Include="VertexPositon2DTex2DColor.cpp" />
+    <ClCompile Include="VertexSkin.cpp" />
+    <ClCompile Include="ZActor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ImGUINodeEditor\imgui_bezier_math.inl" />
+    <None Include="ImGUINodeEditor\imgui_extra_math.inl" />
+    <None Include="ImGUINodeEditor\imgui_node_editor_internal.inl" />
+    <None Include="Shaders\Simple.hlsl">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Shaders</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">$(OutDir)/Shaders</DestinationFolders>
+      <DeploymentContent>false</DeploymentContent>
+    </None>
+    <None Include="Shaders\TexturedShader.hlsl">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Shaders</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">$(OutDir)/Shaders</DestinationFolders>
+    </None>
+    <None Include="Shaders\UIShader.hlsl">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Shaders</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='MonoDebug|x64'">$(OutDir)/Shaders</DestinationFolders>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FbxLoader\FbxLoader.vcxproj">
+      <Project>{46c84b59-98c6-4895-aa50-c22f5afa8665}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ZMathLib\ZMathLib.vcxproj">
+      <Project>{fc49aac5-3e3d-47c5-81ad-e516adda02e1}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Delegates.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\DefaultDiffuseMap.jpg" />
+    <Image Include="Content\DefaultNormalMap.jpg" />
+    <Image Include="Content\DefaultSpecularMap.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\ConvolutionCalc.hlsl">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Shaders\Skybox.hlsl">
+      <FileType>Document</FileType>
+    </Text>
+    <Text Include="Shaders\SphereToCube.hlsl">
+      <FileType>Document</FileType>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\CubeToPlanar.hlsl">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

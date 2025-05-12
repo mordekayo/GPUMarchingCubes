@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{92d692cb-2ea8-4fb2-93c3-fc8157f88571}</UniqueIdentifier>
+      <Extensions>hlsl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingPBRGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectionSphereComp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingSystemPBR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PassLighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PassOpaque.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PassToneMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CascadedDepthRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZPostProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Noise\SimplexNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VoxelTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingCubeVolRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RenderingPBRGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lights.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectionSphereComp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingSystemPBR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadersFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CascadedDepthRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZPostProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchingCubeVolRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Noise\SimplexNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\PBRFillGBuffer.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\PBRLighting.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\PBRToneMapping.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\SkyRenderingPS.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\SkyRenderingVS.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\SkyUpdatePS.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\CascadedDepthRenderer.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\PostProcVSScreenQuad.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\PostProcPS.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\AtmosCodingAdventurePS.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\PointVolumeRendering.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\MarchingCubesCompute.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\MarchingCubesInc.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\MarchingCubesRendering.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\GBufferSampling.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\SDFFillVolume.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+    <Text Include="Shaders\NoiseFillVolume.hlsl">
+      <Filter>Shaders</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\HighPolyGeoSphere.FBX" />
+    <None Include="Content\wood_root\Aset_wood_root_M_rkswd_LOD0.fbx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Content\wood_root\Aset_wood_root_M_rkswd_2K_Albedo.jpg" />
+    <Image Include="Content\wood_root\Aset_wood_root_M_rkswd_2K_Normal_LOD0.jpg" />
+    <Image Include="Content\wood_root\Aset_wood_root_M_rkswd_2K_Roughness.jpg" />
+  </ItemGroup>
+</Project>

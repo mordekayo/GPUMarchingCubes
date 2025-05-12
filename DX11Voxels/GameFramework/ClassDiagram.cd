@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Game">
+    <Position X="10.25" Y="1" Width="1.75" />
+    <Members>
+      <Method Name="~Game" Hidden="true" />
+      <Field Name="DebugRender" Hidden="true" />
+      <Field Name="depthBuffer" Hidden="true" />
+      <Field Name="DepthState" Hidden="true" />
+      <Field Name="DepthView" Hidden="true" />
+      <Field Name="FbxLoader" Hidden="true" />
+      <Field Name="GameCamera" Hidden="true" />
+      <Field Name="isActive" Hidden="true" />
+      <Field Name="isExitRequested" Hidden="true" />
+      <Field Name="ObjLoader" Hidden="true" />
+      <Method Name="PostDraw" Hidden="true" />
+      <Field Name="RastState" Hidden="true" />
+      <Field Name="Renderer2D" Hidden="true" />
+      <Field Name="ScriptingEngine" Hidden="true" />
+      <Field Name="SwapChain1" Hidden="true" />
+      <Field Name="swapDesc" Hidden="true" />
+      <Field Name="TextureLoader" Hidden="true" />
+      <Field Name="UIRender" Hidden="true" />
+    </Members>
+    <AssociationLine Name="Components" Type="std::vector&lt;_Ty, _Alloc&gt;">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.318" Y="0.07" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AASCASBAEgEBA6gkAEAAITQCIwjiAAEAYA0QAAhAAFI=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Display" />
+      <Field Name="InputDevice" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="Components" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="DisplayWin32">
+    <Position X="13.25" Y="1" Width="1.5" />
+    <Members>
+      <Method Name="~DisplayWin32" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAAAAAAAAIAAAAAAAAAAABAIACAAAAUA=</HashCode>
+      <FileName>DisplayWin32.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameComponent">
+    <Position X="5.25" Y="1.5" Width="2" />
+    <Members>
+      <Method Name="~GameComponent" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAFAAAAAwAAAAAAAAAAAABAAAAICAAAAAAAAAA=</HashCode>
+      <FileName>GameComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::vector&lt;_Ty, _Alloc&gt;" Collapsed="true">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AWAEk4EqCrBsCEBAAOMIIAAyAAUEQBIghQkwgkAFUko=</HashCode>
+      <FileName>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\vector</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputDevice">
+    <Position X="13.25" Y="3.75" Width="1.5" />
+    <Members>
+      <Method Name="~InputDevice" Hidden="true" />
+      <Method Name="InputDevice" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Struct Name="InputDevice::MouseMoveEventArgs" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>InputDevice.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="InputDevice::KeyboardInputEventArgs" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>InputDevice.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="InputDevice::RawMouseEventArgs" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>InputDevice.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAIAAAAAAACACAAhBIAAAAIAAAAQACCAIA=</HashCode>
+      <FileName>InputDevice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TriangleComponent">
+    <Position X="8" Y="3" Width="1.75" />
+    <Members>
+      <Field Name="annotation" Hidden="true" />
+      <Field Name="camera" Hidden="true" />
+      <Field Name="constantBuffer" Hidden="true" />
+      <Field Name="Position" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAACFAgQAAwAgEAAAAAAAAIBQAIAAAAAACAAAAgA=</HashCode>
+      <FileName>TriangleComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
