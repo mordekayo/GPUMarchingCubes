@@ -42,7 +42,7 @@ void Table::Serialize(const std::string& fileName)
     for (int i = 0; i < table->size(); ++i)
     {
         TableRow& row = (*table)[i];
-        fileStream.write(reinterpret_cast<char*>(row.data()), sizeof(char) * row.size());
+        fileStream.write(reinterpret_cast<char*>(row.data()), sizeof(char) *  row.size());
     }
 
     fileStream.close();
@@ -90,11 +90,14 @@ void Table::Deserialize(const std::string& fileName)
         return;
     }
 
+    CreateEmpty();
+
     failedCount = 0;
     for (int i = 0; i < table->size(); ++i)
     {
         TableRow row;
-        fileStream.read(reinterpret_cast<char*>(row.data()), sizeof(row.data()));
+        fileStream.read(reinterpret_cast<char*>(row.data()), sizeof(char) * row.size());
+        table->at(i) = row;
     }
 }
 
@@ -110,7 +113,7 @@ void Table::PrintFailedRatio()
 
 void Table::Fill()
 {
-    for (unsigned long i = 0; i < tableSize; ++i)
+    for (unsigned long i = 0; i < tableSize / 2; ++i)
     {
         auto vertexActivityMaskCopy = VertexActivityMask(i);
         bool flipped = false;
@@ -119,13 +122,116 @@ void Table::Fill()
             vertexActivityMaskCopy.flip();
             flipped = true;
         }
-        (*table)[i] = MakeRow(vertexActivityMaskCopy, flipped);
+         (*table)[i] = MakeRow(vertexActivityMaskCopy, flipped);
     }
 }
 
 bool FloatEqual(float a, float b)
 {
     return std::fabs(a - b) < std::numeric_limits<float>::epsilon();
+}
+
+void RemoveStraightAngles(std::vector<std::shared_ptr<EdgePoint>>& circuit)
+{
+    for (int index = 0; index < circuit.size() && circuit.size() > 2; ++index)
+    {
+        int prevIndex = index == 0 ? circuit.size() - 1 : index - 1;
+        int nextIndex = index == circuit.size() - 1 ? 0 : index + 1;
+
+        Vector3 leftArm = circuit[prevIndex]->GetPosition() - circuit[index]->GetPosition();
+        Vector3 rightArm = circuit[nextIndex]->GetPosition() - circuit[index]->GetPosition();
+
+        if (FloatEqual(Vector3::AngleBetween(leftArm, rightArm), 180.0f))
+        {
+            circuit.erase(circuit.begin() + index);
+            if (prevIndex >= circuit.size())
+            {
+                prevIndex = circuit.size() - 2;
+            }
+            index = prevIndex;
+        }
+    }
+}
+
+std::set<int> findAxisAlignedTriangles(const std::vector<std::shared_ptr<EdgePoint>>& circuit)
+{
+    std::set<int> result;
+    for (int i = 0; i < circuit.size(); ++i)
+    {
+        std::vector<float> xs;
+        std::vector<float> ys;
+        std::vector<float> zs;
+
+        for (int j = 0; j < 3; ++j)
+        {
+            Vector3 pos = circuit[(i + j) % circuit.size()]->GetPosition();
+            xs.push_back(pos.x);
+            ys.push_back(pos.y);
+            zs.push_back(pos.z);
+        }
+
+        bool allXisZero = true;
+        bool allXisTwo = true;
+        for (auto x : xs)
+        {
+            if (!FloatEqual(x, 0))
+            {
+                allXisZero = false;
+            }
+            if (!FloatEqual(x, 2))
+            {
+                allXisTwo = false;
+            }
+        }
+
+        bool allYisZero = true;
+        bool allYisTwo = true;
+        for (auto y : ys)
+        {
+            if (!FloatEqual(y, 0))
+            {
+                allYisZero = false;
+            }
+            if (!FloatEqual(y, 2))
+            {
+                allYisTwo = false;
+            }
+        }
+
+        bool allZisZero = true;
+        bool allZisOne = true;
+        for (auto z : zs)
+        {
+            if (!FloatEqual(z, 0))
+            {
+                allZisZero = false;
+            }
+            if (!FloatEqual(z, 1))
+            {
+                allZisOne = false;
+            }
+        }
+
+        if (allXisZero || allXisTwo || allYisZero || allYisTwo || allZisZero || allZisOne)
+        {
+            result.insert(circuit[i]->GetIndex());
+        }
+    }
+
+    return result;
+}
+
+int findEdgePointByIndex(const std::vector<std::shared_ptr<EdgePoint>>& circuit, int index)
+{
+    for (int i = 0; i < circuit.size(); ++i)
+    {
+        if(circuit[i]->GetIndex() == index)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 std::vector<std::shared_ptr<EdgePoint>> EarClipping(const Graph& graph, std::vector<std::shared_ptr<EdgePoint>>& circuit)
@@ -138,8 +244,59 @@ std::vector<std::shared_ptr<EdgePoint>> EarClipping(const Graph& graph, std::vec
         chainCopy.push_back(edgePoint);
     }
 
+    RemoveStraightAngles(circuit);
+
+    std::set<int> faceAlignedTrianglesStartIndexes;
+    if (circuit.size() > 3)
+    {
+        faceAlignedTrianglesStartIndexes = findAxisAlignedTriangles(circuit);
+    }
+
     while (chainCopy.size() > 2)
     {
+        while (faceAlignedTrianglesStartIndexes.size() > 0 && chainCopy.size() > 2)
+        {
+            int index = findEdgePointByIndex(chainCopy, *faceAlignedTrianglesStartIndexes.begin());
+            if (index == -1)
+            {
+                faceAlignedTrianglesStartIndexes.erase(faceAlignedTrianglesStartIndexes.begin());
+                continue;
+            }
+            int prevIndex = index == 0 ? chainCopy.size() - 1 : index - 1;
+            int nextIndex = index == chainCopy.size() - 1 ? 0 : index + 1;
+
+            Vector3 leftArm = chainCopy[prevIndex]->GetPosition() - chainCopy[index]->GetPosition();
+            Vector3 rightArm = chainCopy[nextIndex]->GetPosition() - chainCopy[index]->GetPosition();
+
+            if (FloatEqual(Vector3::AngleBetween(leftArm, rightArm), 180.0f))
+            {
+                chainCopy.erase(chainCopy.begin() + index);
+                if (prevIndex >= chainCopy.size())
+                {
+                    prevIndex = chainCopy.size() - 2;
+                }
+                faceAlignedTrianglesStartIndexes.erase(index);
+                index = prevIndex;
+            }
+            if (Vector3::AngleBetween(leftArm, rightArm) < 180.0f)
+            {
+                if (!graph.IsTriangleInsideProhibitedArea(chainCopy[prevIndex]->GetPosition(),
+                    chainCopy[index]->GetPosition(),
+                    chainCopy[nextIndex]->GetPosition()))
+                {
+                    triangeList.push_back(chainCopy[prevIndex]);
+                    triangeList.push_back(chainCopy[index]);
+                    triangeList.push_back(chainCopy[nextIndex]);
+                }
+                faceAlignedTrianglesStartIndexes.erase(faceAlignedTrianglesStartIndexes.begin());
+                chainCopy.erase(chainCopy.begin() + index);
+                if (prevIndex >= chainCopy.size())
+                {
+                    prevIndex = chainCopy.size() - 2;
+                }
+                index = prevIndex;
+            }
+        }
         for (int index = 0; index < chainCopy.size() && chainCopy.size() > 2; ++index)
         {
             int prevIndex = index == 0 ? chainCopy.size() - 1 : index - 1;
@@ -396,10 +553,27 @@ bool isNew(const std::vector<std::shared_ptr<EdgePoint>>& path, std::vector<std:
 
     for (const auto& cycle : cycles)
     {
-        std::unordered_set<std::shared_ptr<EdgePoint>> set;
-        set.insert(cycle.begin(), cycle.end());
+        //std::unordered_set<std::shared_ptr<EdgePoint>> set;
+        //set.insert(cycle.begin(), cycle.end());
 
-        if (pathSet == set)
+        //if (pathSet == set)
+        //{
+        //    return false;
+        //}
+        if (cycle.size() != path.size())
+        {
+            continue;
+        }
+        bool fullyContains = true;
+        for (const auto& point : cycle)
+        {
+            if (!pathSet.contains(point))
+            {
+                fullyContains = false;
+                break;
+            }
+        }
+        if (fullyContains)
         {
             return false;
         }
@@ -506,16 +680,16 @@ void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint
         }
 
         bool allYisZero = true;
-        bool allYisOne = true;
+        bool allYisTwo = true;
         for (auto y : ys)
         {
             if (!FloatEqual(y, 0))
             {
                 allYisZero = false;
             }
-            if (!FloatEqual(y, 1))
+            if (!FloatEqual(y, 2))
             {
-                allYisOne = false;
+                allYisTwo = false;
             }
         }
 
@@ -533,7 +707,7 @@ void removeFaceAlignedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint
             }
         }
 
-        if (allXisZero || allXisTwo || allYisZero || allYisOne || allZisZero || allZisOne)
+        if (allXisZero || allXisTwo || allYisZero || allYisTwo || allZisZero || allZisOne)
         {
             circuits.erase(circuits.begin() + i);
         }
@@ -546,6 +720,10 @@ void removeCombinedCircuits(std::vector<std::vector<std::shared_ptr<EdgePoint>>>
 
     for (int i = circuits.size() - 1; i >= 1; --i)
     {
+        if (circuits[i].size() == 3)
+        {
+            return;
+        }
         bool shouldBeRemoved = true;
         std::unordered_set<std::shared_ptr<EdgePoint>> iset;
         for (auto point : circuits[i])
@@ -723,10 +901,13 @@ TableRow Table::MakeRow(const VertexActivityMask& vertexActivityMask, bool flipp
                     if (!neighbour->IsActive())
                     {
                         auto edgePoint = graph->GetEdgePoint(vertexPoint->GetIndex(), neighbour->GetIndex());
-                        int edgePointIndex = edgePoint->GetIndex();
-                        if (!Contains(edgePointsFamily, edgePoint))
+                        if (edgePoint != nullptr)
                         {
-                            edgePointsFamily.push_back(edgePoint);
+                            int edgePointIndex = edgePoint->GetIndex();
+                            if (!Contains(edgePointsFamily, edgePoint))
+                            {
+                                edgePointsFamily.push_back(edgePoint);
+                            }
                         }
                     }
                 }

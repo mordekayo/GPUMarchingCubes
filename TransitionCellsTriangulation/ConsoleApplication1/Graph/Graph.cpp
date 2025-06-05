@@ -41,7 +41,7 @@ std::shared_ptr<EdgePoint> Graph::GetEdgePoint(int firstVertexIndex, int secondV
 	int second = std::max(firstVertexIndex, secondVertexIndex);
     if (edgesTable->count(std::make_pair(first, second)) == 0)
     {
-        return {};
+        return nullptr;
     }
     return edgesTable->at(std::make_pair(first, second));
 }
@@ -67,10 +67,11 @@ void Graph::Create(const VertexActivityMask& vertexActivityMask)
 
 bool Graph::IsTriangleInsideProhibitedArea(Vector3 point1, Vector3 point2, Vector3 point3) const
 {
-    return prohibitedAreaBoundingBox.IsPointInside(
-        Vector3((point1.x + point2.x + point3.x) / 3,
-        (point1.y + point2.y + point3.y) / 3,
-        (point1.z + point2.z + point3.z) / 3));
+    return false;
+    //return prohibitedAreaBoundingBox.IsPointInside(
+    //    Vector3((point1.x + point2.x + point3.x) / 3,
+    //    (point1.y + point2.y + point3.y) / 3,
+    //    (point1.z + point2.z + point3.z) / 3));
 }
 
 bool Graph::IsProhibited(int edge1Index, int edge2Index) const

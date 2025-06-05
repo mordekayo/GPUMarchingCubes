@@ -283,6 +283,10 @@ bool Graph13::IsProhibited(int edge1Index, int edge2Index) const
     {
         return true;
     }
+    if (edge1Index == 5 && edge2Index == 35)
+    {
+        return true;
+    }
     return false;
 }
 
@@ -408,6 +412,114 @@ void Graph13::RemoveRedundantLinks(EdgePointsGraph* edgePointsGraph)
         for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
         {
             if (edgePointsGraph->links[i][0]->GetIndex() == 11 || edgePointsGraph->links[i][1]->GetIndex() == 11)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
+        }
+    }
+
+    auto finded = FindLinkInEdgePointsGraph(edgePointsGraph, {3,13});
+    if (finded != edgePointsGraph->links.end())
+    {
+        found = true;
+    }
+    else
+    {
+        found = false;
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->nodes[i]->GetIndex() == 1)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 1 || edgePointsGraph->links[i][1]->GetIndex() == 1)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
+        }
+    }
+
+    finded = FindLinkInEdgePointsGraph(edgePointsGraph, { 13,44 });
+    if (finded != edgePointsGraph->links.end())
+    {
+        found = true;
+    }
+    else
+    {
+        found = false;
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->nodes[i]->GetIndex() == 18)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 18 || edgePointsGraph->links[i][1]->GetIndex() == 18)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
+        }
+    }
+
+    finded = FindLinkInEdgePointsGraph(edgePointsGraph, { 3,40 });
+    if (finded != edgePointsGraph->links.end())
+    {
+        found = true;
+    }
+    else
+    {
+        found = false;
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->nodes[i]->GetIndex() == 11)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 11 || edgePointsGraph->links[i][1]->GetIndex() == 11)
+            {
+                edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
+            }
+        }
+    }
+
+    finded = FindLinkInEdgePointsGraph(edgePointsGraph, { 40,44 });
+    if (finded != edgePointsGraph->links.end())
+    {
+        found = true;
+    }
+    else
+    {
+        found = false;
+    }
+    if (found)
+    {
+        for (int i = edgePointsGraph->nodes.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->nodes[i]->GetIndex() == 38)
+            {
+                edgePointsGraph->nodes.erase(edgePointsGraph->nodes.begin() + i);
+            }
+        }
+        for (int i = edgePointsGraph->links.size() - 1; i >= 0; --i)
+        {
+            if (edgePointsGraph->links[i][0]->GetIndex() == 38 || edgePointsGraph->links[i][1]->GetIndex() == 38)
             {
                 edgePointsGraph->links.erase(edgePointsGraph->links.begin() + i);
             }
