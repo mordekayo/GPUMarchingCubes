@@ -31,6 +31,7 @@ struct VoxelNode
 
 	float* data		= nullptr;
 	uint64_t depth	= 0;
+	uint64_t childIndex = 0;
 
 	VoxelNode* parent;
 	VoxelNode** childs = nullptr;
@@ -39,6 +40,7 @@ struct VoxelNode
 
 	bool isDirty = true;
 	bool isMeshCalculated = false;
+	bool isLastInLOD = false;
 
 	DirectX::BoundingBox aabb;
 	double x = 0, y = 0, z = 0, extend = 0;
@@ -94,6 +96,11 @@ struct VoxelTree
 
 	ID3D11SamplerState* TrilinearClamp;
 
+	ID3D11ShaderResourceView* defaultlookUpTableSRV = nullptr;
+	ID3D11ShaderResourceView* lookUpTable13PointsSRV = nullptr;
+	ID3D11ShaderResourceView* lookUpTable17PointsSRV = nullptr;
+	ID3D11ShaderResourceView* lookUpTable20PointsSRV = nullptr;
+
 	struct PointVolConstParams
 	{
 		DirectX::SimpleMath::Matrix World;
@@ -109,6 +116,8 @@ struct VoxelTree
 		DirectX::SimpleMath::Vector4 PositionIsoline;
 		DirectX::SimpleMath::Vector4 Offset;
 		DirectX::SimpleMath::Vector4 CornerPosWorldSize;
+		DirectX::SimpleMath::Vector4 TransitionParams;
+		DirectX::SimpleMath::Vector4 TransitionParams2;
 	};
 
 	ID3D11Buffer* constPointVolBuf = nullptr;
@@ -130,14 +139,17 @@ struct VoxelTree
 	QueryRes lastQuery;
 
 	const Camera& camera;
+	const Game& game;
 
 	vgjs::JobSystem js;
 
 
 	std::vector<float> lods;
 
+	std::vector<std::chrono::microseconds> last100ComputeTimes;
+	std::vector<std::chrono::microseconds> last100DrawTimes;
 public:
-	VoxelTree(const Camera& inCamera);
+	VoxelTree(const Camera& inCamera, const Game& game);
 
 	uint64_t CalculateSizeByDepth(uint64_t depth);
 
@@ -164,7 +176,13 @@ public:
 	void AddSdfSphere(DirectX::SimpleMath::Vector3 spherePos, float radius, bool isSub = false);
 	void AddSdfSphere(VoxelNode* node, DirectX::SimpleMath::Vector3 spherePos, float radius, bool isSub = false);
 
-	void CalculateMarchingCubes(VoxelNode* node);
+
+	void CheckTransitionStateAndCalculateMarchingCubes(VoxelNode* node);
+	void CalculateMarchingCubes(VoxelNode* node, int lowResNeighboursMask);
 	void LoadShaders();
+	void CreateTriangulationLookUpTables();
+	ID3D11ShaderResourceView* CreateLookUpTable(int vertexCount, int edgesCount, const void const* data, bool truncate);
+
+	bool once = false;
 };
 

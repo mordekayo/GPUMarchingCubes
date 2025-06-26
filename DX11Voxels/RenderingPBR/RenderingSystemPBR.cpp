@@ -16,8 +16,7 @@
 RenderingSystemPBR::RenderingSystemPBR(Game* game) : game(game), gBuffer(game->Display->ClientWidth, game->Display->ClientHeight)
 {
 	//volRenderer = new MarchingCubeVolRenderer();
-	voxelTree = new VoxelTree(*game->GameCamera);
-
+	voxelTree = new VoxelTree(*game->GameCamera, *game);
 
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -335,7 +334,8 @@ void RenderingSystemPBR::Draw(float deltaTime)
 	OpaquePass(deltaTime);
 	Game::Instance->GpuProfiler->AddTimestamp("OpaquePass end");
 
-	game->Context->RSSetState(rastCullBack);
+	//game->Context->RSSetState(rastCullBack);
+	game->Context->RSSetState(rastCullNone);
 
 	if (game->InputDevice->IsKeyDown(Keys::F4))
 		game->Context->RSSetState(rastWireCullNone);

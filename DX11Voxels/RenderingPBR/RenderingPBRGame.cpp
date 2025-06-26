@@ -80,7 +80,7 @@ namespace RenderingPBRTut {
 
 #pragma region Scene
 ///*
-		auto aaa = CreateNewStaticMeshActorAssimp("Content/wood_root/Aset_wood_root_M_rkswd_LOD0.fbx");
+		/*auto aaa = CreateNewStaticMeshActorAssimp("Content/wood_root/Aset_wood_root_M_rkswd_LOD0.fbx");
 		aaa->FindComponentByClass<ZStaticMeshComponent>()->Meshes[0]->Materials[0].ReloadTextures(
 			L"Content/wood_root/Aset_wood_root_M_rkswd_2K_Albedo.jpg",
 			L"Content/wood_root/Aset_wood_root_M_rkswd_2K_Normal_LOD0.jpg",
@@ -147,10 +147,10 @@ namespace RenderingPBRTut {
 		inside->RootComponent->Transform.Rotation = Quaternion::CreateFromYawPitchRoll(0, -M_PI * 0.5f, 0);
 		inside->RootComponent->Transform.Position = Vector3(-150, -10, -150);
 		inside->RootComponent->Transform.Scale = Vector3(0.1f, 0.1f, 0.1f);
-		RegisterActor(inside);
+		RegisterActor(inside);*/
 
 		
-	int rows = 4;
+	/*int rows = 4;
 	int cols = 4;
 	for (int i = 0; i < rows; i++) {
 		float istep = 1.0f / (rows - 1.0f) * i;
@@ -172,7 +172,7 @@ namespace RenderingPBRTut {
 	
 			RegisterActor(sphere);
 		}
-	}
+	}*/
 //*/
 #pragma endregion Scene
 
@@ -271,12 +271,12 @@ namespace RenderingPBRTut {
 		if (InputDevice->IsKeyDown(Keys::Escape)) 
 			Exit();
 
-		static float requestCountDown = 0.005f;
+		static float requestCountDown = 2.0f;
 
 		requestCountDown -= deltaTime;
 		requestCountDown = requestCountDown < -1.0f ? -1.0f : requestCountDown;
 
-		if (InputDevice->IsKeyDown(Keys::MiddleButton) || InputDevice->IsKeyDown(Keys::RightButton))// && requestCountDown < 0)
+		if ((InputDevice->IsKeyDown(Keys::MiddleButton) || InputDevice->IsKeyDown(Keys::RightButton)) && requestCountDown < 0)
 		{
 			const bool isSub = InputDevice->IsKeyDown(Keys::RightButton);
 			rendSys->RequestScreenSample(InputDevice->MousePosition.x, InputDevice->MousePosition.y, [&, isSub](const GSampleData& data)
@@ -286,7 +286,8 @@ namespace RenderingPBRTut {
 				*sampleData = data;
 				std::cout << sampleData->WorldPosition.x << " " << sampleData->WorldPosition.y << " " << sampleData->WorldPosition.z << "\n";
 				//rendSys->volRenderer->AddSdfSphere(sampleData->WorldPosition, 0.25f, isSub);
-				rendSys->voxelTree->AddSdfSphere(sampleData->WorldPosition, 10.0f, isSub);
+
+					rendSys->voxelTree->AddSdfSphere(sampleData->WorldPosition, 10.5f, isSub);
 			});
 			requestCountDown = 0.01f;
 		}

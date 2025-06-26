@@ -6,10 +6,11 @@
 #include <queue>
 #include "Noise/SimplexNoise.h"
 #include <unordered_set>
+#include "InputDevice.h"
 
+#include <chrono>
 
-
-VoxelTree::VoxelTree(const Camera& inCamera) : camera(inCamera), js(vgjs::thread_count_t{8})
+VoxelTree::VoxelTree(const Camera& inCamera, const Game& inGame) : camera(inCamera), game(inGame), js(vgjs::thread_count_t{8})
 {
 	LoadShaders();
 
@@ -70,15 +71,22 @@ bool VoxelTree::NeedToSplit(VoxelNode* node, const Camera& camera)
 	float farPlane	= camera.FarPlaneDistance;
 
 	Vector3 nearPoint;
-	ClosestPtPointAABB(camera.GetPosition(), node->aabb, nearPoint);
-	Vector3 localPos = nearPoint - camera.GetPosition();
+	//ClosestPtPointAABB(camera.GetPosition(), node->aabb, nearPoint);
+	ClosestPtPointAABB(Vector3::Zero, node->aabb, nearPoint);
+	//Vector3 localPos = nearPoint - camera.GetPosition();
+	Vector3 localPos = nearPoint - Vector3::Zero;
 	float dist = localPos.Length();
 
-	for(int i = 0; i < maxDepth; ++i) {
+	for(int i = 0; i < maxDepth; ++i) 
+	{
 		float lodDist = lods[i];
-		if(dist < lodDist && node->depth < (8-i))
+		if (dist < lodDist && node->depth < (8 - i))
+		{
 			return true;
+		}
 	}
+
+	node->isLastInLOD = false;
 
 	return false;
 
@@ -112,6 +120,8 @@ QueryRes VoxelTree::CullTree(const Camera& camera)
 
 	std::queue<VoxelNode*> traverseNodes;
 	traverseNodes.push(rootNode);
+
+	bool once = false;
 
 	while (!traverseNodes.empty())
 	{
@@ -160,27 +170,28 @@ void VoxelTree::InitializeVolume(VoxelNode* node)
 
 	bool havePositive = false;
 	bool haveNegative = false;
-	float* data = new float[voxelSize * voxelSize * voxelSize];
-		for (unsigned int z = 0; z < voxelSize; ++z) {
-			for (unsigned int y = 0; y < voxelSize; ++y) {
-				for (unsigned int x = 0; x < voxelSize; ++x) {
+	int voxelSizeExt = voxelSize + 1;
+	float* data = new float[voxelSizeExt * voxelSizeExt * voxelSizeExt];
+		for (unsigned int z = 0; z < voxelSizeExt; ++z) {
+			for (unsigned int y = 0; y < voxelSizeExt; ++y) {
+				for (unsigned int x = 0; x < voxelSizeExt; ++x) {
 					Vector3 pos = voxelCorner + Vector3(float(x) / float(voxelSize - 1), float(y) / float(voxelSize - 1), float(z) / float(voxelSize - 1)) * node->aabb.Extents.y * 2;
 					float height = pos.y - SimplexNoise::noise(pos.x * 0.002, pos.z * 0.002)*100 + 10 + SimplexNoise::noise(pos.x * 0.005, pos.z * 0.005) * 50 + +SimplexNoise::noise(pos.x * 0.00025, pos.z * 0.00025) * 500;
 					if (height >= 0.0f) havePositive = true;
 					if (height <  0.0f) haveNegative = true;
-					data[x + y * voxelSize + z * voxelSize * voxelSize] = height;
+					data[x + y * voxelSizeExt + z * voxelSizeExt * voxelSizeExt] = height;
 			}
 		}
 	}
 
 	D3D11_SUBRESOURCE_DATA dataSource;
-	dataSource.SysMemSlicePitch = voxelSize * voxelSize * sizeof(float);
-	dataSource.SysMemPitch = voxelSize * sizeof(float);
+	dataSource.SysMemSlicePitch = voxelSizeExt * voxelSizeExt * sizeof(float);
+	dataSource.SysMemPitch = voxelSizeExt * sizeof(float);
 	dataSource.pSysMem = data;
 
 
 	D3D11_TEXTURE3D_DESC texDesc{
-		voxelSize, voxelSize, voxelSize,
+		voxelSizeExt, voxelSizeExt, voxelSizeExt,
 		1,
 		DXGI_FORMAT_R32_FLOAT,
 		D3D11_USAGE_DEFAULT,
@@ -200,7 +211,7 @@ void VoxelTree::InitializeVolume(VoxelNode* node)
 	unsigned int cubesCount = (voxelSize - 1) * (voxelSize - 1) * (voxelSize - 1);
 	UINT structSize = sizeof(Vector3) * 7;
 	D3D11_BUFFER_DESC vertBufDesc{
-		.ByteWidth = 5 * cubesCount * structSize, // 5 is max triangles in cube
+		.ByteWidth = 22 * cubesCount * structSize, // 5 is max triangles in cube
 		.Usage = D3D11_USAGE_DEFAULT,
 		.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE,
 		.CPUAccessFlags = 0,
@@ -213,11 +224,10 @@ void VoxelTree::InitializeVolume(VoxelNode* node)
 	D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{
 		.Format = DXGI_FORMAT_UNKNOWN,
 		.ViewDimension = D3D11_UAV_DIMENSION_BUFFER,
-		.Buffer = D3D11_BUFFER_UAV {0, 5 * cubesCount, D3D11_BUFFER_UAV_FLAG_APPEND}
+		.Buffer = D3D11_BUFFER_UAV {0, 22 * cubesCount, D3D11_BUFFER_UAV_FLAG_APPEND}
 	};
 	Game::Instance->Device->CreateUnorderedAccessView(node->appendBuffer, &uavDesc, &node->appendUAV);
 	Game::Instance->Device->CreateShaderResourceView(node->appendBuffer, nullptr, &node->appendSRV);
-
 
 	D3D11_BUFFER_DESC indirectBufDesc{
 		.ByteWidth = sizeof(D3D11_DRAW_INSTANCED_INDIRECT_ARGS),
@@ -256,6 +266,9 @@ void VoxelTree::InitializeVolume(VoxelNode* node)
 
 void VoxelTree::Update()
 {
+	const std::chrono::time_point<std::chrono::system_clock> before =
+		std::chrono::system_clock::now();
+
 	lastQuery = CullTree(camera);
 
 	for (auto* node : lastQuery.nodes)
@@ -265,15 +278,40 @@ void VoxelTree::Update()
 			vgjs::schedule([node, this](){ InitializeVolume(node); });
 		}
 
-		if (node->state == VoxelNodeState::MIXED && !node->isMeshCalculated)
-			CalculateMarchingCubes(node);
+		if (node->state == VoxelNodeState::MIXED /*&& !node->isMeshCalculated*/)
+		{
+			CheckTransitionStateAndCalculateMarchingCubes(node);
+		}
 	}
 
 	constData.World = Matrix::Identity;
 	constData.View = camera.ViewMatrix;
 	constData.Projection = camera.ProjMatrix;
-}
 
+	std::wstring str;
+
+	const std::chrono::time_point<std::chrono::system_clock> after =
+		std::chrono::system_clock::now();
+
+	std::wstringstream out;
+
+	/*last100ComputeTimes.push_back(std::chrono::duration_cast<std::chrono::microseconds>(after - before));
+	if (last100ComputeTimes.size() > 100)
+	{
+		last100ComputeTimes.erase(last100ComputeTimes.begin());
+	}
+	std::chrono::microseconds acc(0);
+	for (int i = 0; i < last100ComputeTimes.size(); i++)
+	{
+		acc += last100ComputeTimes[i];
+	}
+	acc /= last100ComputeTimes.size();
+	out << "Compute time:" << acc;
+
+	str = out.str();
+
+	Game::Instance->Renderer2D->DrawOnScreenMessage(str);*/
+}
 
 void VoxelTree::GrowBranch(VoxelNode* node)
 {
@@ -308,21 +346,25 @@ void VoxelTree::DrawDebug()
 {
 	std::wstringstream strstr;
 
-	strstr << "Visible nodes count: " << lastQuery.nodes.size() << "\n";
-	std::wstring str = strstr.str();
 
-	Game::Instance->Renderer2D->DrawOnScreenMessage(str);
-	Game::Instance->DebugRender->DrawBoundingBox(rootNode->aabb);
-	//for (const auto* n : lastQuery.nodes) {
-	//	Game::Instance->DebugRender->DrawBoundingBox(n->aabb);
+	//strstr << "Visible nodes count: " << lastQuery.nodes.size() << "\n";
+	//std::wstring str = strstr.str();
+
+	/*Game::Instance->Renderer2D->DrawOnScreenMessage(str);
+	Game::Instance->DebugRender->DrawBoundingBox(rootNode->aabb);*/
+	//for (const auto* n : lastQuery.nodes) 
+	//{
+	//	if (n->state == VoxelNodeState::MIXED)
+	//	{
+	//		Game::Instance->DebugRender->DrawBoundingBox(n->aabb);
+	//	}
 	//}
-
 }
-
 
 void VoxelTree::InitializeNodeParams(VoxelNode* node, uint32_t nodeIndex)
 {
 	node->depth = node->parent ? node->parent->depth + 1 : 0;
+	node->childIndex = nodeIndex;
 	double halfNodeSize = CalculateSizeByDepth(node->depth) * 0.5;
 
 	Vector3 pos = Vector3::Zero;
@@ -373,18 +415,137 @@ VoxelNode::~VoxelNode()
 	SafeRelease(indirectUAV	  );
 }
 
-void VoxelTree::CalculateMarchingCubes(VoxelNode* node)
+void VoxelTree::CheckTransitionStateAndCalculateMarchingCubes(VoxelNode* node)
+{
+	int lowResNeighboursMask = 0;
+	float enableTransCubes = 1.0f;
+	if (game.InputDevice->IsKeyDown(Keys::F5))
+	{
+		enableTransCubes = 0.0f;
+	}
+	if (enableTransCubes > 0.0f)
+	{
+		auto parentCenter = node->parent->aabb.Center;
+
+		auto parentLeftNeighbourPoint = parentCenter + DirectX::XMFLOAT3(-node->parent->aabb.Extents.x * 2, 0.0f, 0.0f);
+		auto parentRightNeighbourPoint = parentCenter + DirectX::XMFLOAT3(node->parent->aabb.Extents.x * 2, 0.0f, 0.0f);
+		auto parentUpNeighbourPoint = parentCenter + DirectX::XMFLOAT3(0.0f, node->parent->aabb.Extents.y * 2, 0.0f);
+		auto parentDownNeighbourPoint = parentCenter + DirectX::XMFLOAT3(0.0f, -node->parent->aabb.Extents.y * 2, 0.0f);
+		auto parentFrontNeighbourPoint = parentCenter + DirectX::XMFLOAT3(0.0f, 0.0f, node->parent->aabb.Extents.z * 2);
+		auto parentBackNeighbourPoint = parentCenter + DirectX::XMFLOAT3(0.0f, 0.0f, -node->parent->aabb.Extents.z * 2);
+
+		auto watcherPos = Vector3::Zero;
+
+		Vector3 nearPoint;
+
+		if (node->childIndex == 2 || node->childIndex == 3 || node->childIndex == 6 || node->childIndex == 7)
+		{
+			DirectX::BoundingBox ParentLNnodeAABB(parentLeftNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentLNnodeAABB, nearPoint);
+			Vector3 LNlocalPos = nearPoint - watcherPos;
+			float LNdist = LNlocalPos.Length();
+			if (LNdist >= lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 1;
+			}
+		}
+
+		if (node->childIndex == 0 || node->childIndex == 1 || node->childIndex == 4 || node->childIndex == 5)
+		{
+			DirectX::BoundingBox ParentRNnodeAABB(parentRightNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentRNnodeAABB, nearPoint);
+			Vector3 RNlocalPos = nearPoint - watcherPos;
+			float RNdist = RNlocalPos.Length();
+			if (RNdist >= lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 2;
+			}
+		}
+
+		if (node->childIndex == 4 || node->childIndex == 5 || node->childIndex == 6 || node->childIndex == 7)
+		{
+			DirectX::BoundingBox ParentDNnodeAABB(parentDownNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentDNnodeAABB, nearPoint);
+			Vector3 DNlocalPos = nearPoint - watcherPos;
+			float DNdist = DNlocalPos.Length();
+			if (DNdist >= lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 4;
+			}
+		}
+
+		if (node->childIndex == 0 || node->childIndex == 1 || node->childIndex == 2 || node->childIndex == 3)
+		{
+			DirectX::BoundingBox ParentUNnodeAABB(parentUpNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentUNnodeAABB, nearPoint);
+			Vector3 UNlocalPos = nearPoint - watcherPos;
+			float UNdist = UNlocalPos.Length();
+			if (UNdist >= lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 8;
+			}
+		}
+
+		if (node->childIndex == 0 || node->childIndex == 3 || node->childIndex == 4 || node->childIndex == 7)
+		{
+			DirectX::BoundingBox ParentBNnodeAABB(parentBackNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentBNnodeAABB, nearPoint);
+			Vector3 BNlocalPos = nearPoint - watcherPos;
+			float BNdist = BNlocalPos.Length();
+			if (BNdist > lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 16;
+			}
+		}
+
+
+		if (node->childIndex == 1 || node->childIndex == 2 || node->childIndex == 5 || node->childIndex == 6)
+		{
+			DirectX::BoundingBox ParentFNnodeAABB(parentFrontNeighbourPoint, node->parent->aabb.Extents);
+			ClosestPtPointAABB(Vector3::Zero, ParentFNnodeAABB, nearPoint);
+			Vector3 FNlocalPos = nearPoint - watcherPos;
+			float FNdist = FNlocalPos.Length();
+			if (FNdist >= lods[8 - node->depth])
+			{
+				lowResNeighboursMask |= 32;
+			}
+		}
+	}
+
+	CalculateMarchingCubes(node, lowResNeighboursMask);
+}
+
+void VoxelTree::CalculateMarchingCubes(VoxelNode* node, int lowResNeighboursMask)
 {
 	auto ctx = Game::Instance->Context;
 
-	computeConstData.Offset = Vector4(0,0,0, 0);
+	computeConstData.Offset = Vector4(0,0,0,0);
 
 	ctx->CSSetConstantBuffers(0, 1, &constComputeBuf);
 	ctx->CSSetShader(marchingCubeCS, nullptr, 0);
 	ctx->CSSetSamplers(0, 1, &TrilinearClamp);
 
-	Vector3 nodePosition = node->aabb.Center;
 	computeConstData.PositionIsoline = Vector4(0,0,0, node->depth);
+
+
+	float transitionParamsx = lowResNeighboursMask & 1;
+	float transitionParamsy = (lowResNeighboursMask & 2) >> 1;
+	float transitionParamsz = (lowResNeighboursMask & 4) >> 2;
+	float transitionParamsw = (lowResNeighboursMask & 8) >> 3;
+	auto transitionParams = Vector4(transitionParamsx, transitionParamsy, transitionParamsz, transitionParamsw);
+	computeConstData.TransitionParams = transitionParams;
+	float transitionParams2x = (lowResNeighboursMask & 16) >> 4;
+	float transitionParams2y = (lowResNeighboursMask & 32) >> 5;
+
+	float enableTransCubes = 1.0f;
+	if (game.InputDevice->IsKeyDown(Keys::F5))
+	{
+		enableTransCubes = 0.0f;
+	}
+
+	auto transitionParams2 = Vector4(transitionParams2x, transitionParams2y, (float)(node->childIndex), lowResNeighboursMask);
+	computeConstData.TransitionParams2 = transitionParams2;
+
 	ctx->UpdateSubresource(constComputeBuf, 0, nullptr, &computeConstData, 0, 0);
 
 	int indBufData[] = { 0, 1, 0, 0 };
@@ -394,6 +555,10 @@ void VoxelTree::CalculateMarchingCubes(VoxelNode* node)
 	ctx->CSSetUnorderedAccessViews(0, 1, &node->appendUAV, counts);
 	ctx->CSSetUnorderedAccessViews(1, 1, &node->indirectUAV, counts);
 	ctx->CSSetShaderResources(0, 1, &node->volumeSRV);
+	ctx->CSSetShaderResources(1, 1, &defaultlookUpTableSRV);
+	ctx->CSSetShaderResources(2, 1, &lookUpTable13PointsSRV);
+	ctx->CSSetShaderResources(3, 1, &lookUpTable17PointsSRV);
+	ctx->CSSetShaderResources(4, 1, &lookUpTable20PointsSRV);
 
 	const UINT groupCount = static_cast<UINT>(std::ceil(16.0f / 8.0f));
 	ctx->Dispatch(groupCount, groupCount, groupCount);
@@ -442,8 +607,12 @@ void VoxelTree::Draw2()
 	ctx->PSSetShader(nullptr, nullptr, 0);
 }
 
+
 void VoxelTree::Draw()
 {
+	const std::chrono::time_point<std::chrono::system_clock> before =
+		std::chrono::system_clock::now();
+
 	auto ctx = Game::Instance->Context;
 
 	Game::Instance->DebugAnnotation->BeginEvent(L"RenderVoxels");
@@ -484,7 +653,31 @@ void VoxelTree::Draw()
 	strstr << "Renderable nodes count: " << visCount << "\n";
 	std::wstring str = strstr.str();
 
-	Game::Instance->Renderer2D->DrawOnScreenMessage(str);
+	//Game::Instance->Renderer2D->DrawOnScreenMessage(str);
+
+	const std::chrono::time_point<std::chrono::system_clock> after =
+		std::chrono::system_clock::now();
+
+	std::wstringstream out;
+
+
+	//last100DrawTimes.push_back(std::chrono::duration_cast<std::chrono::microseconds>(after - before));
+	//if (last100DrawTimes.size() > 100)
+	//{
+	//	last100DrawTimes.erase(last100DrawTimes.begin());
+	//}
+	//std::chrono::microseconds acc(0);
+	//for (int i = 0; i < last100DrawTimes.size(); i++)
+	//{
+	//	acc += last100DrawTimes[i];
+	//}
+	//acc /= last100DrawTimes.size();
+
+	//out << "Draw time:" << acc;
+
+	//str = out.str();
+
+	//Game::Instance->Renderer2D->DrawOnScreenMessage(str);
 }
 
 void VoxelTree::LoadShaders()
@@ -575,10 +768,103 @@ void VoxelTree::LoadShaders()
 	constVolDesc.ByteWidth = sizeof(ComputeConstParams);
 	Game::Instance->Device->CreateBuffer(&constVolDesc, nullptr, &constComputeBuf);
 	computeConstData.SizeXYZScale = Vector4(static_cast<float>(voxelSize), static_cast<float>(voxelSize), static_cast<float>(voxelSize), 1.0f);
+	CreateTriangulationLookUpTables();
+}
 
+void VoxelTree::CreateTriangulationLookUpTables()
+{
+	int8_t* data = new int8_t[std::pow(2, 8) * 16]();
+	std::fstream fileStream{ "TriTable.bin", fileStream.binary | fileStream.in };
+	if (!fileStream.is_open())
+	{
+		std::cout << "Failed to open " << "TriTable.bin" << '\n';
+		return;
+	}
+
+	fileStream.read(reinterpret_cast<char*>(data), std::pow(2, 8) * 16);
+	defaultlookUpTableSRV = CreateLookUpTable(8, 16, data, false);
+
+	int8_t* data13 = new int8_t[std::pow(2, 13) * 66]();
+	std::fstream fileStream13{ "Table13.bin", fileStream13.binary | fileStream13.in };
+	if (!fileStream13.is_open())
+	{
+		std::cout << "Failed to open " << "Table13.bin" << '\n';
+		return;
+	}
+
+	fileStream13.read(reinterpret_cast<char*>(data13), std::pow(2, 13) * 66);
+	lookUpTable13PointsSRV = CreateLookUpTable(13, 66, data13, true);
+
+	int8_t* data15 = new int8_t[std::pow(2, 15) * 120 / 2]();
+	std::fstream fileStream15{ "Table15.bin", fileStream.binary | fileStream.in };
+	if (!fileStream15.is_open())
+	{
+		std::cout << "Failed to open " << "Table15.bin" << '\n';
+		return;
+
+	}
+
+	fileStream15.read(reinterpret_cast<char*>(data15), std::pow(2, 15) * 120 / 2);
+
+	lookUpTable17PointsSRV = CreateLookUpTable(15, 120, data15, true);
+
+	int8_t* data20 = new int8_t[std::pow(2, 14) * 120 / 2]();
+
+	
+	std::fstream fileStream20{ "Table14.bin", fileStream.binary | fileStream.in };
+	if (!fileStream20.is_open())
+	{
+		std::cout << "Failed to open " << "Table14.bin" << '\n';
+		return;
+	}
+
+
+	fileStream20.read(reinterpret_cast<char*>(data20), std::pow(2, 14) * 120 / 2);
+
+	//for (int i = 1; i < 2; ++i)
+	//{
+	//	for (int j = 0; j < 120; ++j)
+	//	{
+	//		int point = (int8_t)data20[i * 120 + j];
+	//		std::cout << point << " ";
+	//	}
+	//}
+
+
+
+	lookUpTable20PointsSRV = CreateLookUpTable(14, 120, data20, true);
 }
 
 
+
+ID3D11ShaderResourceView* VoxelTree::CreateLookUpTable(int vertexCount, int edgesCount, const void const* data, bool truncate)
+{
+	D3D11_SUBRESOURCE_DATA dataSource = {};
+	dataSource.pSysMem = data;
+	dataSource.SysMemPitch = edgesCount * sizeof(int8_t);
+
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = edgesCount;
+	texDesc.Height = truncate ? (std::pow(2, vertexCount) / 2) : std::pow(2, vertexCount);
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8_SINT;
+	texDesc.SampleDesc;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+
+	ID3D11Texture2D* lookUpTableTexture = nullptr;
+	ID3D11ShaderResourceView* lookUpTableSRV = nullptr;
+
+	HRESULT res = Game::Instance->Device->CreateTexture2D(&texDesc, &dataSource, &lookUpTableTexture);
+	Game::Instance->Device->CreateShaderResourceView(lookUpTableTexture, nullptr, &lookUpTableSRV);
+
+	return lookUpTableSRV;
+}
 
 bool SphereAABBTest(double Bmin[3], double Bmax[3], double C[3], double r2)
 {
@@ -664,6 +950,5 @@ void VoxelTree::AddSdfSphere(VoxelNode* node, DirectX::SimpleMath::Vector3 spher
 	const UINT groupCount = static_cast<UINT>(std::ceil(voxelSize / 8.0f));
 	ctx->Dispatch(groupCount, groupCount, groupCount);
 	
-
-	CalculateMarchingCubes(node);
+	//CheckTransitionStateAndCalculateMarchingCubes(node);
 }
