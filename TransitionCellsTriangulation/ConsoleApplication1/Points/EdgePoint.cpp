@@ -1,23 +1,53 @@
 #include "VertexPoints/VertexPoint.hpp"
 #include "EdgePoint.hpp"
 
-EdgePoint::EdgePoint(const IGraphNode& firstParent, const IGraphNode& secondParent, std::int8_t _index)
-    : index(_index), firstParentIndex(firstParent.GetIndex()), secondParentIndex(secondParent.GetIndex())
+EdgePoint::EdgePoint(std::shared_ptr<IGraphNode> _firstParent, std::shared_ptr<IGraphNode> _secondParent, std::int8_t _index) 
+                    : index(_index), firstParent(_firstParent), secondParent(_secondParent)
 {
-    float x = (firstParent.GetPosition().x + secondParent.GetPosition().x) / 2;
-    float y = (firstParent.GetPosition().y + secondParent.GetPosition().y) / 2;
-    float z = (firstParent.GetPosition().z + secondParent.GetPosition().z) / 2;
-    position = Vector3(x,y,z);
+    float x = (_firstParent->GetPosition().x + _secondParent->GetPosition().x) / 2;
+    float y = (_firstParent->GetPosition().y + _secondParent->GetPosition().y) / 2;
+    float z = (_firstParent->GetPosition().z + _secondParent->GetPosition().z) / 2;
+    position = Vector3(x, y, z);
 }
 
-int EdgePoint::GetFirstParentIndex() const
+int EdgePoint::GetFirstParentIndex()
 {
-    return firstParentIndex;
+    std::shared_ptr<IGraphNode> node = firstParent.lock();
+    if (!node)
+    {
+        std::abort();
+    }
+    return node->GetIndex();
 }
 
-int EdgePoint::GetSecondParentIndex() const
+int EdgePoint::GetSecondParentIndex()
 {
-    return secondParentIndex;
+    std::shared_ptr<IGraphNode> node = secondParent.lock();
+    if (!node)
+    {
+        std::abort();
+    }
+    return node->GetIndex();
+}
+
+std::shared_ptr<IGraphNode> EdgePoint::GetFirstParent()
+{
+    std::shared_ptr<IGraphNode> node = firstParent.lock();
+    if (!node)
+    {
+        std::abort();
+    }
+    return node;
+}
+
+std::shared_ptr<IGraphNode> EdgePoint::GetSecondParent()
+{
+    std::shared_ptr<IGraphNode> node = secondParent.lock();
+    if (!node)
+    {
+        std::abort();
+    }
+    return node;
 }
 
 std::int8_t EdgePoint::GetIndex() const

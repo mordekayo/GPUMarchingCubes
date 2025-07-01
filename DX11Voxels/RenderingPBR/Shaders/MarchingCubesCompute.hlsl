@@ -66,7 +66,7 @@ float3 interpolateVerts(float3 v1, float3 v2, float v1Val, float v2Val, float is
     {
         t = 1;
     }
-    return v1.xyz + t * (v2.xyz - v1.xyz);
+    return v1.xyz + 0.5f * (v2.xyz - v1.xyz);
 }
 
 float3 CalculateNormal(float3 uvw)
@@ -772,7 +772,6 @@ void ComputeTransitionNode13(uint3 coords, uint side)
         }
         case 1:
         {  
-                //ComputeDefaultNode(coords);
             if(side == 5)
             {
                 correctCellIndex = coords.x % 2 == 0 && coords.y % 2 == 0 && coords.z % 2 == 0;
@@ -785,37 +784,31 @@ void ComputeTransitionNode13(uint3 coords, uint side)
         }
         case 2:
         {
-                //ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 == 0 && coords.y % 2 == (side == 5 ? 0 : 1) && coords.z % 2 == side % 2;
             break;
         }
         case 3:
         {
-               // ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 == 0 && coords.y % 2 == (side == 5 ? 0 : 1) && coords.z % 2 == 0;
             break;
         }
         case 4:
         {
-                //ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 != side % 2 && coords.y % 2 == 0 && coords.z % 2 == 0;
             break;
         }
         case 5:
         {
-                //ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 != (side == 4 ? 0 : side % 2) && coords.y % 2 == 0 && coords.z % 2 == (side == 4 ? 1 : side % 2);
             break;
         }
         case 6:
         {
-                //ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 == 0 && coords.y % 2 == 0 && coords.z % 2 == (side == 4 ? 1 : side % 2);
             break;
         }
         case 7:
         {
-                //ComputeDefaultNode(coords);
             correctCellIndex = coords.x % 2 == 0 && coords.y % 2 == 0 && coords.z % 2 == 0;
             break;
         }
@@ -917,21 +910,17 @@ void ComputeTransitionNode13(uint3 coords, uint side)
     if (TcornersData[18] < Tisoline)
         TcubeIndex |= 4096;
         
+    bool flip = false;
     if(TcubeIndex > 4095)
     {
         TcubeIndex = 8191 - TcubeIndex;
+        flip = true;
     }
+   
 
 	[loop]
-    for (int i = 0;i < 66; i += 3)
-    {
-        //Get indices of corner points A and B for each of the three edges
-        //of the cube that need to be joined to form the triangle.
-        if (transitionLookUpTable13[uint2(i, TcubeIndex)] == -1)
-        {
-            break;
-        }
-        
+    for (int i = 0; transitionLookUpTable13[uint2(i, TcubeIndex)] != -1; i += 3)
+    {        
         int a0 = transCornerIndexAFromEdge[transitionLookUpTable13[uint2(i, TcubeIndex)]];
         int b0 = transCornerIndexBFromEdge[transitionLookUpTable13[uint2(i, TcubeIndex)]];
 
@@ -947,17 +936,9 @@ void ComputeTransitionNode13(uint3 coords, uint side)
         tri.p1 = PosToTexCoords(interpolateVerts(TcornersPositions[transCorners[side][a0]], TcornersPositions[transCorners[side][b0]], TcornersData[transCorners[0][a0]], TcornersData[transCorners[0][b0]], Tisoline));
         tri.p2 = PosToTexCoords(interpolateVerts(TcornersPositions[transCorners[side][a2]], TcornersPositions[transCorners[side][b2]], TcornersData[transCorners[0][a2]], TcornersData[transCorners[0][b2]], Tisoline));
         
-        float3 normal1 = CalculateNormal(tri.p0);
-        float3 normal2 = CalculateNormal(tri.p1);
-        float3 normal3 = CalculateNormal(tri.p2);
-        
-        float3 meanTriangleNormal = float3((normal1.x + normal2.x + normal3.x) / 3,
-                                   (normal1.y + normal2.y + normal3.y) / 3,
-                                   (normal1.z + normal2.z + normal3.z) / 3);
-        
         float3 normal = normalize(cross(tri.p2 - tri.p0, tri.p1 - tri.p0));
         
-        if (dot(normal, meanTriangleNormal) <= 0)
+        if (flip)
         {
             float3 temp = tri.p0;
             tri.p0 = tri.p2;

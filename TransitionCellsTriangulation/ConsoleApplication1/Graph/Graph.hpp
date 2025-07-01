@@ -42,7 +42,7 @@ protected:
 		}
 	};
 
-	static std::unique_ptr<std::unordered_map<std::pair<int, int>, std::shared_ptr<EdgePoint>, pairHasher>> edgesTable;
+	std::unique_ptr<std::unordered_map<std::pair<int, int>, std::shared_ptr<EdgePoint>, pairHasher>> edgesTable = nullptr;
 	static std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> edgeToFaceTable;
 
 	std::shared_ptr<std::vector<std::shared_ptr<VertexPoint>>> nodes;

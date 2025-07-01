@@ -4,7 +4,7 @@
 #include <memory>
 #include <cstdint>
 
-constexpr int tableRowLength = 120;
+constexpr int tableRowLength = 70;
 constexpr int vertexActivityMaskLength = 15;
 constexpr int tableSize = 1 << 15;
 using VertexActivityMask = std::bitset<vertexActivityMaskLength>;

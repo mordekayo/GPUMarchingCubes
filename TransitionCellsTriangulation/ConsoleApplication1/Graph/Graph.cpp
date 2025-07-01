@@ -8,7 +8,6 @@
 #include <format>
 
 std::unique_ptr<std::unordered_map<int, std::unordered_set<int>>> Graph::edgeToFaceTable = nullptr;
-std::unique_ptr<std::unordered_map<std::pair<int, int>, std::shared_ptr<EdgePoint>, Graph::pairHasher>> Graph::edgesTable = nullptr;
 
 Graph::Graph()
 {

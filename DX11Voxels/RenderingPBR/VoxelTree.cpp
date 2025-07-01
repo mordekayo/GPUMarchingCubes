@@ -784,7 +784,7 @@ void VoxelTree::CreateTriangulationLookUpTables()
 	fileStream.read(reinterpret_cast<char*>(data), std::pow(2, 8) * 16);
 	defaultlookUpTableSRV = CreateLookUpTable(8, 16, data, false);
 
-	int8_t* data13 = new int8_t[std::pow(2, 13) * 66]();
+	int8_t* data13 = new int8_t[std::pow(2, 13) * 43]();
 	std::fstream fileStream13{ "Table13.bin", fileStream13.binary | fileStream13.in };
 	if (!fileStream13.is_open())
 	{
@@ -792,10 +792,10 @@ void VoxelTree::CreateTriangulationLookUpTables()
 		return;
 	}
 
-	fileStream13.read(reinterpret_cast<char*>(data13), std::pow(2, 13) * 66);
-	lookUpTable13PointsSRV = CreateLookUpTable(13, 66, data13, true);
+	fileStream13.read(reinterpret_cast<char*>(data13), std::pow(2, 13) * 43);
+	lookUpTable13PointsSRV = CreateLookUpTable(13, 43, data13, true);
 
-	int8_t* data15 = new int8_t[std::pow(2, 15) * 120 / 2]();
+	int8_t* data15 = new int8_t[std::pow(2, 15) * 70 / 2]();
 	std::fstream fileStream15{ "Table15.bin", fileStream.binary | fileStream.in };
 	if (!fileStream15.is_open())
 	{
@@ -804,9 +804,9 @@ void VoxelTree::CreateTriangulationLookUpTables()
 
 	}
 
-	fileStream15.read(reinterpret_cast<char*>(data15), std::pow(2, 15) * 120 / 2);
+	fileStream15.read(reinterpret_cast<char*>(data15), std::pow(2, 15) * 70 / 2);
 
-	lookUpTable17PointsSRV = CreateLookUpTable(15, 120, data15, true);
+	lookUpTable17PointsSRV = CreateLookUpTable(15, 70, data15, true);
 
 	int8_t* data20 = new int8_t[std::pow(2, 14) * 120 / 2]();
 
