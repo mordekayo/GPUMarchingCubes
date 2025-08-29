@@ -287,7 +287,7 @@ namespace RenderingPBRTut {
 				std::cout << sampleData->WorldPosition.x << " " << sampleData->WorldPosition.y << " " << sampleData->WorldPosition.z << "\n";
 				//rendSys->volRenderer->AddSdfSphere(sampleData->WorldPosition, 0.25f, isSub);
 
-					rendSys->voxelTree->AddSdfSphere(sampleData->WorldPosition, 10.5f, isSub);
+					rendSys->voxelTree->AddSdfSphere(sampleData->WorldPosition, 20.5f, isSub);
 			});
 			requestCountDown = 0.01f;
 		}

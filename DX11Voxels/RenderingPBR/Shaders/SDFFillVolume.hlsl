@@ -26,12 +26,12 @@ float sdSphere(float3 p, float3 spherePos, float s)
 [numthreads(8, 8, 8)]
 void SdfFillVolume(in uint3 coords : SV_DispatchThreadID)
 {
-	if (coords.x >= Params.SizeXYZScale.x)
-		return;
-	if (coords.y >= Params.SizeXYZScale.y)
-		return;
-	if (coords.z >= Params.SizeXYZScale.z)
-		return;
+    if (coords.x >= Params.SizeXYZScale.x + 1)
+        return;
+    if (coords.y >= Params.SizeXYZScale.y + 1)
+        return;
+    if (coords.z >= Params.SizeXYZScale.z + 1)
+        return;
 
 	int4 volCoords = int4(coords, 0);
 	float3 texCoords = (float3) coords / (Params.SizeXYZScale.xyz - float3(1, 1, 1));

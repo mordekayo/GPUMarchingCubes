@@ -278,7 +278,7 @@ void VoxelTree::Update()
 			vgjs::schedule([node, this](){ InitializeVolume(node); });
 		}
 
-		if (node->state == VoxelNodeState::MIXED /*&& !node->isMeshCalculated*/)
+		if (node->state == VoxelNodeState::MIXED && !node->isMeshCalculated)
 		{
 			CheckTransitionStateAndCalculateMarchingCubes(node);
 		}
@@ -423,7 +423,7 @@ void VoxelTree::CheckTransitionStateAndCalculateMarchingCubes(VoxelNode* node)
 	{
 		enableTransCubes = 0.0f;
 	}
-	if (enableTransCubes > 0.0f)
+	if (enableTransCubes > 0.0f && node->parent)
 	{
 		auto parentCenter = node->parent->aabb.Center;
 
@@ -881,7 +881,6 @@ void VoxelTree::AddSdfSphere(DirectX::SimpleMath::Vector3 spherePos, float radiu
 {
 	DirectX::BoundingSphere sphere(spherePos, radius*2);
 
-
 	std::queue<VoxelNode*> traverseNodes;
 	traverseNodes.push(rootNode);
 
@@ -905,6 +904,65 @@ void VoxelTree::AddSdfSphere(DirectX::SimpleMath::Vector3 spherePos, float radiu
 		//{
 		//	continue;
 		//}
+
+		if (node->parent)
+		{
+			VoxelNode* parent = node->parent;
+			switch (node->childIndex)
+			{
+				case 0:
+				{
+					set.insert(parent->childs[3]);
+					set.insert(parent->childs[4]);
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 1:
+				{
+					set.insert(parent->childs[0]);
+					set.insert(parent->childs[2]);
+					set.insert(parent->childs[3]);
+					set.insert(parent->childs[4]);
+					set.insert(parent->childs[5]);
+					set.insert(parent->childs[6]);
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 2:
+				{
+					set.insert(parent->childs[3]);
+					set.insert(parent->childs[6]);
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 3:
+				{
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 4:
+				{
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 5:
+				{
+					set.insert(parent->childs[4]);
+					set.insert(parent->childs[6]);
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 6:
+				{
+					set.insert(parent->childs[7]);
+					break;
+				}
+				case 7:
+				{
+					break;
+				}
+			}
+		}
 
 		set.insert(node);
 
@@ -948,7 +1006,7 @@ void VoxelTree::AddSdfSphere(VoxelNode* node, DirectX::SimpleMath::Vector3 spher
 	ctx->CSSetUnorderedAccessViews(0, 1, &node->volumeUAV, &counts[0]);
 
 	const UINT groupCount = static_cast<UINT>(std::ceil(voxelSize / 8.0f));
-	ctx->Dispatch(groupCount, groupCount, groupCount);
+	ctx->Dispatch(groupCount + 1, groupCount + 1, groupCount + 1);
 	
-	//CheckTransitionStateAndCalculateMarchingCubes(node);
+	CheckTransitionStateAndCalculateMarchingCubes(node);
 }
